@@ -1,15 +1,18 @@
 package com.springfirst.solutions.gym.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class AbstractPerson extends AbstractEntity{
 
-    private String telNo;
-    private String name;
+    String telNo;
+    protected String name;
 }

@@ -1,9 +1,7 @@
 package com.springfirst.solutions.gym.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Singular;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,7 +10,9 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Builder
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "trainer")
 public class Trainer extends AbstractPerson{
 
@@ -20,8 +20,8 @@ public class Trainer extends AbstractPerson{
     private String employeeNumber;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "trainer_specialities", joinColumns = @JoinColumn(name = "trainer_id"),
+    @JoinTable(name = "trainer_trainer_speciality", joinColumns = @JoinColumn(name = "trainer_id"),
             inverseJoinColumns = @JoinColumn(name="speciality_id"))
     @Singular
-    private Set<TrainerSpeciality> specialties = new HashSet<>();
+    private Set<TrainerSpeciality> specialities;
 }

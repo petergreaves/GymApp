@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Builder
 @Entity
-@Table(name = "specialities")
+@Table(name = "trainer_speciality")
 public class TrainerSpeciality extends AbstractEntity{
 
     @Column(name ="description")
