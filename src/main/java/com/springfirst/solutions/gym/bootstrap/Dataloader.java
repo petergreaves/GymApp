@@ -13,7 +13,6 @@ import java.util.Map;
 
 @Component
 @Slf4j
-@Profile("!dev")
 public class Dataloader implements CommandLineRunner {
 
     private TrainerSpecialityRepository trainerSpecialityRepository;
@@ -24,7 +23,9 @@ public class Dataloader implements CommandLineRunner {
     private AddressRepository addressRepository;
     private MemberRepository memberRepository;
 
-    public Dataloader(TrainerSpecialityRepository trainerSpecialityRepository, TrainerRepository trainerRepository, MembershipRepository membershipRepository, MembershipTypeRepository membershipTypeRepository, GymRepository gymRepository, AddressRepository addressRepository, MemberRepository memberRepository) {
+    public Dataloader(TrainerSpecialityRepository trainerSpecialityRepository, TrainerRepository trainerRepository,
+                      MembershipRepository membershipRepository, MembershipTypeRepository membershipTypeRepository,
+                      GymRepository gymRepository, AddressRepository addressRepository, MemberRepository memberRepository) {
         this.trainerSpecialityRepository = trainerSpecialityRepository;
         this.trainerRepository = trainerRepository;
         this.membershipRepository = membershipRepository;
@@ -37,35 +38,40 @@ public class Dataloader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        log.info("Starting data load...");
+        if (gymRepository.count() > 0){
+            log.info("Data already loaded...");
+        }
+        else {
 
-        Map<String, TrainerSpeciality> savedSpecialities = loadSpecialities();
-        long count = trainerSpecialityRepository.count();
-        log.info("Loaded {} trainer specialities...", count);
+            log.info("Starting data load...");
 
-        // trainers
-        Map<String, Trainer> savedTrainers = loadTrainers(savedSpecialities);
+            Map<String, TrainerSpeciality> savedSpecialities = loadSpecialities();
+            long count = trainerSpecialityRepository.count();
+            log.info("Loaded {} trainer specialities...", count);
 
-        count = trainerRepository.count();
-        log.info("Loaded {} trainers...", count);
+            // trainers
+            Map<String, Trainer> savedTrainers = loadTrainers(savedSpecialities);
 
-        // the gym
+            count = trainerRepository.count();
+            log.info("Loaded {} trainers...", count);
 
-        Gym gym = loadGym(savedTrainers);
-        log.info("Created gym {} with {} associated trainers...", gym.getName(), gym.getTrainers().size());
+            // the gym
 
-        // membership types
-        Map<String, MembershipType> savedMembershipTypes = loadMembershipTypes();
-        count = membershipTypeRepository.count();
-        log.info("Loaded {} membership types...", count);
+            Gym gym = loadGym(savedTrainers);
+            log.info("Created gym {} with {} associated trainers...", gym.getName(), gym.getTrainers().size());
 
-        // members
+            // membership types
+            Map<String, MembershipType> savedMembershipTypes = loadMembershipTypes();
+            count = membershipTypeRepository.count();
+            log.info("Loaded {} membership types...", count);
 
-        Map<String, Member> members = loadMembers(savedMembershipTypes);
-        count = memberRepository.count();
-        log.info("Loaded {} members..", count);
+            // members
 
+            Map<String, Member> members = loadMembers(savedMembershipTypes);
+            count = memberRepository.count();
+            log.info("Loaded {} members..", count);
 
+        }
 
     }
 
