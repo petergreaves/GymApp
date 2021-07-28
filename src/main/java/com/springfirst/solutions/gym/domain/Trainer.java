@@ -23,5 +23,5 @@ public class Trainer extends AbstractPerson{
     @JoinTable(name = "trainer_trainer_speciality", joinColumns = @JoinColumn(name = "trainer_id"),
             inverseJoinColumns = @JoinColumn(name="speciality_id"))
     @Singular
-    private Set<TrainerSpeciality> specialities;
+    private Set<TrainerSpeciality> trainerSpecialities;
 }

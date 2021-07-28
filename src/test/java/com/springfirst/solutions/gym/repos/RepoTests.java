@@ -1,6 +1,7 @@
 package com.springfirst.solutions.gym.repos;
 
 import com.springfirst.solutions.gym.bootstrap.Dataloader;
+import com.springfirst.solutions.gym.domain.Address;
 import com.springfirst.solutions.gym.domain.Gym;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 public class RepoTests {
@@ -59,9 +61,10 @@ public class RepoTests {
         // add a trainer
 
         List<TrainerSpeciality> classes = trainerSpecialityRepository.findAllByDescriptionIgnoringCase("classes");
-        List<Trainer> found = trainerRepository.findAllBySpecialities(classes.get(0));
+        List<Trainer> found = trainerRepository.findAllByTrainerSpecialities(classes.get(0));
 
         Assertions.assertTrue(found.size() > 0);
     }
+
 
 }

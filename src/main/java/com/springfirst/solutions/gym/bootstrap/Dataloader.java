@@ -58,7 +58,7 @@ public class Dataloader implements CommandLineRunner {
             // the gym
 
             Gym gym = loadGym(savedTrainers);
-            log.info("Created gym {} with {} associated trainers...", gym.getName(), gym.getTrainers().size());
+            log.info("Created gym \"{}\" with {} associated trainers...", gym.getName(), gym.getTrainers().size());
 
             // membership types
             Map<String, MembershipType> savedMembershipTypes = loadMembershipTypes();
@@ -70,6 +70,8 @@ public class Dataloader implements CommandLineRunner {
             Map<String, Member> members = loadMembers(savedMembershipTypes);
             count = memberRepository.count();
             log.info("Loaded {} members..", count);
+            log.info("Bootstrap dataload complete.");
+
 
         }
 
@@ -101,14 +103,14 @@ public class Dataloader implements CommandLineRunner {
                 .name("Joe Smith")
                 .telNo("049939-8129993")
                 .employeeNumber("AB002")
-                .speciality(savedSpecialities.get("Classes"))
+                .trainerSpeciality(savedSpecialities.get("Classes"))
                 .build());
 
         Trainer savedKelly = trainerRepository.save(Trainer.builder()
                 .name("Kelly Strong")
                 .telNo("043239-8129993")
                 .employeeNumber("BC889")
-                .speciality(savedSpecialities.get("Yoga"))
+                .trainerSpeciality(savedSpecialities.get("Yoga"))
                 .build());
 
         saved.put(savedJoe.getEmployeeNumber(), savedJoe);
@@ -193,8 +195,6 @@ public class Dataloader implements CommandLineRunner {
         saved.put("M002", memberRepository.save(m2));
         saved.put("M003", memberRepository.save(m3));
         return saved;
-
-
     }
 
 }

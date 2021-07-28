@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TrainerRepository extends JpaRepository<Trainer, Long>{
 
-    List<Trainer> findAllBySpecialities(TrainerSpeciality speciality);
+    List<Trainer> findAllByTrainerSpecialities(TrainerSpeciality speciality);
 }
