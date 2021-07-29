@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -22,10 +22,9 @@ public class Dataloader implements CommandLineRunner {
     private GymRepository gymRepository;
     private AddressRepository addressRepository;
     private MemberRepository memberRepository;
+    private VisitRepository visitRepository;
 
-    public Dataloader(TrainerSpecialityRepository trainerSpecialityRepository, TrainerRepository trainerRepository,
-                      MembershipRepository membershipRepository, MembershipTypeRepository membershipTypeRepository,
-                      GymRepository gymRepository, AddressRepository addressRepository, MemberRepository memberRepository) {
+    public Dataloader(TrainerSpecialityRepository trainerSpecialityRepository, TrainerRepository trainerRepository, MembershipRepository membershipRepository, MembershipTypeRepository membershipTypeRepository, GymRepository gymRepository, AddressRepository addressRepository, MemberRepository memberRepository, VisitRepository visitRepository) {
         this.trainerSpecialityRepository = trainerSpecialityRepository;
         this.trainerRepository = trainerRepository;
         this.membershipRepository = membershipRepository;
@@ -33,6 +32,7 @@ public class Dataloader implements CommandLineRunner {
         this.gymRepository = gymRepository;
         this.addressRepository = addressRepository;
         this.memberRepository = memberRepository;
+        this.visitRepository = visitRepository;
     }
 
     @Override
@@ -70,6 +70,11 @@ public class Dataloader implements CommandLineRunner {
             Map<String, Member> members = loadMembers(savedMembershipTypes);
             count = memberRepository.count();
             log.info("Loaded {} members..", count);
+
+            count = visitRepository.count();
+            log.info("Loaded {} visits..", count);
+
+            // done
             log.info("Bootstrap dataload complete.");
 
 
@@ -94,6 +99,7 @@ public class Dataloader implements CommandLineRunner {
                 .trainer(savedTrainers.get("BC889"))
                 .build());
     }
+
 
     private Map<String, Trainer> loadTrainers(Map<String, TrainerSpeciality> savedSpecialities) {
 
@@ -139,10 +145,24 @@ public class Dataloader implements CommandLineRunner {
 
         Map<String, MembershipType> saved = new HashMap<>();
 
-        saved.put("Full", membershipTypeRepository.save(MembershipType.builder().description("Full").build()));
-        saved.put("Gym", membershipTypeRepository.save(MembershipType.builder().description("Gym").build()));
-        saved.put("Classes", membershipTypeRepository.save(MembershipType.builder().description("Classes").build()));
-        saved.put("Trial", membershipTypeRepository.save(MembershipType.builder().description("Trial").build()));
+        saved.put("Full", membershipTypeRepository.save(
+                MembershipType.builder()
+                        .description("Full access to all classes and gym.")
+                        .type("Full").build()));
+        saved.put("Gym", membershipTypeRepository.save
+                (MembershipType.builder()
+                        .description("Gym only membership")
+                        .type("GymOnly")
+                        .build()));
+        saved.put("Classes", membershipTypeRepository.save
+                (MembershipType.builder()
+                        .description("Classes only membership")
+                        .type("Classes").build()));
+        saved.put("Trial", membershipTypeRepository.save
+                (MembershipType.builder()
+                        .description("Trial membership, full access for 2 weeks")
+                        .type("Trial")
+                        .build()));
         return saved;
 
 
@@ -172,28 +192,43 @@ public class Dataloader implements CommandLineRunner {
                 .membershipType(membershipTypes.get("Trial"))
                 .build());
 
+
+        Visit visit = Visit.builder()
+                .purposeOfVisit("cardio session")
+                .visitDateTime(LocalDateTime.of(2020, 8, 14, 10, 34))
+                .build();
+
+        Visit savedVisit = visitRepository.save(visit);
+
         Member m1 = Member.builder()
                 .name("Arnie Liftalot")
                 .memberID("M001")
                 .telNo("039940-2832388")
+                .trainingGoals("get fitter")
+                .visit(savedVisit)
+                .dateOfBirth(LocalDate.of(1963, 3, 22))
                 .membership(savedM1Membership).build();
 
         Member m2= Member.builder()
                 .name("Karen Kettlebells")
                 .memberID("M002")
                 .telNo("0190940-2832388")
+                .trainingGoals("strength")
+                .dateOfBirth(LocalDate.of(1993, 7, 12))
                 .membership(savedM2Membership).build();
 
         Member m3= Member.builder()
                 .name("Billy Biceps")
                 .memberID("M003")
                 .telNo("0378-832388")
+                .dateOfBirth(LocalDate.of(1977, 11, 19))
+                .trainingGoals("flexibility")
                 .membership(savedM3Membership).build();
 
 
-        saved.put("M001", memberRepository.save(m1));
-        saved.put("M002", memberRepository.save(m2));
-        saved.put("M003", memberRepository.save(m3));
+        saved.put(m1.getMemberID(), memberRepository.save(m1));
+        saved.put(m2.getMemberID(), memberRepository.save(m2));
+        saved.put(m2.getMemberID(), memberRepository.save(m3));
         return saved;
     }
 

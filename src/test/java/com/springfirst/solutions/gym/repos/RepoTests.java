@@ -41,23 +41,26 @@ public class RepoTests {
     @Autowired
     MemberRepository memberRepository;
 
+    @Autowired
+    VisitRepository visitRepository;
+
     @BeforeEach
     public void setup() throws Exception {
         Dataloader dataloader = new Dataloader(trainerSpecialityRepository, trainerRepository,
-                membershipRepository, membershipTypeRepository, gymRepository, addressRepository, memberRepository);
+                membershipRepository, membershipTypeRepository, gymRepository, addressRepository, memberRepository, visitRepository);
 
         dataloader.run("Running...");
     }
 
     @Test
-    public void checkGym(){
+    public void checkGym_success(){
 
         List<Gym> gyms = gymRepository.findAll();
         Assertions.assertEquals(gyms.size(), 1);
     }
 
     @Test
-    public void testTrainerSearchBySpec(){
+    public void testTrainerSearchBySpec_success(){
         // add a trainer
 
         List<TrainerSpeciality> classes = trainerSpecialityRepository.findAllByDescriptionIgnoringCase("classes");

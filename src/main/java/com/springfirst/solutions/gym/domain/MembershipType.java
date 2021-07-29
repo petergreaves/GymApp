@@ -1,8 +1,6 @@
 package com.springfirst.solutions.gym.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -10,9 +8,12 @@ import javax.persistence.Table;
 @Builder
 @Entity
 @Table(name = "membershiptype")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class MembershipType extends AbstractEntity{
 
+    private String type;
     private String description;
 }

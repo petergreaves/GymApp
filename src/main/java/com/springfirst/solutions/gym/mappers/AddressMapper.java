@@ -10,5 +10,7 @@ public interface AddressMapper {
 
     AddressMapper INSTANCE = Mappers.getMapper( AddressMapper.class);
     AddressCommand addressToAddressCommand(Address a);
+    Address addressCommandToAddress(AddressCommand a);
+
 
 }

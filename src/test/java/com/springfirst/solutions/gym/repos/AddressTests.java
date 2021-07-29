@@ -41,7 +41,7 @@ public class AddressTests {
     }
 
     @Test
-    public void findAddressQuery(){
+    public void findAddressQuery_success(){
 
         Optional<Address> address = addressRepository.findByCounty("Middx");
         Assertions.assertEquals(address.get().getBuildingIdentifier(), "99");

@@ -1,8 +1,6 @@
 package com.springfirst.solutions.gym.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +11,8 @@ import javax.persistence.Table;
 @Setter
 @Builder
 @Table(name = "address")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address extends AbstractEntity{
 
     @Column(name = "building_identifier")
