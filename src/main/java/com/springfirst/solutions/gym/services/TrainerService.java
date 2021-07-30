@@ -9,5 +9,6 @@ public interface TrainerService {
     List<TrainerCommand> getAllTrainers();
     TrainerCommand getTrainerById(Long id);
     TrainerCommand getTrainerByEmployeeID(String empID);
+    TrainerCommand createTrainer(TrainerCommand trainerCommand);
 
 }

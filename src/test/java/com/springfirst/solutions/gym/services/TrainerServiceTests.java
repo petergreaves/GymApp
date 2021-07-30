@@ -1,6 +1,7 @@
 package com.springfirst.solutions.gym.services;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
+import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.configs.MapperConfigs;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
@@ -9,10 +10,7 @@ import com.springfirst.solutions.gym.repositories.TrainerRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -50,6 +48,7 @@ public class TrainerServiceTests {
                 .employeeNumber(t1EmpID)
                 .name(t1Name)
                 .telNo(t1TelNo)
+                .id(1L)
                .trainerSpeciality(TrainerSpeciality.builder()
                        .description("yoga")
                        .build())
@@ -59,6 +58,7 @@ public class TrainerServiceTests {
                 .employeeNumber("DD01")
                 .name("Mary Muscles")
                 .telNo(t2TelNo)
+                .id(2L)
                .trainerSpeciality(TrainerSpeciality.builder()
                        .description("classes")
                        .build())
@@ -78,6 +78,63 @@ public class TrainerServiceTests {
        TrainerCommand t = trainerService.getTrainerByEmployeeID(t1EmpID);
 
        Assertions.assertEquals(t.getName(), t1Name);
+
+    }
+
+    @Test
+    public void createTrainer_success(){
+
+        Trainer savedTrainer  = Trainer.builder()
+                .employeeNumber(t1EmpID)
+                .name(t1Name)
+                .telNo(t1TelNo)
+                .id(999L)
+                .trainerSpeciality(TrainerSpeciality.builder()
+                        .description("yoga")
+                        .build())
+                .build();
+
+        TrainerCommand newTrainerCommand = TrainerCommand.builder()
+                .employeeNumber(t1EmpID)
+                .name(t1Name)
+                .telNo(t1TelNo)
+                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
+                        .description("yoga")
+                        .build())
+                .build();
+
+        when(trainerRepository.save(any())).thenReturn(savedTrainer);
+
+        TrainerCommand savedTrainerCommand = trainerService.createTrainer(newTrainerCommand);
+
+
+        Assertions.assertAll(
+                () -> {
+                    Assertions.assertNotNull(savedTrainerCommand);
+                },
+                () -> {
+                    Assertions.assertEquals(savedTrainerCommand.getName(), t1Name);
+                },
+                () -> {
+                    Assertions.assertEquals(savedTrainerCommand.getTelNo(), t1TelNo);
+                }
+                ,
+                () -> {
+                    Assertions.assertEquals(savedTrainerCommand.getEmployeeNumber(), t1EmpID);
+                }
+        );
+
+    }
+
+
+
+    @Test
+    public void getTrainerByID_success(){
+
+        when(trainerRepository.findById(anyLong())).thenReturn(Optional.of(t1));
+        TrainerCommand t = trainerService.getTrainerById(1L);
+
+        Assertions.assertEquals(t.getName(), t1Name);
 
     }
 

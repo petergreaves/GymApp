@@ -15,14 +15,14 @@ import java.util.*;
 @Slf4j
 public class Dataloader implements CommandLineRunner {
 
-    private TrainerSpecialityRepository trainerSpecialityRepository;
-    private TrainerRepository trainerRepository;
-    private MembershipRepository membershipRepository;
-    private MembershipTypeRepository membershipTypeRepository;
-    private GymRepository gymRepository;
-    private AddressRepository addressRepository;
-    private MemberRepository memberRepository;
-    private VisitRepository visitRepository;
+    private final TrainerSpecialityRepository trainerSpecialityRepository;
+    private final TrainerRepository trainerRepository;
+    private final MembershipRepository membershipRepository;
+    private final MembershipTypeRepository membershipTypeRepository;
+    private final GymRepository gymRepository;
+    private final AddressRepository addressRepository;
+    private final MemberRepository memberRepository;
+    private final VisitRepository visitRepository;
 
     public Dataloader(TrainerSpecialityRepository trainerSpecialityRepository, TrainerRepository trainerRepository, MembershipRepository membershipRepository, MembershipTypeRepository membershipTypeRepository, GymRepository gymRepository, AddressRepository addressRepository, MemberRepository memberRepository, VisitRepository visitRepository) {
         this.trainerSpecialityRepository = trainerSpecialityRepository;

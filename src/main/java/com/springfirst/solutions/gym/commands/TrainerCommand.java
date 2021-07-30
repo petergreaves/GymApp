@@ -13,6 +13,7 @@ public class TrainerCommand {
 
     private String name;
     private String telNo;
+    private String employeeNumber;
     @Singular
     private Set<TrainerSpecialityCommand> trainerSpecialityCommands;
 }

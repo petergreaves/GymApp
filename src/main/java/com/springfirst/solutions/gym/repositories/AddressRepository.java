@@ -13,7 +13,7 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     @Query("SELECT a FROM Address a WHERE a.county = :c")
     Optional<Address> findByCounty(@Param("c") String county);
 
-    @Query("SELECT a FROM Address a WHERE a.county = :c")
-    StreetOnly findStreetByCounty(@Param("c") String county);
+    @Query("SELECT a FROM Address a WHERE a.street = :s")
+    Optional<Address> findByStreet(@Param("s") String street);
 
 }
