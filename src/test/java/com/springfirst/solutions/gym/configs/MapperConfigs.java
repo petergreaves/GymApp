@@ -32,4 +32,13 @@ public class MapperConfigs {
     public MembershipTypeMapper membershipTypeMapper() {
         return Mappers.getMapper(MembershipTypeMapper.class);
     }
+    @Bean
+    public MemberMapper memberMapper() {
+        return Mappers.getMapper(MemberMapper.class);
+    }
+
+    @Bean
+    public MembershipMapper membershipMapper() {
+        return Mappers.getMapper(MembershipMapper.class);
+    }
 }

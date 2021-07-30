@@ -1,8 +1,10 @@
 package com.springfirst.solutions.gym.services;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
+import com.springfirst.solutions.gym.configs.MapperConfigs;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,16 +13,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@ContextConfiguration(classes = {MapperConfigs.class})
 public class TrainerServiceTests {
 
     @Mock
@@ -35,6 +40,9 @@ public class TrainerServiceTests {
     private final String t1Name="Billy Budd";
 
 
+    @Autowired
+    private TrainerMapper trainerMapper;
+
     @BeforeEach
     public void setup() {
 
@@ -42,24 +50,24 @@ public class TrainerServiceTests {
                 .employeeNumber(t1EmpID)
                 .name(t1Name)
                 .telNo(t1TelNo)
-//               .trainerSpeciality(TrainerSpeciality.builder()
-//                       .description("yoga")
-//                       .build())
+               .trainerSpeciality(TrainerSpeciality.builder()
+                       .description("yoga")
+                       .build())
                 .build();
 
         t2 = Trainer.builder()
                 .employeeNumber("DD01")
                 .name("Mary Muscles")
                 .telNo(t2TelNo)
-//               .trainerSpeciality(TrainerSpeciality.builder()
-//                       .description("classes")
-//                       .build())
-//               .trainerSpeciality(TrainerSpeciality.builder()
-//                       .description("pilates")
-//                       .build())
+               .trainerSpeciality(TrainerSpeciality.builder()
+                       .description("classes")
+                       .build())
+               .trainerSpeciality(TrainerSpeciality.builder()
+                       .description("pilates")
+                       .build())
                 .build();
 
-        trainerService = new TrainerServiceImpl(trainerRepository);
+        trainerService = new TrainerServiceImpl(trainerRepository, trainerMapper);
     }
 
 
@@ -74,7 +82,7 @@ public class TrainerServiceTests {
     }
 
     @Test
-    public void testGetAllTrainers_success() {
+    public void getAllTrainers_success() {
 
         when(trainerRepository.findAll()).thenReturn(Arrays.asList(t1, t2));
 

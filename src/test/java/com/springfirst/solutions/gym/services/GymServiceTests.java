@@ -2,6 +2,7 @@ package com.springfirst.solutions.gym.services;
 
 import com.springfirst.solutions.gym.commands.GymCommand;
 import com.springfirst.solutions.gym.domain.Gym;
+import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.repositories.GymRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 //@ExtendWith(MockitoExtension.class)
@@ -27,10 +26,11 @@ public class GymServiceTests {
 
     private GymService gymService;
 
+
     @BeforeEach
     public void setup(){
         MockitoAnnotations.openMocks(this);
-        gymService =new GymServiceImpl(gymRepository);
+        gymService =new GymServiceImpl(GymMapper.INSTANCE, gymRepository);
     }
     @Test
     public void getGymDetails_success(){
