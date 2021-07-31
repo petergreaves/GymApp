@@ -51,6 +51,8 @@ public class TrainerMapperTest {
                 .telNo("0129348 03993")
                 .trainerSpeciality(TrainerSpeciality.builder().description("classes").build())
                 .trainerSpeciality(TrainerSpeciality.builder().description("yoga").build())
+                .imagePath("trainers/a997.jpg")
+                .biography("Been a ersonal trainer for 10 years")
                 .build();
         TrainerCommand trainerCommand = trainerMapper.trainerToTrainerCommand(trainer);
 
@@ -64,6 +66,12 @@ public class TrainerMapperTest {
                 }
                 , () -> {
                     Assertions.assertEquals(trainer.getTrainerSpecialities().size(), trainerCommand.getTrainerSpecialityCommands().size());
+                },
+                () -> {
+                    Assertions.assertEquals(trainer.getBiography(), trainerCommand.getBiography());
+                },
+                () -> {
+                    Assertions.assertEquals(trainer.getImagePath(), trainerCommand.getImagePath());
                 }
         );
     }

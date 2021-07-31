@@ -18,6 +18,11 @@ public class Trainer extends AbstractPerson{
     @Column(name = "employee_number")
     private String employeeNumber;
 
+    @Column(name = "biography")
+    private String biography;
+    private String imagePath;
+
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "trainer_trainer_speciality", joinColumns = @JoinColumn(name = "trainer_id"),
             inverseJoinColumns = @JoinColumn(name="speciality_id"))

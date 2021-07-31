@@ -14,6 +14,9 @@ public class TrainerCommand {
     private String name;
     private String telNo;
     private String employeeNumber;
+    private String biography;
+    private String imagePath;
+
     @Singular
     private Set<TrainerSpecialityCommand> trainerSpecialityCommands;
 }
