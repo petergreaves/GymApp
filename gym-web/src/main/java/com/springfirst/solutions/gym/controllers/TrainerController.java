@@ -1,14 +1,13 @@
 package com.springfirst.solutions.gym.controllers;
 
+import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.services.TrainerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 @Controller()
 @RequestMapping("/trainers")
@@ -23,9 +22,9 @@ public class TrainerController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public String viewTrainer(Model model, @PathVariable("id") Long trainerID){
+    public String viewTrainer(Model model, @PathVariable("id") String trainerID){
 
-        model.addAttribute("trainer", trainerService.getTrainerById(trainerID));
+        model.addAttribute("trainer", trainerService.getTrainerByEmployeeID(trainerID));
         return "trainers/view-trainer-details";
     }
 
@@ -35,5 +34,13 @@ public class TrainerController {
 
         model.addAttribute("trainers", trainerService.getAllTrainers());
         return "trainers/view-trainers-list";
+    }
+
+    @PostMapping(value = "/new", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
+    public String createTrainer(TrainerCommand newTrainerCommand){
+
+        TrainerCommand savedTrainer=trainerService.createTrainer(newTrainerCommand);
+        return "redirect:trainers/view-trainers-list/" + savedTrainer.getEmployeeNumber();
     }
 }

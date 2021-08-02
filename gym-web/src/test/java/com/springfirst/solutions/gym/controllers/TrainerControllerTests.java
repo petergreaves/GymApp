@@ -1,23 +1,27 @@
 package com.springfirst.solutions.gym.controllers;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
+import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.services.TrainerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.anyLong;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -83,13 +87,40 @@ public class TrainerControllerTests {
     @Test
     public void getTrainerById() throws Exception {
 
-        when(trainerService.getTrainerById(anyLong())).thenReturn(trainerCommandsList.get(0));
+        when(trainerService.getTrainerByEmployeeID(anyString())).thenReturn(trainerCommandsList.get(0));
 
         mockMvc.perform(get("/trainers/{id}", "8699"))
                 .andExpect(model().attributeExists("trainer"))
                 .andExpect(model().attribute("trainer", hasProperty("telNo", is("049939-8129993"))))
                 .andExpect(view().name("trainers/view-trainer-details"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void createTrainer_success() throws Exception {
+        TrainerCommand newTrainerCommand = TrainerCommand.builder()
+                .employeeNumber("A001")
+                .name("Big Jim")
+                .telNo("838438")
+                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
+                        .description("strength")
+                        .build())
+                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
+                .description("yoga")
+                .build())
+                .build();
+
+        when(trainerService.createTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(newTrainerCommand);
+
+        mockMvc.perform(post("/trainers/new")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .param("name", "Big Jim")
+                .param("empNo", "A001")
+                .param("telNo", "838438")
+                .param("speciality", "yoga", "strength"))
+                .andExpect(status().is3xxRedirection());
+
+        verify(trainerService,  times(1)).createTrainer(any());
     }
 
 }

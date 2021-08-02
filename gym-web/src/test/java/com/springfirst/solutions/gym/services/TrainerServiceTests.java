@@ -142,7 +142,6 @@ public class TrainerServiceTests {
     public void getAllTrainers_success() {
 
         when(trainerRepository.findAll()).thenReturn(Arrays.asList(t1, t2));
-
         List<TrainerCommand> trainerCommandList = trainerService.getAllTrainers();
 
         Assertions.assertAll(
@@ -162,8 +161,7 @@ public class TrainerServiceTests {
                     Assertions.assertEquals(trainerCommandList.get(1).getTelNo(), t2TelNo);
                 }
         );
-
-
     }
+
 
 }
