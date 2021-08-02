@@ -2,11 +2,13 @@ package com.springfirst.solutions.gym.services;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.domain.Trainer;
+import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,8 +41,16 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public TrainerCommand getTrainerByEmployeeID(String empID) {
-        return trainerMapper.trainerToTrainerCommand(trainerRepository.findByEmployeeNumber(empID).get());
+    public TrainerCommand getTrainerByEmployeeID(String empID) throws TrainerNotFoundException {
+
+        Optional<Trainer> t = trainerRepository.findByEmployeeNumber(empID);
+
+        if (t.isPresent()){
+            return trainerMapper.trainerToTrainerCommand(t.get());
+        }
+        else {
+            throw new TrainerNotFoundException("Trainer not found with employee ID : "+ empID);
+        }
     }
 
     @Override

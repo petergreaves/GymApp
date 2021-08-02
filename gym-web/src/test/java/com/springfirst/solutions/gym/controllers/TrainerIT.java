@@ -3,6 +3,7 @@ package com.springfirst.solutions.gym.controllers;
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.domain.Trainer;
+import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.repositories.GymRepository;
@@ -24,6 +25,7 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class TrainerIT {
@@ -102,9 +104,11 @@ public class TrainerIT {
         gymService.removeTrainer(toRemove);
         trainerRepository.delete(getOne);
 
-        TrainerCommand test = trainerService.getTrainerByEmployeeID(toRemove.getEmployeeNumber());
+        List<TrainerCommand> trainers = trainerService.getAllTrainers();
+        Assertions.assertTrue(trainers.stream().noneMatch(t -> t.getEmployeeNumber().equals(toRemove.getEmployeeNumber())));
 
-        Assertions.assertNull(test);
 
     }
+
+
 }

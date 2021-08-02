@@ -5,6 +5,7 @@ import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.configs.MapperConfigs;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;
 import org.junit.jupiter.api.Assertions;
@@ -78,6 +79,16 @@ public class TrainerServiceTests {
        TrainerCommand t = trainerService.getTrainerByEmployeeID(t1EmpID);
 
        Assertions.assertEquals(t.getName(), t1Name);
+
+    }
+
+    @Test
+    void testGetTrainer_fail() {
+
+        when(trainerRepository.findByEmployeeNumber(anyString())).thenReturn(Optional.empty());
+        Assertions.assertThrows(TrainerNotFoundException.class, () -> {
+            trainerService.getTrainerByEmployeeID("XXXX");
+        });
 
     }
 
