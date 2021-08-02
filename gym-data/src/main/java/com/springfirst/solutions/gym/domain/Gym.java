@@ -21,7 +21,7 @@ public class Gym extends AbstractEntity{
     @OneToOne
     private Address address;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @Singular
     private Set<Trainer> trainers;
 }
