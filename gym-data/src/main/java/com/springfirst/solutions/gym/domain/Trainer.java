@@ -15,11 +15,13 @@ import java.util.Set;
 @Table(name = "trainer")
 public class Trainer extends AbstractPerson{
 
-    @Column(name = "employee_number")
+    @Column(name = "employee_number", unique=true)
     private String employeeNumber;
 
     @Column(name = "biography")
     private String biography;
+
+    @Column(name = "image_path")
     private String imagePath;
 
 
