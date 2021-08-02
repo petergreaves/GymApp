@@ -108,6 +108,8 @@ public class Dataloader implements CommandLineRunner {
                 .name("Joe Smith")
                 .telNo("049939-8129993")
                 .employeeNumber("AB002")
+                .biography("Joe has been a trainer for 10 years, he knows his stuff.")
+                .imagePath("/images/trainers/AB002.jpg")
                 .trainerSpeciality(savedSpecialities.get("Classes"))
                 .build());
 
@@ -115,6 +117,8 @@ public class Dataloader implements CommandLineRunner {
                 .name("Kelly Strong")
                 .telNo("043239-8129993")
                 .employeeNumber("BC889")
+                .imagePath("/images/trainers/BC889.jpg")
+                .biography("Kelly can help you with your goals, whatever they are, she has lots of experience.")
                 .trainerSpeciality(savedSpecialities.get("Yoga"))
                 .build());
 
