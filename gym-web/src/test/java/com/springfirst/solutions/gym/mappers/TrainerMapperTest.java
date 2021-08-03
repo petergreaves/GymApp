@@ -46,7 +46,7 @@ public class TrainerMapperTest {
     public void toCommand() {
 
         Trainer trainer = Trainer.builder()
-                .employeeNumber("A997")
+                .employeeID("A997")
                 .name("Bill Bicep")
                 .telNo("0129348 03993")
                 .trainerSpeciality(TrainerSpeciality.builder().description("classes").build())

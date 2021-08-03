@@ -10,5 +10,7 @@ public interface TrainerService {
     TrainerCommand getTrainerById(Long id);
     TrainerCommand getTrainerByEmployeeID(String empID);
     TrainerCommand createTrainer(TrainerCommand trainerCommand);
+    TrainerCommand updateTrainer(TrainerCommand trainerCommand);
+    void deleteTrainer(String employeeID);
 
 }

@@ -69,17 +69,17 @@ public class GymServiceTests {
 
         Gym gym = Gym.builder().gymInfo(info).name(name).build();
 
-        gym.setTrainers(Set.of(Trainer.builder().employeeNumber("A123").build(),
-                Trainer.builder().employeeNumber("B499").build(),
-                Trainer.builder().employeeNumber("C7388").build()));
+        gym.setTrainers(Set.of(Trainer.builder().employeeID("A123").build(),
+                Trainer.builder().employeeID("B499").build(),
+                Trainer.builder().employeeID("C7388").build()));
 
         when(gymRepository.findFirstByGymInfoNotNull()).thenReturn(Optional.of(gym));
 
         // lets' try to remove this one
-        TrainerCommand toRemove = TrainerCommand.builder().employeeNumber("B499").build();
+        TrainerCommand toRemove = TrainerCommand.builder().employeeID("B499").build();
 
-        Set<TrainerCommand> trainers = gymService.removeTrainer(TrainerCommand.builder().employeeNumber("B499").build());
-        Assertions.assertTrue(trainers.stream().noneMatch(t -> t.getEmployeeNumber().equals(toRemove.getEmployeeNumber())));
+        Set<TrainerCommand> trainers = gymService.removeTrainer(TrainerCommand.builder().employeeID("B499").build());
+        Assertions.assertTrue(trainers.stream().noneMatch(t -> t.getEmployeeID().equals(toRemove.getEmployeeID())));
 
     }
 

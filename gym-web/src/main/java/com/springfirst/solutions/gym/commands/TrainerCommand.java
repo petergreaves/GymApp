@@ -13,7 +13,7 @@ public class TrainerCommand {
 
     private String name;
     private String telNo;
-    private String employeeNumber;
+    private String employeeID;
     private String biography;
     private String imagePath;
 

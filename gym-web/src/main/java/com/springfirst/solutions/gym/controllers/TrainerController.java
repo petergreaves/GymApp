@@ -41,6 +41,6 @@ public class TrainerController {
     public String createTrainer(TrainerCommand newTrainerCommand){
 
         TrainerCommand savedTrainer=trainerService.createTrainer(newTrainerCommand);
-        return "redirect:trainers/view-trainers-list/" + savedTrainer.getEmployeeNumber();
+        return "redirect:trainers/view-trainers-list/" + savedTrainer.getEmployeeID();
     }
 }

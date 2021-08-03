@@ -16,7 +16,7 @@ import java.util.Set;
 public class Trainer extends AbstractPerson{
 
     @Column(name = "employee_number", unique=true)
-    private String employeeNumber;
+    private String employeeID;
 
     @Column(name = "biography")
     private String biography;

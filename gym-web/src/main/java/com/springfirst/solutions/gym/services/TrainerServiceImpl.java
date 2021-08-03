@@ -43,7 +43,7 @@ public class TrainerServiceImpl implements TrainerService {
     @Override
     public TrainerCommand getTrainerByEmployeeID(String empID) throws TrainerNotFoundException {
 
-        Optional<Trainer> t = trainerRepository.findByEmployeeNumber(empID);
+        Optional<Trainer> t = trainerRepository.findByEmployeeID(empID);
 
         if (t.isPresent()){
             return trainerMapper.trainerToTrainerCommand(t.get());
@@ -58,6 +58,24 @@ public class TrainerServiceImpl implements TrainerService {
 
         Trainer savedTrainer = trainerRepository.save(trainerMapper.trainerCommandToTrainer(trainerCommand));
         return trainerMapper.trainerToTrainerCommand(savedTrainer);
+
+    }
+
+    @Override
+    public TrainerCommand updateTrainer(TrainerCommand trainerCommand) {
+        return null;
+    }
+
+    @Override
+    public void deleteTrainer(String employeeID) throws TrainerNotFoundException{
+        Optional<Trainer> t = trainerRepository.findByEmployeeID(employeeID);
+
+        if (t.isPresent()){
+            trainerRepository.delete(t.get());
+        }
+        else {
+            throw new TrainerNotFoundException("Trainer not found with employee ID : "+ employeeID);
+        }
 
     }
 }

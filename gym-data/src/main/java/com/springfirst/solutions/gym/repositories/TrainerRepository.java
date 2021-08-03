@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface TrainerRepository extends JpaRepository<Trainer, Long>{
 
     List<Trainer> findAllByTrainerSpecialities(TrainerSpeciality speciality);
-    Optional<Trainer> findByEmployeeNumber(String employeeID);
+    Optional<Trainer> findByEmployeeID(String employeeID);
 }

@@ -44,7 +44,7 @@ public class GymServiceImpl implements GymService {
         Set<Trainer> updatedTrainers = theGym
                 .getTrainers()
                 .stream()
-                .filter(t -> !t.getEmployeeNumber().equals(trainerCommand.getEmployeeNumber()))
+                .filter(t -> !t.getEmployeeID().equals(trainerCommand.getEmployeeID()))
                 .collect(Collectors.toSet());
 
         theGym.setTrainers(updatedTrainers);

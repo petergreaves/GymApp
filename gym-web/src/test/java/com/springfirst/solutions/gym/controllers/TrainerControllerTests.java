@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -56,7 +57,7 @@ public class TrainerControllerTests {
         trainerCommandsList.add(trainerMapper.trainerToTrainerCommand(Trainer.builder()
                 .name("Joe Smith")
                 .telNo("049939-8129993")
-                .employeeNumber("AB002")
+                .employeeID("AB002")
                 .id(9500L)
                 .build()));
 
@@ -64,7 +65,7 @@ public class TrainerControllerTests {
         trainerCommandsList.add(trainerMapper.trainerToTrainerCommand(Trainer.builder()
                 .name("Kelly Strong")
                 .telNo("043239-8129993")
-                .employeeNumber("BC889")
+                .employeeID("BC889")
                 .id(748L)
                 .build()));
 
@@ -94,12 +95,14 @@ public class TrainerControllerTests {
                 .andExpect(model().attribute("trainer", hasProperty("telNo", is("049939-8129993"))))
                 .andExpect(view().name("trainers/view-trainer-details"))
                 .andExpect(status().isOk());
+
+        verify(trainerService,  times(1)).getTrainerByEmployeeID((any()));
     }
 
     @Test
     public void createTrainer_success() throws Exception {
         TrainerCommand newTrainerCommand = TrainerCommand.builder()
-                .employeeNumber("A001")
+                .employeeID("A001")
                 .name("Big Jim")
                 .telNo("838438")
                 .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
@@ -122,5 +125,8 @@ public class TrainerControllerTests {
 
         verify(trainerService,  times(1)).createTrainer(any());
     }
+
+
+
 
 }

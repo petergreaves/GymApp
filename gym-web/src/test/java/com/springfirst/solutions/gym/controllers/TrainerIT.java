@@ -3,7 +3,6 @@ package com.springfirst.solutions.gym.controllers;
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.domain.Trainer;
-import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.repositories.GymRepository;
@@ -14,7 +13,6 @@ import com.springfirst.solutions.gym.services.TrainerService;
 import com.springfirst.solutions.gym.services.TrainerServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +23,6 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class TrainerIT {
@@ -64,7 +61,7 @@ public class TrainerIT {
     public void testCreateTrainer_success(){
 
         TrainerCommand newTrainerCommand = TrainerCommand.builder()
-                .employeeNumber("A001")
+                .employeeID("A001")
                 .name("Big Jim")
                 .telNo("838438")
                 .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
@@ -77,7 +74,7 @@ public class TrainerIT {
 
         trainerController.createTrainer(newTrainerCommand);
 
-        Optional<Trainer> newOne = trainerRepository.findByEmployeeNumber("A001");
+        Optional<Trainer> newOne = trainerRepository.findByEmployeeID("A001");
         Assertions.assertTrue(newOne.isPresent());
 
     }
@@ -100,12 +97,12 @@ public class TrainerIT {
     public void testRemoveTrainer_success(){
 
         Trainer getOne = trainerRepository.findAll().get(0);
-        TrainerCommand toRemove = TrainerCommand.builder().employeeNumber(getOne.getEmployeeNumber()).build();
+        TrainerCommand toRemove = TrainerCommand.builder().employeeID(getOne.getEmployeeID()).build();
         gymService.removeTrainer(toRemove);
         trainerRepository.delete(getOne);
 
         List<TrainerCommand> trainers = trainerService.getAllTrainers();
-        Assertions.assertTrue(trainers.stream().noneMatch(t -> t.getEmployeeNumber().equals(toRemove.getEmployeeNumber())));
+        Assertions.assertTrue(trainers.stream().noneMatch(t -> t.getEmployeeID().equals(toRemove.getEmployeeID())));
 
 
     }

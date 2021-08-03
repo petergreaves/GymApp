@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ContextConfiguration(classes = {MapperConfigs.class})
@@ -46,7 +46,7 @@ public class TrainerServiceTests {
     public void setup() {
 
         t1 = Trainer.builder()
-                .employeeNumber(t1EmpID)
+                .employeeID(t1EmpID)
                 .name(t1Name)
                 .telNo(t1TelNo)
                 .id(1L)
@@ -56,7 +56,7 @@ public class TrainerServiceTests {
                 .build();
 
         t2 = Trainer.builder()
-                .employeeNumber("DD01")
+                .employeeID("DD01")
                 .name("Mary Muscles")
                 .telNo(t2TelNo)
                 .id(2L)
@@ -75,7 +75,7 @@ public class TrainerServiceTests {
     @Test
     public void getTrainerByEmployeeID_success(){
 
-       when(trainerRepository.findByEmployeeNumber(anyString())).thenReturn(Optional.of(t1));
+       when(trainerRepository.findByEmployeeID(anyString())).thenReturn(Optional.of(t1));
        TrainerCommand t = trainerService.getTrainerByEmployeeID(t1EmpID);
 
        Assertions.assertEquals(t.getName(), t1Name);
@@ -85,7 +85,7 @@ public class TrainerServiceTests {
     @Test
     void testGetTrainer_fail() {
 
-        when(trainerRepository.findByEmployeeNumber(anyString())).thenReturn(Optional.empty());
+        when(trainerRepository.findByEmployeeID(anyString())).thenReturn(Optional.empty());
         Assertions.assertThrows(TrainerNotFoundException.class, () -> {
             trainerService.getTrainerByEmployeeID("XXXX");
         });
@@ -96,7 +96,7 @@ public class TrainerServiceTests {
     public void createTrainer_success(){
 
         Trainer savedTrainer  = Trainer.builder()
-                .employeeNumber(t1EmpID)
+                .employeeID(t1EmpID)
                 .name(t1Name)
                 .telNo(t1TelNo)
                 .id(999L)
@@ -106,7 +106,7 @@ public class TrainerServiceTests {
                 .build();
 
         TrainerCommand newTrainerCommand = TrainerCommand.builder()
-                .employeeNumber(t1EmpID)
+                .employeeID(t1EmpID)
                 .name(t1Name)
                 .telNo(t1TelNo)
                 .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
@@ -131,9 +131,35 @@ public class TrainerServiceTests {
                 }
                 ,
                 () -> {
-                    Assertions.assertEquals(savedTrainerCommand.getEmployeeNumber(), t1EmpID);
+                    Assertions.assertEquals(savedTrainerCommand.getEmployeeID(), t1EmpID);
                 }
         );
+
+    }
+
+
+    @Test
+    public void deleteTrainerByEmployeeID_success(){
+
+        String trainerEmployeeIDToDelete = "A001";
+        Trainer toDel = Trainer.builder().build();
+
+        when(trainerRepository.findByEmployeeID(any(String.class))).thenReturn(Optional.of(toDel));
+        trainerService.deleteTrainer(trainerEmployeeIDToDelete);
+
+        verify(trainerRepository).delete(any(Trainer.class));
+        verify(trainerRepository,  times(1)).findByEmployeeID(anyString());
+    }
+
+    @Test
+    void testDeleteTrainer_fail() {
+
+        when(trainerRepository.findByEmployeeID(anyString())).thenReturn(Optional.empty());
+        Assertions.assertThrows(TrainerNotFoundException.class, () -> {
+            trainerService.deleteTrainer("XXXX");
+        });
+        verify(trainerRepository, times(0)).delete(any(Trainer.class));
+        verify(trainerRepository, times(1)).findByEmployeeID(anyString());
 
     }
 
@@ -146,6 +172,7 @@ public class TrainerServiceTests {
         TrainerCommand t = trainerService.getTrainerById(1L);
 
         Assertions.assertEquals(t.getName(), t1Name);
+        verify(trainerRepository,  times(1)).findById((anyLong()));
 
     }
 
