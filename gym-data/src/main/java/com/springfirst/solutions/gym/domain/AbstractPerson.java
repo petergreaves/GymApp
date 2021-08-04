@@ -13,13 +13,12 @@ import javax.persistence.MappedSuperclass;
 @AllArgsConstructor
 public abstract class AbstractPerson extends AbstractEntity{
 
-
     public AbstractPerson(Long id, String telNo, String name) {
         super(id);
         this.telNo = telNo;
         this.name = name;
     }
 
-    protected String telNo;
-    protected String name;
+    private String telNo;
+    private String name;
 }
