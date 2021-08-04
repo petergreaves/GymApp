@@ -38,10 +38,10 @@ public class TrainerSpecialityServiceTests {
 
         specs = new ArrayList<>();
 
-        specs.add(TrainerSpeciality.builder().description("Pilates").build());
-        specs.add(TrainerSpeciality.builder().description("Yoga").build());
-        specs.add(TrainerSpeciality.builder().description("Strength").build());
-        specs.add(TrainerSpeciality.builder().description("Core").build());
+        specs.add(TrainerSpeciality.builder().id(1L).description("Pilates").build());
+        specs.add(TrainerSpeciality.builder().id(2L).description("Yoga").build());
+        specs.add(TrainerSpeciality.builder().id(3L).description("Strength").build());
+        specs.add(TrainerSpeciality.builder().id(4L).description("Core").build());
 
     }
 
@@ -50,15 +50,19 @@ public class TrainerSpecialityServiceTests {
     public void getTrainerSpecialities_success(){
 
         when(trainerSpecialityRepository.findAll()).thenReturn(specs);
-        List<TrainerSpecialityCommand> fromService = trainerSpecialityService.getTrainerSpecialities();
+        List<TrainerSpecialityCommand> commands = trainerSpecialityService.getTrainerSpecialities();
 
         Assertions.assertAll(
                 () -> {
-                    Assertions.assertNotNull(fromService);
+                    Assertions.assertNotNull(commands);
                 },
                 () -> {
-                    Assertions.assertEquals(fromService.size(), specs.size());
+                    Assertions.assertEquals(commands.size(), specs.size());
+                },
+                () -> {
+                    Assertions.assertEquals(commands.get(0).getId(), specs.get(0).getId());
                 }
+
         );
 
     }

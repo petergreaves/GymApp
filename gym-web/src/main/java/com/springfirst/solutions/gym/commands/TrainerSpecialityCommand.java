@@ -10,4 +10,5 @@ import lombok.Getter;
 public class TrainerSpecialityCommand {
 
     private String description;
+    private Long id;
 }
