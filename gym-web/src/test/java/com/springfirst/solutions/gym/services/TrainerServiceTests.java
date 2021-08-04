@@ -177,6 +177,18 @@ public class TrainerServiceTests {
     }
 
     @Test
+    public void getNewTrainerInstance_success(){
+
+
+        TrainerCommand t = trainerService.getNewTrainerInstance();
+
+        Assertions.assertEquals(t.getName(), null);
+        Assertions.assertEquals(t.getIsNew(), true);
+        verifyNoInteractions(trainerRepository);
+
+    }
+
+    @Test
     public void getAllTrainers_success() {
 
         when(trainerRepository.findAll()).thenReturn(Arrays.asList(t1, t2));

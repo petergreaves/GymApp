@@ -62,6 +62,11 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
+    public TrainerCommand getNewTrainerInstance() {
+        return TrainerCommand.builder().isNew(true).build();
+    }
+
+    @Override
     public TrainerCommand updateTrainer(TrainerCommand trainerCommand) {
         return null;
     }

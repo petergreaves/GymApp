@@ -16,8 +16,7 @@ import static org.hamcrest.Matchers.*;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.mockito.Mockito;
@@ -45,7 +44,7 @@ public class TrainerControllerTests {
     private TrainerMapper trainerMapper;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(trainerController)
@@ -78,7 +77,7 @@ public class TrainerControllerTests {
 
         mockMvc.perform(get("/trainers"))
                 .andExpect(model().attributeExists("trainers"))
-                .andExpect(model().attribute("trainers",hasSize(2) ))
+                .andExpect(model().attribute("trainers", hasSize(2)))
                 .andExpect(view().name("trainers/view-trainers-list"))
                 .andExpect(status().isOk());
 
@@ -96,7 +95,7 @@ public class TrainerControllerTests {
                 .andExpect(view().name("trainers/view-trainer-details"))
                 .andExpect(status().isOk());
 
-        verify(trainerService,  times(1)).getTrainerByEmployeeID((any()));
+        verify(trainerService, times(1)).getTrainerByEmployeeID((any()));
     }
 
     @Test
@@ -109,8 +108,8 @@ public class TrainerControllerTests {
                         .description("strength")
                         .build())
                 .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                .description("yoga")
-                .build())
+                        .description("yoga")
+                        .build())
                 .build();
 
         when(trainerService.createTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(newTrainerCommand);
@@ -123,10 +122,64 @@ public class TrainerControllerTests {
                 .param("speciality", "yoga", "strength"))
                 .andExpect(status().is3xxRedirection());
 
-        verify(trainerService,  times(1)).createTrainer(any());
+        verify(trainerService, times(1)).createTrainer(any());
     }
 
 
+    @Test
+    public void deleteTrainer_success() throws Exception {
 
+        //   when(trainerService.deleteTrainer(anyString())).;
+
+        mockMvc.perform(delete("/trainers/{id}/delete", "A001"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void getCreateTrainerForm_success() throws Exception {
+
+        TrainerCommand newInstance = TrainerCommand.builder().isNew(true).build();
+
+        when(trainerService.getNewTrainerInstance()).thenReturn(newInstance);
+
+        mockMvc.perform(get("/trainers/new"))
+                .andExpect(model().attributeExists("trainer"))
+                .andExpect(model().attribute("trainer", hasProperty("isNew", is(true))))
+                .andExpect(view().name("trainers/create-update-trainer-form"))
+                .andExpect(status().isOk());
+
+        verify(trainerService, times(1)).getNewTrainerInstance();
+    }
+
+    @Test
+    public void getUpdateTrainerForm_success() throws Exception {
+
+        when(trainerService.getTrainerByEmployeeID(anyString())).thenReturn(trainerCommandsList.get(0));
+
+        mockMvc.perform(get("/trainers/{id}/update", "A001"))
+                .andExpect(model().attributeExists("trainer"))
+                .andExpect(model().attribute("trainer", hasProperty("isNew", nullValue())))
+                .andExpect(view().name("trainers/create-update-trainer-form"))
+                .andExpect(status().isOk());
+
+        verify(trainerService, times(1)).getTrainerByEmployeeID(anyString());
+    }
+
+    @Test
+    public void updateTrainer_success() throws Exception {
+        TrainerCommand updatedTrainerCommand = TrainerCommand.builder().build();
+
+        when(trainerService.updateTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(updatedTrainerCommand);
+
+        mockMvc.perform(put("/trainers/{id}/update", "A001")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .param("name", "Big Jim")
+                .param("empNo", "A001")
+                .param("telNo", "838438")
+                .param("speciality", "yoga", "strength"))
+                .andExpect(status().is3xxRedirection());
+
+        verify(trainerService, times(1)).updateTrainer(ArgumentMatchers.any(TrainerCommand.class));
+    }
 
 }

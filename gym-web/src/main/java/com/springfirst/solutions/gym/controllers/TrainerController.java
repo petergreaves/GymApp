@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+
 @Controller()
 @RequestMapping("/trainers")
 @Slf4j
@@ -20,6 +22,7 @@ public class TrainerController {
         this.trainerService = trainerService;
     }
 
+    // get an individual trainer
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String viewTrainer(Model model, @PathVariable("id") String trainerID){
@@ -28,6 +31,7 @@ public class TrainerController {
         return "trainers/view-trainer-details";
     }
 
+    //get a list of all trainers
     @GetMapping({"/", ""})
     @ResponseStatus(HttpStatus.OK)
     public String getTrainers(Model model){
@@ -36,11 +40,50 @@ public class TrainerController {
         return "trainers/view-trainers-list";
     }
 
+
+    // get the form for create a new trainer
+    @GetMapping("/new")
+    @ResponseStatus(HttpStatus.OK)
+    public String getNewTrainerForm(Model model){
+
+        model.addAttribute("trainer", trainerService.getNewTrainerInstance());
+        return "trainers/create-update-trainer-form";
+    }
+
+    // get the form for updating an existing trainer
+    @GetMapping("/{id}/update")
+    @ResponseStatus(HttpStatus.OK)
+    public String getUpdateTrainerForm(Model model, @PathVariable("id") String employeeID){
+
+        model.addAttribute("trainer", trainerService.getTrainerByEmployeeID(employeeID));
+        return "trainers/create-update-trainer-form";
+    }
+
+
+    // handle the post of a new trainer
     @PostMapping(value = "/new", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
     public String createTrainer(TrainerCommand newTrainerCommand){
 
         TrainerCommand savedTrainer=trainerService.createTrainer(newTrainerCommand);
         return "redirect:trainers/view-trainers-list/" + savedTrainer.getEmployeeID();
+    }
+
+    // handle the post of an updated  trainer
+    @PutMapping(value = "/{id}/update", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
+    public String updateTrainer(@PathVariable String id, TrainerCommand updatedTrainerCommand){
+
+        TrainerCommand savedTrainer=trainerService.updateTrainer(updatedTrainerCommand);
+        return "redirect:trainers/view-trainers-list/" + updatedTrainerCommand.getEmployeeID();
+    }
+
+    // handle delete trainer
+    @DeleteMapping("/{id}/delete")
+    @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
+    public String doTrainerDelete(Model model, @PathVariable("id") String employeeID){
+
+       trainerService.deleteTrainer(employeeID);
+       return "redirect:trainers/view-trainers-list";
     }
 }
