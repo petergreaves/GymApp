@@ -16,6 +16,7 @@ public class TrainerCommand {
     private String employeeID;
     private String biography;
     private String imagePath;
+    private Boolean isNew;
 
     @Singular
     private Set<TrainerSpecialityCommand> trainerSpecialityCommands;
