@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'trainers')}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>List of Trainers</title>
@@ -17,10 +17,14 @@
     </thead>
     <tbody>
     <tr th:each="trainer : ${trainers}">
-        <td th:text="${trainer.name}">
+        <td th:text="${trainer.name}">Name
+        </td>
+        <td><a th:href="@{'/trainers/' + ${trainer.getEmployeeID()}+ '/update'}">Edit</a>
         </td>
     </tr>
     </tbody>
 </table>
+
+<a href="/trainers/new">Create new trainer</a>
 </body>
 </html>

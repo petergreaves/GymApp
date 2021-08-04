@@ -1,44 +1,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-<h1> create or update trainer</h1>
-<!--
-<h2>
-    <th:block th:if="${trainer['new']}">New </th:block>
-    Trainer
-</h2>
--->
+
 <!--/*@thymesVar id="trainer" type="com.springfirst.solutions.gym.commands.TrainerCommand"*/-->
-<!--
-<form th:object="${trainer}" class="form-horizontal" method="post">
-    <input type="hidden" name="id" th:value="*{employeeID}" />
-    <div class="form-group has-feedback">
-        <div class="form-group">
-            <label class="col-sm-2 control-label">Trainer</label>
-            <div class="col-sm-10">
-                <span th:text="${trainer.getName()}" />
-            </div>
-        </div>
-        <input
-                th:replace="~{fragments/inputField :: input ('Name', 'name', 'text')}" />
-        <input
-                th:replace="~{fragments/inputField :: input ('Bio', 'biography', 'text')}" />
-        <input
-                th:replace="~{fragments/inputField :: input ('Tel no', 'telNo', 'text')}" />
-        <input
-                th:replace="~{fragments/inputField :: input ('Image path', 'imagePath', 'text')}" />
-        <input
-                th:replace="~{fragments/selectField :: select ('Specialities', 'specialities', ${specialities})}" />
-    </div>
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button
-                    th:with="text=${trainer['new']} ? 'Add Trainer' : 'Update Trainer'"
-                    class="btn btn-default" type="submit" th:text="${text}">Add
-                Trainer</button>
-        </div>
-    </div>
-</form> -->
+<!--/*@thymesVar id="trainerSpec" type="com.springfirst.solutions.gym.commands.TrainerSpecialityCommand"*/-->
+<h1 th:text="${trainer['isNew']} ? 'New trainer' : 'Update existing trainer'">
+ New or Update
+</h1>
+
+<form th:object="${trainer}" class="form-horizontal" method="post" action="/trainers/new">
+    <input type="hidden" name="id" th:value="*{employeeID}"/>
+    <p><label for="name">Name:</label></p>
+    <p><input type="text" id="name" th:value="${trainer.name}" /></p>
+    <p><label for="telNo">Telephone:</label></p>
+    <p><input type="text" id="telNo" th:value="${trainer.telNo}"/></p>
+    <p><label for="telNo">Biography:</label></p>
+    <p><input type="text" id="biography" th:value="${trainer.biography}"/></p>
+    <p><select th:field="*{percentage}">
+        <option th:each="spec : ${numbers.sequence(0, 100)}" th:value="${i}" th:text="${i}">
+        </option>
+    </select></p>
+
+    <!--  <input
+              th:replace="~{fragments/selectField :: select ('Specialities', 'specialities', ${specialities})}" /> -->
+
+    <button th:with="text=${trainer['isNew']} ? 'Add Trainer' : 'Update Trainer'"
+            type="submit" th:text="${text}">Save Trainer
+    </button>
+
+</form>
 
 </body>
 

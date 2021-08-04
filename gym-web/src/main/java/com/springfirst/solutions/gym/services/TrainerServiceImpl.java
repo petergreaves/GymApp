@@ -55,10 +55,8 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public TrainerCommand createTrainer(TrainerCommand trainerCommand) {
-
         Trainer savedTrainer = trainerRepository.save(trainerMapper.trainerCommandToTrainer(trainerCommand));
         return trainerMapper.trainerToTrainerCommand(savedTrainer);
-
     }
 
     @Override
