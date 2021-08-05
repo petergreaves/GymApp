@@ -3,7 +3,8 @@
 <body>
 
 <!--/*@thymesVar id="trainer" type="com.springfirst.solutions.gym.commands.TrainerCommand"*/-->
-<!--/*@thymesVar id="trainerSpec" type="com.springfirst.solutions.gym.commands.TrainerSpecialityCommand"*/-->
+<!--/*@thymesVar id="spec" type="com.springfirst.solutions.gym.commands.TrainerSpecialityCommand"*/-->
+<!--/*@thymesVar id="specialities" type="List<com.springfirst.solutions.gym.commands.TrainerSpecialityCommand>"*/-->
 <h1 th:text="${trainer['isNew']} ? 'New trainer' : 'Update existing trainer'">
  New or Update
 </h1>
@@ -16,13 +17,15 @@
     <p><input type="text" id="telNo" th:value="${trainer.telNo}"/></p>
     <p><label for="telNo">Biography:</label></p>
     <p><input type="text" id="biography" th:value="${trainer.biography}"/></p>
-    <p><select th:field="*{percentage}">
-        <option th:each="spec : ${numbers.sequence(0, 100)}" th:value="${i}" th:text="${i}">
+    <p><label for="telNo">Biography:</label></p>
+    <p><select th:name="specialities" th:id="specialities" multiple="multiple">
+        <option th:each="spec : ${specialities}" th:value="${spec.id}" th:text="${spec.description}" th:selected="${#lists.contains(trainer.trainerSpecialityCommands.![id], spec.id)}">
         </option>
     </select></p>
 
-    <!--  <input
-              th:replace="~{fragments/selectField :: select ('Specialities', 'specialities', ${specialities})}" /> -->
+    <div th:each="s : ${trainer.trainerSpecialityCommands}">
+        <p th:text="${s.id} + ' / '  + ${s.description}">foo</p>
+    </div>
 
     <button th:with="text=${trainer['isNew']} ? 'Add Trainer' : 'Update Trainer'"
             type="submit" th:text="${text}">Save Trainer

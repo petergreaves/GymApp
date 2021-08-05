@@ -2,6 +2,7 @@ package com.springfirst.solutions.gym.controllers;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.services.TrainerService;
+import com.springfirst.solutions.gym.services.TrainerSpecialityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,17 +10,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
-
 @Controller()
 @RequestMapping("/trainers")
 @Slf4j
 public class TrainerController {
 
     private final TrainerService trainerService;
+    private final TrainerSpecialityService trainerSpecialityService;
 
-    public TrainerController(TrainerService trainerService) {
+    public TrainerController(TrainerService trainerService, TrainerSpecialityService trainerSpecialityService) {
         this.trainerService = trainerService;
+        this.trainerSpecialityService = trainerSpecialityService;
     }
 
     // get an individual trainer
@@ -44,8 +45,9 @@ public class TrainerController {
     // get the form for create a new trainer
     @GetMapping("/new")
     @ResponseStatus(HttpStatus.OK)
-    public String getNewTrainerForm(Model model){
+    public String getCreateTrainerForm(Model model){
 
+        model.addAttribute("specialities", trainerSpecialityService.getTrainerSpecialities());
         model.addAttribute("trainer", trainerService.getNewTrainerInstance());
         return "trainers/create-update-trainer-form";
     }
@@ -55,6 +57,7 @@ public class TrainerController {
     @ResponseStatus(HttpStatus.OK)
     public String getUpdateTrainerForm(Model model, @PathVariable("id") String employeeID){
 
+        model.addAttribute("specialities", trainerSpecialityService.getTrainerSpecialities());
         model.addAttribute("trainer", trainerService.getTrainerByEmployeeID(employeeID));
         return "trainers/create-update-trainer-form";
     }

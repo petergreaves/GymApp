@@ -5,12 +5,11 @@ import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
+import com.springfirst.solutions.gym.mappers.TrainerSpecialityMapper;
 import com.springfirst.solutions.gym.repositories.GymRepository;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;
-import com.springfirst.solutions.gym.services.GymService;
-import com.springfirst.solutions.gym.services.GymServiceImpl;
-import com.springfirst.solutions.gym.services.TrainerService;
-import com.springfirst.solutions.gym.services.TrainerServiceImpl;
+import com.springfirst.solutions.gym.repositories.TrainerSpecialityRepository;
+import com.springfirst.solutions.gym.services.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,9 +32,14 @@ public class TrainerIT {
     @Autowired
     private GymRepository gymRepository;
 
+    @Autowired
+    private TrainerSpecialityRepository trainerSpecialityRepository ;
+
     @MockBean
     Model model;
 
+    @Autowired
+    private TrainerSpecialityMapper trainerSpecialityMapper;
 
     @Autowired
     private TrainerMapper trainerMapper;
@@ -44,6 +48,7 @@ public class TrainerIT {
     private GymMapper gymMapper;
 
     private TrainerService trainerService;
+    private TrainerSpecialityService trainerSpecialityService;
     private GymService gymService ;
     private TrainerController trainerController;
 
@@ -52,7 +57,8 @@ public class TrainerIT {
     public void setup(){
 
         trainerService = new TrainerServiceImpl(trainerRepository, trainerMapper);
-        trainerController = new TrainerController(trainerService);
+        trainerSpecialityService = new TrainerSpecialityServiceImpl(trainerSpecialityRepository,trainerSpecialityMapper );
+        trainerController = new TrainerController(trainerService, trainerSpecialityService);
         gymService = new GymServiceImpl(gymMapper, trainerMapper, gymRepository);
 
     }

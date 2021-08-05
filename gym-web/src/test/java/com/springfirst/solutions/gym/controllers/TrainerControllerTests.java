@@ -3,8 +3,11 @@ package com.springfirst.solutions.gym.controllers;
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.domain.Trainer;
+import com.springfirst.solutions.gym.domain.TrainerSpeciality;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
+import com.springfirst.solutions.gym.mappers.TrainerSpecialityMapper;
 import com.springfirst.solutions.gym.services.TrainerService;
+import com.springfirst.solutions.gym.services.TrainerSpecialityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +22,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,12 +36,16 @@ public class TrainerControllerTests {
     @Mock
     TrainerService trainerService;
 
+    @Mock
+    TrainerSpecialityService trainerSpecialityService;
+
     @InjectMocks
     TrainerController trainerController;
 
     MockMvc mockMvc;
 
     private List<TrainerCommand> trainerCommandsList;
+    private List<TrainerSpecialityCommand> trainerSpecialityCommands;
 
     private TrainerMapper trainerMapper;
 
@@ -67,6 +73,12 @@ public class TrainerControllerTests {
                 .employeeID("BC889")
                 .id(748L)
                 .build()));
+
+        trainerSpecialityCommands = new ArrayList<>();
+
+        trainerSpecialityCommands.add(TrainerSpecialityCommand.builder().id(1L).description("yoga").build());
+        trainerSpecialityCommands.add(TrainerSpecialityCommand.builder().id(1L).description("classes").build());
+
 
     }
 
@@ -141,9 +153,11 @@ public class TrainerControllerTests {
         TrainerCommand newInstance = TrainerCommand.builder().isNew(true).build();
 
         when(trainerService.getNewTrainerInstance()).thenReturn(newInstance);
+        when(trainerSpecialityService.getTrainerSpecialities()).thenReturn(trainerSpecialityCommands);
 
         mockMvc.perform(get("/trainers/new"))
                 .andExpect(model().attributeExists("trainer"))
+                .andExpect(model().attributeExists("specialities"))
                 .andExpect(model().attribute("trainer", hasProperty("isNew", is(true))))
                 .andExpect(view().name("trainers/create-update-trainer-form"))
                 .andExpect(status().isOk());
@@ -155,9 +169,11 @@ public class TrainerControllerTests {
     public void getUpdateTrainerForm_success() throws Exception {
 
         when(trainerService.getTrainerByEmployeeID(anyString())).thenReturn(trainerCommandsList.get(0));
+        when(trainerSpecialityService.getTrainerSpecialities()).thenReturn(trainerSpecialityCommands);
 
         mockMvc.perform(get("/trainers/{id}/update", "A001"))
                 .andExpect(model().attributeExists("trainer"))
+                .andExpect(model().attributeExists("specialities"))
                 .andExpect(model().attribute("trainer", hasProperty("isNew", nullValue())))
                 .andExpect(view().name("trainers/create-update-trainer-form"))
                 .andExpect(status().isOk());
