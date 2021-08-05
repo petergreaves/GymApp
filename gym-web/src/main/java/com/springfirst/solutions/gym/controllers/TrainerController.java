@@ -88,11 +88,12 @@ public class TrainerController {
             for (ObjectError allError : bindingResult.getAllErrors()) {
                 log.error("Trainer create/update error validating : " + allError.getDefaultMessage());
             }
+            trainer.setIsNew(true); // never been saved
             return TRAINER_CREATE_UPDATE_FORM;
         }
 
         TrainerCommand savedTrainer=trainerService.createTrainer(trainer);
-        return "redirect:/trainers/view-trainers-list/" + savedTrainer.getEmployeeID();
+        return "redirect:/trainers/" + savedTrainer.getEmployeeID();
     }
 
     // handle the post of an updated  trainer

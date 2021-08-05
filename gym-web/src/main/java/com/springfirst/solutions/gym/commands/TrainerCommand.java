@@ -27,11 +27,12 @@ public class TrainerCommand {
     private String employeeID;
 
     @NotBlank
-    @Size(min = 12, max = 255)
+    @Size(min = 20, max = 255)
     private String biography;
 
     @NotBlank
     private String imagePath;
+
     private Boolean isNew;
 
     @Singular

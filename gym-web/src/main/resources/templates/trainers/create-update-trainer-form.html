@@ -10,7 +10,6 @@
 </h1>
 
 <form th:object="${trainer}" class="form-horizontal"
-      th:method="${trainer['isNew']} ? 'post' : 'put'"
       th:action="${trainer['isNew']} ? '/trainers/new' : '/trainers/' +${trainer.employeeID} +'/update'">
 
 
@@ -18,22 +17,51 @@
         <p>Please Correct Errors Below!!</p>
     </div>
 
-    <span class="help-block" th:if="${#fields.hasErrors('name')}">
-                                        <ul>
-                                            <li th:each="err : ${#fields.errors('name')}" th:text="${err}"/>
-                                        </ul>
-    </span>
+
     <input type="hidden" name="id" th:value="*{employeeID}"/>
     <p><label for="name">Name:</label></p>
     <p><input type="text" id="name" th:field="*{name}" th:value="${trainer.name}" /></p>
+    <span class="help-block" th:if="${#fields.hasErrors('name')}">
+        <ul>
+            <li th:each="err : ${#fields.errors('name')}" th:text="${err}"/>
+        </ul>
+    </span>
+
     <p><label for="telNo">Telephone:</label></p>
     <p><input type="text" id="telNo" th:field="*{telNo}" th:value="${trainer.telNo}"/></p>
+    <span class="help-block" th:if="${#fields.hasErrors('telNo')}">
+        <ul>
+            <li th:each="err : ${#fields.errors('telNo')}" th:text="${err}"/>
+        </ul>
+    </span>
+
     <p><label for="employeeID">Employee ID:</label></p>
     <p><input type="text" id="employeeID" th:field="*{employeeID}" th:value="${trainer.employeeID}"/></p>
+    <span class="help-block" th:if="${#fields.hasErrors('employeeID')}">
+        <ul>
+            <li th:each="err : ${#fields.errors('employeeID')}" th:text="${err}"/>
+        </ul>
+    </span>
+
+
     <p><label for="biography">Biography:</label></p>
     <p><input type="text" id="biography" th:field="*{biography}" th:value="${trainer.biography}"/></p>
+    <span class="help-block" th:if="${#fields.hasErrors('biography')}">
+        <ul>
+            <li th:each="err : ${#fields.errors('biography')}" th:text="${err}"/>
+        </ul>
+    </span>
+
+
     <p><label for="imagePath">Image path:</label></p>
     <p><input type="text" id="imagePath" th:field="*{imagePath}" th:value="${trainer.imagePath}"/></p>
+    <span class="help-block" th:if="${#fields.hasErrors('imagePath')}">
+        <ul>
+            <li th:each="err : ${#fields.errors('imagePath')}" th:text="${err}"/>
+        </ul>
+    </span>
+
+
     <p><label for="specialities">Specialities:</label></p>
     <p><select th:name="specialities" id="specialities" th:field="*{trainerSpecialityCommands}" multiple="multiple">
         <option th:each="spec : ${specialities}" th:value="${spec.id}" th:text="${spec.description}" th:selected="${#lists.contains(trainer.trainerSpecialityCommands.![id], spec.id)}">
