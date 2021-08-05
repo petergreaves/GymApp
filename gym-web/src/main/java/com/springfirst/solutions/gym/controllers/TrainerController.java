@@ -9,14 +9,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @Controller()
 @RequestMapping("/trainers")
 @Slf4j
 public class TrainerController {
+
+
+    private static final String TRAINER_CREATE_UPDATE_FORM = "trainers/create-update-trainer-form";
 
     private final TrainerService trainerService;
     private final TrainerSpecialityService trainerSpecialityService;
@@ -50,9 +56,8 @@ public class TrainerController {
     @ResponseStatus(HttpStatus.OK)
     public String getCreateTrainerForm(Model model){
 
-
         model.addAttribute("trainer", trainerService.getNewTrainerInstance());
-        return "trainers/create-update-trainer-form";
+        return TRAINER_CREATE_UPDATE_FORM;
     }
 
     // get the form for updating an existing trainer
@@ -61,7 +66,7 @@ public class TrainerController {
     public String getUpdateTrainerForm(Model model, @PathVariable("id") String employeeID){
 
         model.addAttribute("trainer", trainerService.getTrainerByEmployeeID(employeeID));
-        return "trainers/create-update-trainer-form";
+        return TRAINER_CREATE_UPDATE_FORM;
     }
 
     @ModelAttribute
@@ -73,7 +78,18 @@ public class TrainerController {
     // handle the post of a new trainer
     @PostMapping(value = "/new")
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
-    public String createTrainer(TrainerCommand trainer){
+    public String createTrainer(@Valid @ModelAttribute("trainer") TrainerCommand trainer, BindingResult bindingResult){
+
+        //webDataBinder.validate();
+        //BindingResult bindingResult = webDataBinder.getBindingResult();
+
+        if (bindingResult.hasErrors()) {
+
+            for (ObjectError allError : bindingResult.getAllErrors()) {
+                log.error("Trainer create/update error validating : " + allError.getDefaultMessage());
+            }
+            return TRAINER_CREATE_UPDATE_FORM;
+        }
 
         TrainerCommand savedTrainer=trainerService.createTrainer(trainer);
         return "redirect:/trainers/view-trainers-list/" + savedTrainer.getEmployeeID();

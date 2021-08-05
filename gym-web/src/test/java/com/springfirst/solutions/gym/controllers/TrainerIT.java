@@ -13,11 +13,14 @@ import com.springfirst.solutions.gym.services.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 
 
 import java.util.List;
@@ -37,6 +40,9 @@ public class TrainerIT {
 
     @MockBean
     Model model;
+
+    @Mock
+    BindingResult bindingResult;
 
     @Autowired
     private TrainerSpecialityMapper trainerSpecialityMapper;
@@ -67,9 +73,11 @@ public class TrainerIT {
     public void testCreateTrainer_success(){
 
         TrainerCommand newTrainerCommand = TrainerCommand.builder()
-                .employeeID("A001")
-                .name("Big Jim")
-                .telNo("838438")
+                .employeeID("A0201")
+                .name("Big Jim Beefcake")
+                .telNo("83843874774")
+                .biography("now is the time for all good men to come to the aid of the party")
+                .imagePath("/images/p039.jpg")
                 .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
                         .description("strength")
                         .build())
@@ -78,9 +86,9 @@ public class TrainerIT {
                         .build())
                 .build();
 
-        trainerController.createTrainer(newTrainerCommand);
+        trainerController.createTrainer(newTrainerCommand, bindingResult);
 
-        Optional<Trainer> newOne = trainerRepository.findByEmployeeID("A001");
+        Optional<Trainer> newOne = trainerRepository.findByEmployeeID("A0201");
         Assertions.assertTrue(newOne.isPresent());
 
     }

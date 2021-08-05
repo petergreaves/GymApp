@@ -129,12 +129,46 @@ public class TrainerControllerTests {
         mockMvc.perform(post("/trainers/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .param("name", "Big Jim")
-                .param("empNo", "A001")
-                .param("telNo", "838438")
+                .param("employeeID", "A1001")
+                .param("imagePath", "/images/A002.jpg")
+                .param("telNo", "4884988438")
+                .param("biography", "this is the story of Big Jim")
                 .param("speciality", "yoga", "strength"))
+                .andExpect(model().hasNoErrors())
                 .andExpect(status().is3xxRedirection());
 
         verify(trainerService, times(1)).createTrainer(any());
+    }
+
+    @Test
+    public void createTrainer_failsValidation() throws Exception {
+        TrainerCommand newTrainerCommand = TrainerCommand.builder()
+                .employeeID("A001")
+                .name("Big Jim")
+                .telNo("838438")
+                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
+                        .description("strength")
+                        .build())
+                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
+                        .description("yoga")
+                        .build())
+                .build();
+
+      //  when(trainerService.createTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(newTrainerCommand);
+
+        mockMvc.perform(post("/trainers/new")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .param("name", "") // blank
+                .param("employeeID", "A01") //too short
+                .param("imagePath", "/images/A002.jpg")  //ok
+                .param("telNo", "48849884274576486838") //too long
+                .param("biography", "this is the story of Big Jim")
+                .param("speciality", "yoga", "strength"))
+                .andExpect(model().attributeExists("trainer"))
+                .andExpect(model().hasErrors())
+                .andExpect(status().is3xxRedirection());
+
+        verifyNoInteractions(trainerService);
     }
 
 
