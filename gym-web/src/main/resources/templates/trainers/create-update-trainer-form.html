@@ -10,6 +10,7 @@
 </h1>
 
 <form th:object="${trainer}" class="form-horizontal"
+      method="POST"
       th:action="${trainer['isNew']} ? '/trainers/new' : '/trainers/' +${trainer.employeeID} +'/update'">
 
 
@@ -18,7 +19,7 @@
     </div>
 
 
-    <input type="hidden" name="id" th:value="*{employeeID}"/>
+    <input type="hidden" name="id" th:value="*{id}"/>
     <p><label for="name">Name:</label></p>
     <p><input type="text" id="name" th:field="*{name}" th:value="${trainer.name}" /></p>
     <span class="help-block" th:if="${#fields.hasErrors('name')}">

@@ -21,13 +21,13 @@ import java.util.Arrays;
 public class TrainerMapperTest {
 
     @Autowired
-    ApplicationContext applicationContext ;
+    ApplicationContext applicationContext;
 
     @Autowired
     TrainerMapper trainerMapper;
 
     @Test
-    public void testMapperBeans(){
+    public void testMapperBeans() {
 
         Arrays.stream(applicationContext.getBeanDefinitionNames()).forEach(log::info);
 
@@ -52,7 +52,7 @@ public class TrainerMapperTest {
                 .trainerSpeciality(TrainerSpeciality.builder().description("classes").build())
                 .trainerSpeciality(TrainerSpeciality.builder().description("yoga").build())
                 .imagePath("trainers/a997.jpg")
-                .biography("Been a ersonal trainer for 10 years")
+                .biography("Been a personal trainer for 10 years")
                 .build();
         TrainerCommand trainerCommand = trainerMapper.trainerToTrainerCommand(trainer);
 
@@ -72,6 +72,9 @@ public class TrainerMapperTest {
                 },
                 () -> {
                     Assertions.assertEquals(trainer.getImagePath(), trainerCommand.getImagePath());
+                },
+                () -> {
+                    Assertions.assertEquals(trainer.getId(), trainerCommand.getId());
                 }
         );
     }

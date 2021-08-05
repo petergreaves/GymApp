@@ -34,6 +34,7 @@ public class TrainerCommand {
     private String imagePath;
 
     private Boolean isNew;
+    private Long id;
 
     @Singular
     private Set<TrainerSpecialityCommand> trainerSpecialityCommands;

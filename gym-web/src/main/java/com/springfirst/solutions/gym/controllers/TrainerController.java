@@ -80,9 +80,6 @@ public class TrainerController {
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
     public String createTrainer(@Valid @ModelAttribute("trainer") TrainerCommand trainer, BindingResult bindingResult){
 
-        //webDataBinder.validate();
-        //BindingResult bindingResult = webDataBinder.getBindingResult();
-
         if (bindingResult.hasErrors()) {
 
             for (ObjectError allError : bindingResult.getAllErrors()) {
@@ -97,12 +94,21 @@ public class TrainerController {
     }
 
     // handle the post of an updated  trainer
-    @PutMapping(value = "/{id}/update", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/{id}/update", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
-    public String updateTrainer(@PathVariable String id, TrainerCommand updatedTrainerCommand){
+    public String updateTrainer(@Valid @ModelAttribute("trainer") TrainerCommand updatedTrainerCommand, BindingResult bindingResult){
 
-        TrainerCommand savedTrainer=trainerService.updateTrainer(updatedTrainerCommand);
-        return "redirect:trainers/view-trainers-list/" + updatedTrainerCommand.getEmployeeID();
+        if (bindingResult.hasErrors()) {
+
+            for (ObjectError allError : bindingResult.getAllErrors()) {
+                log.error("Trainer create/update error validating : " + allError.getDefaultMessage());
+            }
+            updatedTrainerCommand.setIsNew(false); // has been saved
+            return TRAINER_CREATE_UPDATE_FORM;
+        }
+
+        TrainerCommand updatedTrainer=trainerService.updateTrainer(updatedTrainerCommand);
+        return "redirect:/trainers/" + updatedTrainer.getEmployeeID();
     }
 
     // handle delete trainer

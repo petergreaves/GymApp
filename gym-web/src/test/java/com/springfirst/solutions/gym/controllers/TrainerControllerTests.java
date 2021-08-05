@@ -221,11 +221,14 @@ public class TrainerControllerTests {
 
         when(trainerService.updateTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(updatedTrainerCommand);
 
-        mockMvc.perform(put("/trainers/{id}/update", "A001")
+        mockMvc.perform(post("/trainers/{id}/update", "A001")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .param("name", "Big Jim")
-                .param("empNo", "A001")
-                .param("telNo", "838438")
+                .param("employeeID", "A0301")
+                .param("biography", "now is the time for all good men to come to the aid of the party.")
+                .param("telNo", "8384389993")
+                .param("id", "1")
+                .param("imagePath", "/images/a.jpg")
                 .param("speciality", "yoga", "strength"))
                 .andExpect(status().is3xxRedirection());
 

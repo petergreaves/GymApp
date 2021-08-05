@@ -69,6 +69,50 @@ public class TrainerIT {
 
     }
 
+
+    @Test
+    public void testUpdateTrainer_success() {
+
+        TrainerCommand originalTrainerCommand = TrainerCommand.builder()
+                .employeeID("A0201")
+                .name("Big Jim Beefcake")
+                .telNo("83843874774")
+                .biography("now is the time for all good men to come to the aid of the party")
+                .imagePath("/images/p039.jpg")
+                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
+                        .description("strength")
+                        .build())
+                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
+                        .description("yoga")
+                        .build())
+                .build();
+
+
+       TrainerCommand created= trainerService.createTrainer(originalTrainerCommand);
+
+        TrainerCommand updatedTrainerCommand = TrainerCommand.builder()
+                .employeeID("A0201")
+                .name("Big Jim Beefcake UPDATED")
+                .telNo("83843874774 UPDATED")
+                .biography("now is the time for all good men to come to the aid of the party UPDATED")
+                .imagePath("/images/p039.jpg UPDATED")
+                .id(created.getId())
+                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
+                        .description("strength")
+                        .build())
+                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
+                        .description("yoga")
+                        .build())
+                .build();
+
+        trainerController.updateTrainer(updatedTrainerCommand, bindingResult);
+
+        Optional<Trainer> updatedOneOptional = trainerRepository.findByEmployeeID("A0201");
+        Trainer updatedOne = updatedOneOptional.get();
+        Assertions.assertTrue(updatedOne.getName().endsWith(" UPDATED"));
+
+    }
+
     @Test
     public void testCreateTrainer_success(){
 
