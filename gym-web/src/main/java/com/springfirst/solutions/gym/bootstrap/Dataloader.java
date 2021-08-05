@@ -120,6 +120,8 @@ public class Dataloader implements CommandLineRunner {
                 .imagePath("/images/trainers/BC889.jpg")
                 .biography("Kelly can help you with your goals, whatever they are, she has lots of experience.")
                 .trainerSpeciality(savedSpecialities.get("Yoga"))
+                .trainerSpeciality(savedSpecialities.get("Classes"))
+                .trainerSpeciality(savedSpecialities.get("Strength"))
                 .build());
 
         saved.put(savedJoe.getEmployeeID(), savedJoe);
@@ -132,12 +134,36 @@ public class Dataloader implements CommandLineRunner {
 
         Map<String, TrainerSpeciality> saved = new HashMap<>();
 
-        saved.put("Pilates", trainerSpecialityRepository.save(TrainerSpeciality.builder().description("Pilates").build()));
-        saved.put("Yoga", trainerSpecialityRepository.save(TrainerSpeciality.builder().description("Yoga").build()));
-        saved.put("Strength", trainerSpecialityRepository.save(TrainerSpeciality.builder().description("Strength").build()));
-        saved.put("Core", trainerSpecialityRepository.save(TrainerSpeciality.builder().description("Core").build()));
-        saved.put("Classes", trainerSpecialityRepository.save(TrainerSpeciality.builder().description("Classes").build()));
-        saved.put("Strength", trainerSpecialityRepository.save(TrainerSpeciality.builder().description("Strength").build()));
+        saved.put("Pilates", trainerSpecialityRepository.save(TrainerSpeciality
+                .builder()
+                .id(1L)
+                .description("Pilates")
+                .build()));
+        saved.put("Yoga", trainerSpecialityRepository.save(TrainerSpeciality
+                .builder()
+                .id(2L)
+                .description("Yoga")
+                .build()));
+        saved.put("Strength", trainerSpecialityRepository.save(TrainerSpeciality
+                .builder()
+                .id(3L)
+                .description("Strength")
+                .build()));
+        saved.put("Core", trainerSpecialityRepository.save(TrainerSpeciality
+                .builder()
+                .id(4L)
+                .description("Core")
+                .build()));
+        saved.put("Classes", trainerSpecialityRepository.save(TrainerSpeciality
+                .builder()
+                .id(5L)
+                .description("Classes")
+                .build()));
+        saved.put("Strength", trainerSpecialityRepository.save(TrainerSpeciality
+                .builder()
+                .id(6L)
+                .description("Strength")
+                .build()));
 
         return saved;
 

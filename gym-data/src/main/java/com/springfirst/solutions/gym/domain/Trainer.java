@@ -25,7 +25,7 @@ public class Trainer extends AbstractPerson{
     private String imagePath;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "trainer_trainer_speciality", joinColumns = @JoinColumn(name = "trainer_id"),
             inverseJoinColumns = @JoinColumn(name="speciality_id"))
     @Singular
