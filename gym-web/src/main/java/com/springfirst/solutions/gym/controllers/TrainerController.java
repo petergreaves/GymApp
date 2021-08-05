@@ -1,6 +1,7 @@
 package com.springfirst.solutions.gym.controllers;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
+import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.services.TrainerService;
 import com.springfirst.solutions.gym.services.TrainerSpecialityService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller()
 @RequestMapping("/trainers")
@@ -47,7 +50,7 @@ public class TrainerController {
     @ResponseStatus(HttpStatus.OK)
     public String getCreateTrainerForm(Model model){
 
-        model.addAttribute("specialities", trainerSpecialityService.getTrainerSpecialities());
+
         model.addAttribute("trainer", trainerService.getNewTrainerInstance());
         return "trainers/create-update-trainer-form";
     }
@@ -57,19 +60,23 @@ public class TrainerController {
     @ResponseStatus(HttpStatus.OK)
     public String getUpdateTrainerForm(Model model, @PathVariable("id") String employeeID){
 
-        model.addAttribute("specialities", trainerSpecialityService.getTrainerSpecialities());
         model.addAttribute("trainer", trainerService.getTrainerByEmployeeID(employeeID));
         return "trainers/create-update-trainer-form";
     }
 
+    @ModelAttribute
+    public void specialities(Model model){
+        model.addAttribute("specialities", trainerSpecialityService.getTrainerSpecialities());
+    }
+
 
     // handle the post of a new trainer
-    @PostMapping(value = "/new", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/new")
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
-    public String createTrainer(TrainerCommand newTrainerCommand){
+    public String createTrainer(TrainerCommand trainer){
 
-        TrainerCommand savedTrainer=trainerService.createTrainer(newTrainerCommand);
-        return "redirect:trainers/view-trainers-list/" + savedTrainer.getEmployeeID();
+        TrainerCommand savedTrainer=trainerService.createTrainer(trainer);
+        return "redirect:/trainers/view-trainers-list/" + savedTrainer.getEmployeeID();
     }
 
     // handle the post of an updated  trainer

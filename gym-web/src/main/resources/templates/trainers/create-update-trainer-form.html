@@ -9,16 +9,22 @@
  New or Update
 </h1>
 
-<form th:object="${trainer}" class="form-horizontal" method="post" action="/trainers/new">
+<form th:object="${trainer}" class="form-horizontal"
+      th:method="${trainer['isNew']} ? 'post' : 'put'"
+      th:action="${trainer['isNew']} ? '/trainers/new' : '/trainers/' +${trainer.employeeID} +'/update'">
     <input type="hidden" name="id" th:value="*{employeeID}"/>
     <p><label for="name">Name:</label></p>
-    <p><input type="text" id="name" th:value="${trainer.name}" /></p>
+    <p><input type="text" id="name" th:field="*{name}" th:value="${trainer.name}" /></p>
     <p><label for="telNo">Telephone:</label></p>
-    <p><input type="text" id="telNo" th:value="${trainer.telNo}"/></p>
-    <p><label for="telNo">Biography:</label></p>
-    <p><input type="text" id="biography" th:value="${trainer.biography}"/></p>
-    <p><label for="telNo">Biography:</label></p>
-    <p><select th:name="specialities" th:id="specialities" multiple="multiple">
+    <p><input type="text" id="telNo" th:field="*{telNo}" th:value="${trainer.telNo}"/></p>
+    <p><label for="employeeID">Employee ID:</label></p>
+    <p><input type="text" id="employeeID" th:field="*{employeeID}" th:value="${trainer.employeeID}"/></p>
+    <p><label for="biography">Biography:</label></p>
+    <p><input type="text" id="biography" th:field="*{biography}" th:value="${trainer.biography}"/></p>
+    <p><label for="imagePath">Image path:</label></p>
+    <p><input type="text" id="imagePath" th:field="*{imagePath}" th:value="${trainer.imagePath}"/></p>
+    <p><label for="specialities">Specialities:</label></p>
+    <p><select th:name="specialities" id="specialities" th:field="*{trainerSpecialityCommands}" multiple="multiple">
         <option th:each="spec : ${specialities}" th:value="${spec.id}" th:text="${spec.description}" th:selected="${#lists.contains(trainer.trainerSpecialityCommands.![id], spec.id)}">
         </option>
     </select></p>
