@@ -44,9 +44,8 @@
         </ul>
     </span>
 
-
     <p><label for="biography">Biography:</label></p>
-    <p><input type="text" id="biography" th:field="*{biography}" th:value="${trainer.biography}"/></p>
+    <p><textarea cols="50" rows="10" id="biography" th:field="*{biography}" th:value="${trainer.biography}"/></p>
     <span class="help-block" th:if="${#fields.hasErrors('biography')}">
         <ul>
             <li th:each="err : ${#fields.errors('biography')}" th:text="${err}"/>
