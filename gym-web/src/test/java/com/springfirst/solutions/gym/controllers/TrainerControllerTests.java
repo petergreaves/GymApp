@@ -87,7 +87,7 @@ public class TrainerControllerTests {
 
         when(trainerService.getAllTrainers()).thenReturn(trainerCommandsList);
 
-        mockMvc.perform(get("/trainers"))
+        mockMvc.perform(get("/trainers/list"))
                 .andExpect(model().attributeExists("trainers"))
                 .andExpect(model().attribute("trainers", hasSize(2)))
                 .andExpect(view().name("trainers/view-trainers-list"))
@@ -101,7 +101,7 @@ public class TrainerControllerTests {
 
         when(trainerService.getTrainerByEmployeeID(anyString())).thenReturn(trainerCommandsList.get(0));
 
-        mockMvc.perform(get("/trainers/{id}", "8699"))
+        mockMvc.perform(get("/trainers/{id}/show", "8699"))
                 .andExpect(model().attributeExists("trainer"))
                 .andExpect(model().attribute("trainer", hasProperty("telNo", is("049939-8129993"))))
                 .andExpect(view().name("trainers/view-trainer-details"))
@@ -177,7 +177,8 @@ public class TrainerControllerTests {
 
         //   when(trainerService.deleteTrainer(anyString())).;
 
-        mockMvc.perform(get("/trainers/{id}/delete", "A001"))
+        mockMvc.perform(post("/trainers/{id}/delete", "A001")
+                .param("id", "A001"))
                 .andExpect(status().is3xxRedirection());
     }
 

@@ -6,18 +6,26 @@
 </head>
 <body>
 <!--/*@thymesVar id="trainer" type="com.springfirst.solutions.gym.commands.TrainerCommand"*/-->
+<!--/*@thymesVar id="specialities" type="List<com.springfirst.solutions.gym.commands.TrainerSpecialityCommand>"*/-->
 <h2>Trainers</h2>
 
 <table id="trainers" class="table table-striped">
     <thead>
     <tr>
         <th>Name</th>
+        <th>Contact</th>
+        <th>Biography</th>
         <th>Specialities</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="trainer : ${trainers}">
-        <td th:text="${trainer.name}">Name
+        <td><a th:href="@{'/trainers/' + ${trainer.employeeID} +'/show'}"><p th:text="${trainer.name}">Name</p></a>
+        </td>
+        <td th:text="${trainer.telNo}">Contact</td>
+        <td th:text="${trainer.biography}">About</td>
+        <td th:each="spec : ${trainer.trainerSpecialityCommands}">
+            <p th:text="${spec.description}">spec</p>
         </td>
         <td><a th:href="@{'/trainers/' + ${trainer.getEmployeeID()}+ '/update'}">Edit</a>
         </td>

@@ -9,7 +9,7 @@
 </h1>
 
 
-    <input type="hidden" name="id" th:value="${trainer.employeeID}"/>
+
 
     <p th:text="'Contact: ' + ${trainer.telNo}" /></p>
     <p th:text="'About: ' + ${trainer.biography}" /></p>
@@ -19,8 +19,11 @@
         <p th:text="${s.description}">spec</p>
     </div>
 
-    <a th:href="@{'/trainers/' + ${trainer.getEmployeeID()}+ '/delete'}">Delete</a>
-
+<form id="deleteForm"
+      method="POST"
+      th:action="@{'/trainers/' + ${trainer.employeeID} +'/delete'}">
+    <input type="hidden" name="id" th:value="${trainer.employeeID}"/>
+    <a href="#" onclick="document.getElementById('deleteForm').submit();">Delete</a>
 </form>
 
 </body>

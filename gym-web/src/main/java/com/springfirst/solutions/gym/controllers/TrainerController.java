@@ -33,7 +33,7 @@ public class TrainerController {
     }
 
     // get an individual trainer
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/show")
     @ResponseStatus(HttpStatus.OK)
     public String viewTrainer(Model model, @PathVariable("id") String trainerID){
 
@@ -42,7 +42,7 @@ public class TrainerController {
     }
 
     //get a list of all trainers
-    @GetMapping({"/", ""})
+    @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public String getTrainers(Model model){
 
@@ -112,11 +112,12 @@ public class TrainerController {
     }
 
     // handle delete trainer
-    @GetMapping("/{id}/delete")
+    @RequestMapping (value = "/{id}/delete", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
-    public String doTrainerDelete(Model model, @PathVariable("id") String employeeID){
+    public String doTrainerDelete(Model model, @RequestParam("id") String employeeID){
 
-       trainerService.deleteTrainer(employeeID);
-       return "redirect:/trainers/view-trainers-list";
+        log.debug("Got a request to delete trainer with empID {}", employeeID);
+        trainerService.deleteTrainer(employeeID);
+        return "redirect:/trainers/list";
     }
 }
