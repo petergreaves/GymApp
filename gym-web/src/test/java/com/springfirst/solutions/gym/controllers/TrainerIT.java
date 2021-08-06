@@ -62,7 +62,7 @@ public class TrainerIT {
     @BeforeEach
     public void setup(){
 
-        trainerService = new TrainerServiceImpl(trainerRepository, trainerMapper);
+        trainerService = new TrainerServiceImpl(trainerRepository, gymService, trainerMapper);
         trainerSpecialityService = new TrainerSpecialityServiceImpl(trainerSpecialityRepository,trainerSpecialityMapper );
         trainerController = new TrainerController(trainerService, trainerSpecialityService);
         gymService = new GymServiceImpl(gymMapper, trainerMapper, gymRepository);

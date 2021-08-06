@@ -41,4 +41,9 @@ public class MapperConfigs {
     public MembershipMapper membershipMapper() {
         return Mappers.getMapper(MembershipMapper.class);
     }
+
+    @Bean
+    public GymMapper gymMapper() {
+        return Mappers.getMapper(GymMapper.class);
+    }
 }

@@ -6,7 +6,9 @@ import com.springfirst.solutions.gym.configs.MapperConfigs;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
 import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
+import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
+import com.springfirst.solutions.gym.repositories.GymRepository;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -29,7 +32,14 @@ public class TrainerServiceTests {
 
     @Mock
     private TrainerRepository trainerRepository;
+
+    @Mock
+    private GymRepository gymRepository;
+
     private TrainerService trainerService;
+
+    @Mock
+    private GymService gymService;
 
     private Trainer t1;
     private Trainer t2;
@@ -41,6 +51,9 @@ public class TrainerServiceTests {
 
     @Autowired
     private TrainerMapper trainerMapper;
+
+    @Autowired
+    private GymMapper gymMapper;
 
     @BeforeEach
     public void setup() {
@@ -68,7 +81,8 @@ public class TrainerServiceTests {
                        .build())
                 .build();
 
-        trainerService = new TrainerServiceImpl(trainerRepository, trainerMapper);
+        trainerService = new TrainerServiceImpl(trainerRepository, gymService, trainerMapper);
+       // gymService = new GymServiceImpl(gymMapper,trainerMapper,gymRepository);
     }
 
 
@@ -145,9 +159,11 @@ public class TrainerServiceTests {
         Trainer toDel = Trainer.builder().build();
 
         when(trainerRepository.findByEmployeeID(any(String.class))).thenReturn(Optional.of(toDel));
+        when(gymService.removeTrainer(any(TrainerCommand.class))).thenReturn(Set.of(TrainerCommand.builder().build()));
         trainerService.deleteTrainer(trainerEmployeeIDToDelete);
 
         verify(trainerRepository).delete(any(Trainer.class));
+        verify(gymService,  times(1)).removeTrainer(any(TrainerCommand.class));
         verify(trainerRepository,  times(1)).findByEmployeeID(anyString());
     }
 

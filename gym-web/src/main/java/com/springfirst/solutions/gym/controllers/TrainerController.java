@@ -112,11 +112,11 @@ public class TrainerController {
     }
 
     // handle delete trainer
-    @DeleteMapping("/{id}/delete")
+    @GetMapping("/{id}/delete")
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
     public String doTrainerDelete(Model model, @PathVariable("id") String employeeID){
 
        trainerService.deleteTrainer(employeeID);
-       return "redirect:trainers/view-trainers-list";
+       return "redirect:/trainers/view-trainers-list";
     }
 }

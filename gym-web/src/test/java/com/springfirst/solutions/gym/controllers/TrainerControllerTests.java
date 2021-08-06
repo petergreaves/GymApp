@@ -177,7 +177,7 @@ public class TrainerControllerTests {
 
         //   when(trainerService.deleteTrainer(anyString())).;
 
-        mockMvc.perform(delete("/trainers/{id}/delete", "A001"))
+        mockMvc.perform(get("/trainers/{id}/delete", "A001"))
                 .andExpect(status().is3xxRedirection());
     }
 

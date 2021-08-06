@@ -1,1 +1,28 @@
-<h1>View an individual trainer</h1>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<!--/*@thymesVar id="trainer" type="com.springfirst.solutions.gym.commands.TrainerCommand"*/-->
+<!--/*@thymesVar id="spec" type="com.springfirst.solutions.gym.commands.TrainerSpecialityCommand"*/-->
+<!--/*@thymesVar id="specialities" type="List<com.springfirst.solutions.gym.commands.TrainerSpecialityCommand>"*/-->
+<h1 th:text="${trainer.name}">Trainer name
+</h1>
+
+
+    <input type="hidden" name="id" th:value="${trainer.employeeID}"/>
+
+    <p th:text="'Contact: ' + ${trainer.telNo}" /></p>
+    <p th:text="'About: ' + ${trainer.biography}" /></p>
+
+    <p th:if="${trainer.trainerSpecialityCommands}" th:text="'Specialities: '"></p>
+    <div th:each="s : ${trainer.trainerSpecialityCommands}">
+        <p th:text="${s.description}">spec</p>
+    </div>
+
+    <a th:href="@{'/trainers/' + ${trainer.getEmployeeID()}+ '/delete'}">Delete</a>
+
+</form>
+
+</body>
+
+</html>

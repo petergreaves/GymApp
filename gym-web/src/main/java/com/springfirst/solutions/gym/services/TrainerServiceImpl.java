@@ -15,10 +15,12 @@ import java.util.stream.Collectors;
 public class TrainerServiceImpl implements TrainerService {
 
     private final TrainerRepository trainerRepository;
+    private final GymService gymService;
     private final TrainerMapper trainerMapper;
 
-    public TrainerServiceImpl(TrainerRepository trainerRepository, TrainerMapper trainerMapper) {
+    public TrainerServiceImpl(TrainerRepository trainerRepository, GymService gymService, TrainerMapper trainerMapper) {
         this.trainerRepository = trainerRepository;
+        this.gymService = gymService;
         this.trainerMapper = trainerMapper;
     }
 
@@ -76,7 +78,9 @@ public class TrainerServiceImpl implements TrainerService {
         Optional<Trainer> t = trainerRepository.findByEmployeeID(employeeID);
 
         if (t.isPresent()){
-            trainerRepository.delete(t.get());
+            Trainer trainer = t.get();
+            gymService.removeTrainer(trainerMapper.trainerToTrainerCommand(trainer));
+            trainerRepository.delete(trainer);
         }
         else {
             throw new TrainerNotFoundException("Trainer not found with employee ID : "+ employeeID);
