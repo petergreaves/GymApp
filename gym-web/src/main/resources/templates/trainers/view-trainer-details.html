@@ -14,9 +14,9 @@
     <p th:text="'Contact: ' + ${trainer.telNo}" /></p>
     <p th:text="'About: ' + ${trainer.biography}" /></p>
 
-    <p th:if="${trainer.trainerSpecialityCommands}" th:text="'Specialities: '"></p>
-    <div th:each="s : ${trainer.trainerSpecialityCommands}">
-        <p th:text="${s.description}">spec</p>
+    <p th:if="${trainer.trainerSpecialityCommandIDs}" th:text="'Speciality ID: '"></p>
+    <div th:each="s : ${trainer.trainerSpecialityCommandIDs}">
+        <p th:text="${s}">spec</p>
     </div>
 
 <form id="deleteForm"

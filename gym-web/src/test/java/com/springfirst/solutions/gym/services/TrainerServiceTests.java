@@ -10,6 +10,7 @@ import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.repositories.GymRepository;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;
+import com.springfirst.solutions.gym.repositories.TrainerSpecialityRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,9 @@ public class TrainerServiceTests {
 
     @Mock
     private TrainerRepository trainerRepository;
+
+    @Mock
+    private TrainerSpecialityRepository trainerSpecialityRepository;
 
     @Mock
     private GymRepository gymRepository;
@@ -81,7 +85,7 @@ public class TrainerServiceTests {
                        .build())
                 .build();
 
-        trainerService = new TrainerServiceImpl(trainerRepository, gymService, trainerMapper);
+        trainerService = new TrainerServiceImpl(trainerRepository, gymService, trainerMapper,trainerSpecialityRepository);
        // gymService = new GymServiceImpl(gymMapper,trainerMapper,gymRepository);
     }
 
@@ -116,6 +120,7 @@ public class TrainerServiceTests {
                 .id(999L)
                 .trainerSpeciality(TrainerSpeciality.builder()
                         .description("yoga")
+                        .id(55L)
                         .build())
                 .build();
 
@@ -123,14 +128,12 @@ public class TrainerServiceTests {
                 .employeeID(t1EmpID)
                 .name(t1Name)
                 .telNo(t1TelNo)
-                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                        .description("yoga")
-                        .build())
+                .trainerSpecialityCommandID(55L)
                 .build();
 
         when(trainerRepository.save(any())).thenReturn(savedTrainer);
 
-        TrainerCommand savedTrainerCommand = trainerService.createTrainer(newTrainerCommand);
+        TrainerCommand savedTrainerCommand = trainerService.createOrUpdateTrainer(newTrainerCommand);
 
 
         Assertions.assertAll(

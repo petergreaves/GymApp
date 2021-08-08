@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -71,26 +70,26 @@ public class TrainerController {
 
     @ModelAttribute
     public void specialities(Model model){
-        model.addAttribute("specialities", trainerSpecialityService.getTrainerSpecialities());
+        model.addAttribute("specialities",  trainerSpecialityService.getTrainerSpecialities());
     }
 
 
     // handle the post of a new trainer
     @PostMapping(value = "/new")
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
-    public String createTrainer(@Valid @ModelAttribute("trainer") TrainerCommand trainer, BindingResult bindingResult){
+    public String createTrainer(@Valid @ModelAttribute("trainer") TrainerCommand trainerCommand, BindingResult bindingResult){
 
         if (bindingResult.hasErrors()) {
 
             for (ObjectError allError : bindingResult.getAllErrors()) {
                 log.error("Trainer create/update error validating : " + allError.getDefaultMessage());
             }
-            trainer.setIsNew(true); // never been saved
+            trainerCommand.setIsNew(true); // never been saved
             return TRAINER_CREATE_UPDATE_FORM;
         }
 
-        TrainerCommand savedTrainer=trainerService.createTrainer(trainer);
-        return "redirect:/trainers/" + savedTrainer.getEmployeeID();
+        TrainerCommand savedTrainer=trainerService.createOrUpdateTrainer(trainerCommand);
+        return "redirect:/trainers/" + savedTrainer.getEmployeeID() + "/show";
     }
 
     // handle the post of an updated  trainer
@@ -107,8 +106,8 @@ public class TrainerController {
             return TRAINER_CREATE_UPDATE_FORM;
         }
 
-        TrainerCommand updatedTrainer=trainerService.updateTrainer(updatedTrainerCommand);
-        return "redirect:/trainers/" + updatedTrainer.getEmployeeID();
+        TrainerCommand updatedTrainer=trainerService.createOrUpdateTrainer(updatedTrainerCommand);
+        return "redirect:/trainers/" + updatedTrainer.getEmployeeID() + "/show";
     }
 
     // handle delete trainer

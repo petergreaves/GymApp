@@ -116,15 +116,11 @@ public class TrainerControllerTests {
                 .employeeID("A001")
                 .name("Big Jim")
                 .telNo("838438")
-                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                        .description("strength")
-                        .build())
-                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                        .description("yoga")
-                        .build())
+                .trainerSpecialityCommandID(55L)
+                .trainerSpecialityCommandID(66L)
                 .build();
 
-        when(trainerService.createTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(newTrainerCommand);
+        when(trainerService.createOrUpdateTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(newTrainerCommand);
 
         mockMvc.perform(post("/trainers/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -133,11 +129,11 @@ public class TrainerControllerTests {
                 .param("imagePath", "/images/A002.jpg")
                 .param("telNo", "4884988438")
                 .param("biography", "this is the story of Big Jim")
-                .param("speciality", "yoga", "strength"))
+                .param("trainerSpecialityCommandIDs", "1", "2"))
                 .andExpect(model().hasNoErrors())
                 .andExpect(status().is3xxRedirection());
 
-        verify(trainerService, times(1)).createTrainer(any());
+        verify(trainerService, times(1)).createOrUpdateTrainer(any());
     }
 
     @Test
@@ -146,12 +142,8 @@ public class TrainerControllerTests {
                 .employeeID("A001")
                 .name("Big Jim")
                 .telNo("838438")
-                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                        .description("strength")
-                        .build())
-                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                        .description("yoga")
-                        .build())
+                .trainerSpecialityCommandID(22L)
+                .trainerSpecialityCommandID(11L)
                 .build();
 
       //  when(trainerService.createTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(newTrainerCommand);
@@ -163,7 +155,7 @@ public class TrainerControllerTests {
                 .param("imagePath", "/images/A002.jpg")  //ok
                 .param("telNo", "48849884274576486838") //too long
                 .param("biography", "this is the story of Big Jim")
-                .param("speciality", "yoga", "strength"))
+                .param("trainerSpecialityCommandIDs", "1", "2"))
                 .andExpect(model().attributeExists("trainer"))
                 .andExpect(model().hasErrors())
                 .andExpect(status().is3xxRedirection());
@@ -220,7 +212,7 @@ public class TrainerControllerTests {
     public void updateTrainer_success() throws Exception {
         TrainerCommand updatedTrainerCommand = TrainerCommand.builder().build();
 
-        when(trainerService.updateTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(updatedTrainerCommand);
+        when(trainerService.createOrUpdateTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(updatedTrainerCommand);
 
         mockMvc.perform(post("/trainers/{id}/update", "A001")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -230,10 +222,10 @@ public class TrainerControllerTests {
                 .param("telNo", "8384389993")
                 .param("id", "1")
                 .param("imagePath", "/images/a.jpg")
-                .param("speciality", "yoga", "strength"))
+                .param("trainerSpecialityCommandIDs", "3", "1"))
                 .andExpect(status().is3xxRedirection());
 
-        verify(trainerService, times(1)).updateTrainer(ArgumentMatchers.any(TrainerCommand.class));
+        verify(trainerService, times(1)).createOrUpdateTrainer(ArgumentMatchers.any(TrainerCommand.class));
     }
 
 }

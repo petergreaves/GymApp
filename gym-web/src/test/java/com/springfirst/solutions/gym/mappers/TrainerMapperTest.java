@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
+import java.util.Set;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ContextConfiguration(classes = {MapperConfigs.class})
@@ -43,14 +44,51 @@ public class TrainerMapperTest {
     }
 
     @Test
+    public void toEntity() {
+
+        TrainerCommand trainerCommand = TrainerCommand.builder()
+                .employeeID("A997")
+                .name("Bill Bicep")
+                .telNo("0129348 03993")
+                .trainerSpecialityCommandID(1L)
+                .trainerSpecialityCommandID(2L)
+                .imagePath("trainers/a997.jpg")
+                .biography("Been a personal trainer for 10 years")
+                .build();
+        Trainer trainer = trainerMapper.trainerCommandToTrainer(trainerCommand);
+
+        Assertions.assertAll(
+
+                () -> {
+                    Assertions.assertEquals(trainer.getName(), trainerCommand.getName());
+                },
+                () -> {
+                    Assertions.assertEquals(trainer.getTelNo(), trainerCommand.getTelNo());
+                }
+                , () -> {
+                    Assertions.assertTrue(trainer.getTrainerSpecialities().size()==0);
+                },
+                () -> {
+                    Assertions.assertEquals(trainer.getBiography(), trainerCommand.getBiography());
+                },
+                () -> {
+                    Assertions.assertEquals(trainer.getImagePath(), trainerCommand.getImagePath());
+                },
+                () -> {
+                    Assertions.assertEquals(trainer.getId(), trainerCommand.getId());
+                }
+        );
+    }
+
+    @Test
     public void toCommand() {
 
         Trainer trainer = Trainer.builder()
                 .employeeID("A997")
                 .name("Bill Bicep")
                 .telNo("0129348 03993")
-                .trainerSpeciality(TrainerSpeciality.builder().description("classes").build())
-                .trainerSpeciality(TrainerSpeciality.builder().description("yoga").build())
+                .trainerSpeciality(TrainerSpeciality.builder().description("classes").id(1L).build())
+                .trainerSpeciality(TrainerSpeciality.builder().description("yoga").id(2L).build())
                 .imagePath("trainers/a997.jpg")
                 .biography("Been a personal trainer for 10 years")
                 .build();
@@ -65,7 +103,12 @@ public class TrainerMapperTest {
                     Assertions.assertEquals(trainer.getTelNo(), trainerCommand.getTelNo());
                 }
                 , () -> {
-                    Assertions.assertEquals(trainer.getTrainerSpecialities().size(), trainerCommand.getTrainerSpecialityCommands().size());
+                    Assertions.assertEquals(trainer.getTrainerSpecialities().size(),
+                            trainerCommand.getTrainerSpecialityCommandIDs().size());
+                }
+                , () -> {
+                    Assertions.assertTrue(trainerCommand.getTrainerSpecialityCommandIDs().containsAll(Set.of(1L, 2L)));
+
                 },
                 () -> {
                     Assertions.assertEquals(trainer.getBiography(), trainerCommand.getBiography());

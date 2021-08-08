@@ -63,14 +63,12 @@
 
 
     <p><label for="specialities">Specialities:</label></p>
-    <p><select th:name="specialities" id="specialities" th:field="*{trainerSpecialityCommands}" multiple="multiple">
-        <option th:each="spec : ${specialities}" th:value="${spec.id}" th:text="${spec.description}" th:selected="${#lists.contains(trainer.trainerSpecialityCommands.![id], spec.id)}">
+    <p><select th:name="specialities" id="specialities"
+               th:field="*{trainerSpecialityCommandIDs}" multiple="multiple" th:size="${specialities.size()}">
+        <option th:each="spec : ${specialities}" th:value="${spec.id}" th:text="${spec.description}"
+                th:selected="${#lists.contains(trainer.trainerSpecialityCommandIDs, spec.id)}">
         </option>
     </select></p>
-
-    <div th:each="s : ${trainer.trainerSpecialityCommands}">
-        <p th:text="${s.id} + ' / '  + ${s.description}">foo</p>
-    </div>
 
     <button th:with="text=${trainer['isNew']} ? 'Add Trainer' : 'Update Trainer'"
             type="submit" th:text="${text}">Save Trainer

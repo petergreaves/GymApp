@@ -24,8 +24,8 @@
         </td>
         <td th:text="${trainer.telNo}">Contact</td>
         <td th:text="${trainer.biography}">About</td>
-        <td th:each="spec : ${trainer.trainerSpecialityCommands}">
-            <p th:text="${spec.description}">spec</p>
+        <td th:each="spec : ${trainer.trainerSpecialityCommandIDs}">
+            <p th:text="${spec}">spec</p>
         </td>
         <td><a th:href="@{'/trainers/' + ${trainer.getEmployeeID()}+ '/update'}">Edit</a>
         </td>

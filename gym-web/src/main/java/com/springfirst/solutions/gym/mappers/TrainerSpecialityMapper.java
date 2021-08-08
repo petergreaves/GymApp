@@ -11,4 +11,5 @@ public interface TrainerSpecialityMapper {
 
     TrainerSpecialityMapper INSTANCE = Mappers.getMapper( TrainerSpecialityMapper.class);
     TrainerSpecialityCommand trainerSpecialityToTrainerSpecialityCommand(TrainerSpeciality ts);
+
 }

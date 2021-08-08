@@ -37,5 +37,5 @@ public class TrainerCommand {
     private Long id;
 
     @Singular
-    private Set<TrainerSpecialityCommand> trainerSpecialityCommands;
+    private Set<Long> trainerSpecialityCommandIDs;
 }

@@ -62,7 +62,7 @@ public class TrainerIT {
     @BeforeEach
     public void setup(){
 
-        trainerService = new TrainerServiceImpl(trainerRepository, gymService, trainerMapper);
+        trainerService = new TrainerServiceImpl(trainerRepository, gymService, trainerMapper,trainerSpecialityRepository);
         trainerSpecialityService = new TrainerSpecialityServiceImpl(trainerSpecialityRepository,trainerSpecialityMapper );
         trainerController = new TrainerController(trainerService, trainerSpecialityService);
         gymService = new GymServiceImpl(gymMapper, trainerMapper, gymRepository);
@@ -79,16 +79,12 @@ public class TrainerIT {
                 .telNo("83843874774")
                 .biography("now is the time for all good men to come to the aid of the party")
                 .imagePath("/images/p039.jpg")
-                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                        .description("strength")
-                        .build())
-                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                        .description("yoga")
-                        .build())
+                .trainerSpecialityCommandID(33L)
+                .trainerSpecialityCommandID(11L)
                 .build();
 
 
-       TrainerCommand created= trainerService.createTrainer(originalTrainerCommand);
+       TrainerCommand created= trainerService.createOrUpdateTrainer(originalTrainerCommand);
 
         TrainerCommand updatedTrainerCommand = TrainerCommand.builder()
                 .employeeID("A0201")
@@ -97,12 +93,8 @@ public class TrainerIT {
                 .biography("now is the time for all good men to come to the aid of the party UPDATED")
                 .imagePath("/images/p039.jpg UPDATED")
                 .id(created.getId())
-                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                        .description("strength")
-                        .build())
-                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                        .description("yoga")
-                        .build())
+                .trainerSpecialityCommandID(33L)
+                .trainerSpecialityCommandID(11L)
                 .build();
 
         trainerController.updateTrainer(updatedTrainerCommand, bindingResult);
@@ -122,12 +114,8 @@ public class TrainerIT {
                 .telNo("83843874774")
                 .biography("now is the time for all good men to come to the aid of the party")
                 .imagePath("/images/p039.jpg")
-                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                        .description("strength")
-                        .build())
-                .trainerSpecialityCommand(TrainerSpecialityCommand.builder()
-                        .description("yoga")
-                        .build())
+                .trainerSpecialityCommandID(33L)
+                .trainerSpecialityCommandID(11L)
                 .build();
 
         trainerController.createTrainer(newTrainerCommand, bindingResult);
