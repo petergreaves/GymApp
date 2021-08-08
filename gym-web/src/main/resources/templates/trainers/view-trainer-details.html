@@ -14,9 +14,9 @@
     <p th:text="'Contact: ' + ${trainer.telNo}" /></p>
     <p th:text="'About: ' + ${trainer.biography}" /></p>
 
-    <p th:if="${trainer.trainerSpecialityCommandIDs}" th:text="'Speciality ID: '"></p>
-    <div th:each="s : ${trainer.trainerSpecialityCommandIDs}">
-        <p th:text="${s}">spec</p>
+    <p th:if="${trainer.trainerSpecialityCommandIDs}" th:text="'Specialities: '"></p>
+    <div th:each="s : ${specialities}">
+        <p th:if="${trainer.trainerSpecialityCommandIDs.contains(s.id)}" th:text="${s.description}">spec</p>
     </div>
 
 <form id="deleteForm"
@@ -25,6 +25,8 @@
     <input type="hidden" name="id" th:value="${trainer.employeeID}"/>
     <a href="#" onclick="document.getElementById('deleteForm').submit();">Delete</a>
 </form>
+
+<p><a th:href="@{'/trainers/' + ${trainer.employeeID}+ '/update'}">Edit</a> </p>
 
 </body>
 
