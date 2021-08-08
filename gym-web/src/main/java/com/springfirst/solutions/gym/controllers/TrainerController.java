@@ -68,10 +68,6 @@ public class TrainerController {
         return TRAINER_CREATE_UPDATE_FORM;
     }
 
-    @ModelAttribute
-    public void specialities(Model model){
-        model.addAttribute("specialities",  trainerSpecialityService.getTrainerSpecialities());
-    }
 
 
     // handle the post of a new trainer
@@ -119,4 +115,11 @@ public class TrainerController {
         trainerService.deleteTrainer(employeeID);
         return "redirect:/trainers/list";
     }
+
+
+    @ModelAttribute
+    public void specialities(Model model){
+        model.addAttribute("specialities",  trainerSpecialityService.getTrainerSpecialities());
+    }
+
 }
