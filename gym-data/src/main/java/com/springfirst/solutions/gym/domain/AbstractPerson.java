@@ -21,4 +21,5 @@ public abstract class AbstractPerson extends AbstractEntity{
 
     private String telNo;
     private String name;
+    private Byte[] image;
 }

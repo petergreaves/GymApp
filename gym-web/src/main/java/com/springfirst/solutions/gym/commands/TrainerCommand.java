@@ -36,6 +36,8 @@ public class TrainerCommand {
     private Boolean isNew;
     private Long id;
 
+    private Byte[] image;
+
     @Singular
     private Set<Long> trainerSpecialityCommandIDs;
 }

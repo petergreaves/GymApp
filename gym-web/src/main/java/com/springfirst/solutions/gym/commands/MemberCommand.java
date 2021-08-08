@@ -19,6 +19,7 @@ public class MemberCommand {
     private String memberID;
     private LocalDate dateOfBirth;
     private String trainingGoals;
+    private Byte[] image;
     private Set<VisitCommand> visitCommands;
     @Singular
     private Set<MembershipCommand> membershipCommands;
