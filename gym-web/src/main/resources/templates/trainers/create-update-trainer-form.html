@@ -53,15 +53,6 @@
     </span>
 
 
-    <p><label for="imagePath">Image path:</label></p>
-    <p><input type="text" id="imagePath" th:field="*{imagePath}" th:value="${trainer.imagePath}"/></p>
-    <span class="help-block" th:if="${#fields.hasErrors('imagePath')}">
-        <ul>
-            <li th:each="err : ${#fields.errors('imagePath')}" th:text="${err}"/>
-        </ul>
-    </span>
-
-
     <p><label for="specialities">Specialities:</label></p>
     <p><select th:name="specialities" id="specialities"
                th:field="*{trainerSpecialityCommandIDs}" multiple="multiple" th:size="${specialities.size()}">

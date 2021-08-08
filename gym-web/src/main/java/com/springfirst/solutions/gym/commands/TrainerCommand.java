@@ -30,9 +30,6 @@ public class TrainerCommand {
     @Size(min = 20, max = 255)
     private String biography;
 
-    @NotBlank
-    private String imagePath;
-
     private Boolean isNew;
     private Long id;
 

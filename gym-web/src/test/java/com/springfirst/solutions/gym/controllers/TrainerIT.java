@@ -73,12 +73,13 @@ public class TrainerIT {
     @Test
     public void testUpdateTrainer_success() {
 
+        final String empID = "A0202";
+
         TrainerCommand originalTrainerCommand = TrainerCommand.builder()
-                .employeeID("A0201")
+                .employeeID(empID)
                 .name("Big Jim Beefcake")
                 .telNo("83843874774")
                 .biography("now is the time for all good men to come to the aid of the party")
-                .imagePath("/images/p039.jpg")
                 .trainerSpecialityCommandID(33L)
                 .trainerSpecialityCommandID(11L)
                 .build();
@@ -87,11 +88,10 @@ public class TrainerIT {
        TrainerCommand created= trainerService.createOrUpdateTrainer(originalTrainerCommand);
 
         TrainerCommand updatedTrainerCommand = TrainerCommand.builder()
-                .employeeID("A0201")
+                .employeeID(empID)
                 .name("Big Jim Beefcake UPDATED")
                 .telNo("83843874774 UPDATED")
                 .biography("now is the time for all good men to come to the aid of the party UPDATED")
-                .imagePath("/images/p039.jpg UPDATED")
                 .id(created.getId())
                 .trainerSpecialityCommandID(33L)
                 .trainerSpecialityCommandID(11L)
@@ -99,7 +99,7 @@ public class TrainerIT {
 
         trainerController.updateTrainer(updatedTrainerCommand, bindingResult);
 
-        Optional<Trainer> updatedOneOptional = trainerRepository.findByEmployeeID("A0201");
+        Optional<Trainer> updatedOneOptional = trainerRepository.findByEmployeeID(empID);
         Trainer updatedOne = updatedOneOptional.get();
         Assertions.assertTrue(updatedOne.getName().endsWith(" UPDATED"));
 
@@ -113,7 +113,6 @@ public class TrainerIT {
                 .name("Big Jim Beefcake")
                 .telNo("83843874774")
                 .biography("now is the time for all good men to come to the aid of the party")
-                .imagePath("/images/p039.jpg")
                 .trainerSpecialityCommandID(33L)
                 .trainerSpecialityCommandID(11L)
                 .build();

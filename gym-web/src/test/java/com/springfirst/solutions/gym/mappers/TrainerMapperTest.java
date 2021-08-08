@@ -52,7 +52,6 @@ public class TrainerMapperTest {
                 .telNo("0129348 03993")
                 .trainerSpecialityCommandID(1L)
                 .trainerSpecialityCommandID(2L)
-                .imagePath("trainers/a997.jpg")
                 .biography("Been a personal trainer for 10 years")
                 .image(new Byte['3'])
                 .build();
@@ -73,9 +72,6 @@ public class TrainerMapperTest {
                     Assertions.assertEquals(trainer.getBiography(), trainerCommand.getBiography());
                 },
                 () -> {
-                    Assertions.assertEquals(trainer.getImagePath(), trainerCommand.getImagePath());
-                },
-                () -> {
                     Assertions.assertEquals(trainer.getId(), trainerCommand.getId());
                 }
                 ,() -> {
@@ -94,7 +90,6 @@ public class TrainerMapperTest {
                 .telNo("0129348 03993")
                 .trainerSpeciality(TrainerSpeciality.builder().description("classes").id(1L).build())
                 .trainerSpeciality(TrainerSpeciality.builder().description("yoga").id(2L).build())
-                .imagePath("trainers/a997.jpg")
                 .image(new Byte['4'])
                 .biography("Been a personal trainer for 10 years")
                 .build();
@@ -118,9 +113,6 @@ public class TrainerMapperTest {
                 },
                 () -> {
                     Assertions.assertEquals(trainer.getBiography(), trainerCommand.getBiography());
-                },
-                () -> {
-                    Assertions.assertEquals(trainer.getImagePath(), trainerCommand.getImagePath());
                 },
                 () -> {
                     Assertions.assertEquals(trainer.getId(), trainerCommand.getId());

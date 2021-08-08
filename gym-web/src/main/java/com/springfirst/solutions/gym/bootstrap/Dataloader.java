@@ -109,7 +109,7 @@ public class Dataloader implements CommandLineRunner {
                 .telNo("049129993")
                 .employeeID("AB002")
                 .biography("Joe has been a trainer for 10 years, he knows his stuff.")
-                .imagePath("/images/trainers/AB002.jpg")
+    //            .image(new Byte['3'])
                 .trainerSpeciality(savedSpecialities.get("Classes"))
                 .build());
 
@@ -117,7 +117,7 @@ public class Dataloader implements CommandLineRunner {
                 .name("Kelly Strong")
                 .telNo("04328129993")
                 .employeeID("BC889")
-                .imagePath("/images/trainers/BC889.jpg")
+   //             .image(new Byte['3'])
                 .biography("Kelly can help you with your goals, whatever they are, she has lots of experience.")
                 .trainerSpeciality(savedSpecialities.get("Yoga"))
                 .trainerSpeciality(savedSpecialities.get("Classes"))
