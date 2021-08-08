@@ -106,7 +106,7 @@ public class Dataloader implements CommandLineRunner {
 
         Trainer savedJoe = trainerRepository.save(Trainer.builder()
                 .name("Joe Smith")
-                .telNo("049939-8129993")
+                .telNo("049129993")
                 .employeeID("AB002")
                 .biography("Joe has been a trainer for 10 years, he knows his stuff.")
                 .imagePath("/images/trainers/AB002.jpg")
@@ -115,7 +115,7 @@ public class Dataloader implements CommandLineRunner {
 
         Trainer savedKelly = trainerRepository.save(Trainer.builder()
                 .name("Kelly Strong")
-                .telNo("043239-8129993")
+                .telNo("04328129993")
                 .employeeID("BC889")
                 .imagePath("/images/trainers/BC889.jpg")
                 .biography("Kelly can help you with your goals, whatever they are, she has lots of experience.")
