@@ -1,0 +1,27 @@
+#Database Configuration
+#db.url=jdbc:mariadb://localhost:13306/gymdb_dev
+#db.username=gymdb_dev_appuser
+#db.password=Br3ntf0rd
+#db.driver-class-name=org.mariadb.jdbc.Driver
+#spring.jpa.hibernate.ddl-auto=validate
+
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:13306/gymdb_dev
+    username: gymdb_dev_appuser
+    password: Br3ntf0rd
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: mysql
+    show-sql: true
+    properties:
+      javax:
+#        persistence:
+#          schema-generation:
+#            create-source: metadata
+#            scripts:
+#              action: create
+#              create-target: gym_database_create.sql

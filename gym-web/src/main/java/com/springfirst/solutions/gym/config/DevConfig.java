@@ -16,8 +16,8 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 
-@Configuration
-@Profile("dev")
+//@Configuration
+//@Profile("dev")
 public class DevConfig {
 
     @Value("${db.url}")
