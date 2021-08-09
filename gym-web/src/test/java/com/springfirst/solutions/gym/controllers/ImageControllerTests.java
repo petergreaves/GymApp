@@ -44,7 +44,6 @@ public class ImageControllerTests {
     @BeforeEach
     public void setup() {
 
-
     mockMvc =MockMvcBuilders
             .standaloneSetup(imageController)
             .build();

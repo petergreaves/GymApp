@@ -2,8 +2,15 @@
 
 <body>
 
-<h1>image upload form
+<h1>Image upload form
 </h1>
+<!--/*@thymesVar id="trainer" type="com.springfirst.solutions.gym.commands.TrainerCommand"*/-->
+<form  action="http:\\localhost" method="post" enctype="multipart/form-data"
+       th:action="@{'/images/trainers/' + ${trainer.employeeID} + '/save'}">
+    <label class="control-label">Select File</label>
+    <input id="imagefile" name="imagefile" type="file" class="file">
+    <button type="submit">Submit</button>
+</form>
 </body>
 
 </html>

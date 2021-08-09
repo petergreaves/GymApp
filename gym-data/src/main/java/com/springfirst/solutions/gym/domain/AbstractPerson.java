@@ -3,6 +3,7 @@ package com.springfirst.solutions.gym.domain;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
@@ -21,5 +22,7 @@ public abstract class AbstractPerson extends AbstractEntity{
 
     private String telNo;
     private String name;
+
+    @Lob
     private Byte[] image;
 }

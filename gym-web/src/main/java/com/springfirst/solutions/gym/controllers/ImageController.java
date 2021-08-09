@@ -45,7 +45,7 @@ public class ImageController {
 
     // handle the image upload post
     @PostMapping("/trainers/{id}/save")
-    public String handleImageUploadForm(MultipartFile image, @PathVariable("id") String employeeID){
+    public String handleImageUploadForm(@RequestParam("imagefile") MultipartFile image, @PathVariable("id") String employeeID){
 
         log.debug("got image post request for {}", employeeID);
 

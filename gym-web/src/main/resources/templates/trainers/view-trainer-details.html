@@ -9,7 +9,9 @@
 </h1>
 
 
-
+<th:block th:if="${trainer.image.length>0}"><img
+      th:src="@{'/images/trainers/' + ${trainer.employeeID} + '/image'}"
+     width="200" height="200" /></th:block>
 
     <p th:text="'Contact: ' + ${trainer.telNo}" /></p>
     <p th:text="'About: ' + ${trainer.biography}" /></p>
@@ -27,6 +29,8 @@
 </form>
 
 <p><a th:href="@{'/trainers/' + ${trainer.employeeID}+ '/update'}">Edit</a> </p>
+
+<a th:href="@{'/images/trainers/' + ${trainer.employeeID}+ '/upload'}">Image upload</a>
 
 </body>
 
