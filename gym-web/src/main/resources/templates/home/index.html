@@ -1,13 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Gym app home page</title>
 
     <h1> Welcome to the gym app!</h1>
-    <p><a href="/trainers/list">See our trainers</a></p>
-    <p><a href="/register">Register</a></p>
-    <p><a href="/classes">See the classes we have</a></p>
+
+    <table>
+        <tr>
+            <td>
+                <img th:src="@{/img/gym.jpg}" height="200px"/>
+            </td>
+            <td>
+                <p><a href="/trainers/list">See our trainers</a></p>
+                <p><a href="/register">Register</a></p>
+                <p><a href="/classes">See the classes we have on offer</a></p>
+                <p><a href="/members">Members</a></p>
+            </td>
+        </tr>
+    </table>
+
+
+
 
 </head>
 <body>
