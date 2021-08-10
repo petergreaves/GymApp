@@ -25,12 +25,15 @@
       method="POST"
       th:action="@{'/trainers/' + ${trainer.employeeID} +'/delete'}">
     <input type="hidden" name="id" th:value="${trainer.employeeID}"/>
-    <a href="#" onclick="document.getElementById('deleteForm').submit();">Delete</a>
+    <a href="javascript:void()" onclick="document.getElementById('deleteForm').submit();">Delete</a>
 </form>
 
-<p><a th:href="@{'/trainers/' + ${trainer.employeeID}+ '/update'}">Edit</a> </p>
+    <p><a th:href="@{'/trainers/' + ${trainer.employeeID}+ '/update'}">Edit</a> |
 
-<a th:href="@{'/images/trainers/' + ${trainer.employeeID}+ '/upload'}">Image upload</a>
+    <a th:href="@{'/images/trainers/' + ${trainer.employeeID}+ '/upload'}">Image upload</a> | <a th:href="@{'/trainers/list'}">List</a>
+
+
+
 
 </body>
 
