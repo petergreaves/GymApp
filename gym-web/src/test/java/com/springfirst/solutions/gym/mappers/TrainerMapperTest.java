@@ -112,6 +112,9 @@ public class TrainerMapperTest {
 
                 },
                 () -> {
+                    Assertions.assertEquals(trainerCommand.getImagePresent(), true);
+                },
+                () -> {
                     Assertions.assertEquals(trainer.getBiography(), trainerCommand.getBiography());
                 },
                 () -> {
@@ -119,6 +122,50 @@ public class TrainerMapperTest {
                 }
                 ,() -> {
                     Assertions.assertEquals(trainer.getImage()[0], trainerCommand.getImage()[0]);
+                }
+        );
+    }
+
+    @Test
+    public void toCommandNoImage() {
+
+        Trainer trainer = Trainer.builder()
+                .employeeID("A997")
+                .name("Bill Bicep")
+                .telNo("0129348 03993")
+                .trainerSpeciality(TrainerSpeciality.builder().description("classes").id(1L).build())
+                .trainerSpeciality(TrainerSpeciality.builder().description("yoga").id(2L).build())
+                //.image(new Byte['4'])
+                .biography("Been a personal trainer for 10 years")
+                .build();
+        TrainerCommand trainerCommand = trainerMapper.trainerToTrainerCommand(trainer);
+
+        Assertions.assertAll(
+
+                () -> {
+                    Assertions.assertEquals(trainerCommand.getImagePresent(), false);
+                }
+        );
+    }
+
+    @Test
+    public void toCommandNullImage() {
+
+        Trainer trainer = Trainer.builder()
+                .employeeID("A997")
+                .name("Bill Bicep")
+                .telNo("0129348 03993")
+                .trainerSpeciality(TrainerSpeciality.builder().description("classes").id(1L).build())
+                .trainerSpeciality(TrainerSpeciality.builder().description("yoga").id(2L).build())
+                .image(null)
+                .biography("Been a personal trainer for 10 years")
+                .build();
+        TrainerCommand trainerCommand = trainerMapper.trainerToTrainerCommand(trainer);
+
+        Assertions.assertAll(
+
+                () -> {
+                    Assertions.assertEquals(trainerCommand.getImagePresent(), false);
                 }
         );
     }

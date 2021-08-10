@@ -35,6 +35,8 @@ public class TrainerCommand {
 
     private Byte[] image;
 
+    private Boolean imagePresent;
+
     @Singular
     private Set<Long> trainerSpecialityCommandIDs;
 }

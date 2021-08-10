@@ -5,6 +5,7 @@ import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Set;
@@ -16,6 +17,7 @@ public interface TrainerMapper {
     TrainerMapper INSTANCE = Mappers.getMapper( TrainerMapper.class);
 
     @Mapping(source = "trainerSpecialities", target = "trainerSpecialityCommandIDs")
+    @Mapping(source = "image", target = "imagePresent")
     TrainerCommand trainerToTrainerCommand(Trainer t);
 
     Trainer trainerCommandToTrainer(TrainerCommand t);
@@ -26,6 +28,12 @@ public interface TrainerMapper {
                 .stream()
                 .map(ts -> ts.getId())
                 .collect(Collectors.toSet());
+
+    }
+
+    default boolean map(Byte[] image){
+
+        return (image==null || image.length==0)?false:true;
 
     }
 

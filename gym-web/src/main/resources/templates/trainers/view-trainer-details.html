@@ -9,7 +9,7 @@
 </h1>
 
 
-<th:block th:if="${trainer.image.length>0}"><img
+<th:block th:if="${trainer.imagePresent}"><img
       th:src="@{'/images/trainers/' + ${trainer.employeeID} + '/image'}"
      width="200" height="200" /></th:block>
 
