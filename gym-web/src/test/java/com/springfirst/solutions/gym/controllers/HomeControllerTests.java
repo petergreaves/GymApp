@@ -58,7 +58,7 @@ public class HomeControllerTests {
     public void testHomePageMVCAuth_fail() throws Exception {
 
         mockMvc.perform(get("/"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -80,6 +80,13 @@ public class HomeControllerTests {
     public void testHomePageMVCHttpBasicAuth_success() throws Exception {
 
         mockMvc.perform(get("/").with(httpBasic("user", "pa55w0rd")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testHomePageMVCAllowAnonHomepage_success() throws Exception {
+
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk());
     }
 
