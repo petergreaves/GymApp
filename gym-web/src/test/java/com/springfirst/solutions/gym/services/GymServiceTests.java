@@ -58,6 +58,7 @@ public class GymServiceTests {
                 .buildingIdentifier("11")
                 .street("Hamilton Rd")
                 .county("Middx")
+                .city("Newtown")
                 .postcode("TT3 9JJ")
                 .id(9L)
                 .build();

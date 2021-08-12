@@ -87,6 +87,7 @@ public class Dataloader implements CommandLineRunner {
                 .buildingIdentifier("11a")
                 .street("Swan St")
                 .postcode("RR1 9DD")
+                .city("Newtown")
                 .county("Rutland")
                 .build());
 

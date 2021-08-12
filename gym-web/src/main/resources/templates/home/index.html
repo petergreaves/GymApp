@@ -11,7 +11,7 @@
         <tr>
             <td>
                 <p th:text="${gym.gymInfo}">About the gym</p>
-                <p th:text="'Join us at '+${gym.address.buildingIdentifier}+' '+${gym.address.street}+', '+ ${gym.address.county}">Address</p>
+                <p th:text="'Join us at '+${gym.address.buildingIdentifier}+' '+${gym.address.street}+', '+  ${gym.address.city}+', '+${gym.address.county}">Address</p>
             </td>
         </tr>
         <tr>

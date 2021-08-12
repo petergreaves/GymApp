@@ -1,9 +1,12 @@
 package com.springfirst.solutions.gym.controllers;
 
 
+import com.jayway.jsonpath.internal.path.PathToken;
 import com.springfirst.solutions.gym.commands.AddressCommand;
 import com.springfirst.solutions.gym.commands.GymCommand;
-import com.springfirst.solutions.gym.domain.Address;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +40,7 @@ public class HomeControllerTests extends BaseIT{
                 .buildingIdentifier("44")
                 .street("Beesley Street")
                 .county("Rutland")
+                 .city("Newtown")
                 .postcode("GG4 9LL")
                 .build();
          gymCommand = GymCommand.builder()
@@ -141,6 +145,15 @@ public class HomeControllerTests extends BaseIT{
 
         mockMvc.perform(get("/"))
                 .andExpect(model().attributeExists("gym"))
+                .andExpect(status().isOk());
+    }
+    @Test
+    public void testHomePageHasGymCityAttribute_success() throws Exception {
+
+        mockMvc.perform(get("/"))
+                .andExpect(model().attribute("gym",
+                        hasProperty("address",
+                                hasProperty("city", equalTo("Newtown")))))
                 .andExpect(status().isOk());
     }
 

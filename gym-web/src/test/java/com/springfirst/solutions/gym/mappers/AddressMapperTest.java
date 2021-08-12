@@ -22,6 +22,7 @@ class AddressMapperTest {
         Address address = Address.builder()
                 .buildingIdentifier("97")
                 .street("Berry Rd")
+                .city("Wewtown")
                 .county("Surrey")
                 .postcode("TW17 0FF")
                 .build();
@@ -32,6 +33,7 @@ class AddressMapperTest {
                 () -> {Assertions.assertEquals(address.getBuildingIdentifier(), addressCommand.getBuildingIdentifier());},
                 () -> {Assertions.assertEquals(address.getStreet(), addressCommand.getStreet());},
                 () -> {Assertions.assertEquals(address.getCounty(), addressCommand.getCounty());},
+                () -> {Assertions.assertEquals(address.getCity(), addressCommand.getCity());},
                 () -> {Assertions.assertEquals(address.getPostcode(), addressCommand.getPostcode());}
         );
     }
@@ -52,6 +54,7 @@ class AddressMapperTest {
                 () -> {Assertions.assertEquals(address.getBuildingIdentifier(), addressCommand.getBuildingIdentifier());},
                 () -> {Assertions.assertEquals(address.getStreet(), addressCommand.getStreet());},
                 () -> {Assertions.assertEquals(address.getCounty(), addressCommand.getCounty());},
+                () -> {Assertions.assertEquals(address.getCity(), addressCommand.getCity());},
                 () -> {Assertions.assertEquals(address.getPostcode(), addressCommand.getPostcode());}
         );
     }

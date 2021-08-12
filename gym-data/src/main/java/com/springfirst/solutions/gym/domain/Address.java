@@ -20,6 +20,8 @@ public class Address extends AbstractEntity{
     private String buildingIdentifier;
     @Column(name = "street")
     private String street;
+    @Column(name = "city")
+    private String city;
     @Column(name = "post_code")
     private String postcode;
     @Column(name = "county")
