@@ -1,8 +1,10 @@
 package com.springfirst.solutions.gym.controllers;
 
+
 import com.springfirst.solutions.gym.commands.GymCommand;
-import com.springfirst.solutions.gym.domain.Gym;
+import com.springfirst.solutions.gym.domain.Address;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,8 +25,33 @@ public class HomeControllerTests extends BaseIT{
     Model model;
 
 
+    private Address address;
+    private GymCommand gymCommand;
+
+    @BeforeEach
+    public void setup(){
+
+        super.setup();
+         address= Address.builder()
+                .buildingIdentifier("44")
+                .street("Beesley Street")
+                .county("Rutland")
+                .postcode("GG4 9LL")
+                .build();
+         gymCommand = GymCommand.builder()
+                .name("Fat Al's")
+                .gymInfo("some info")
+                .address(address)
+                .build();
+
+        when(gymService.getGym()).thenReturn(gymCommand);
+
+
+    }
+
     @Test
     public void testHomePageMVCAuth_fail() throws Exception {
+
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk());
@@ -34,12 +61,16 @@ public class HomeControllerTests extends BaseIT{
     @WithMockUser("nemo")   // can be anything
     public void testHomePageMVCAuthMockuser_success() throws Exception {
 
+
+
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void testHomePageMVCHttpBasicAuth_fail() throws Exception {
+
+
 
         mockMvc.perform(get("/").with(httpBasic("foo", "bar")))
                 .andExpect(status().isUnauthorized());
@@ -48,6 +79,8 @@ public class HomeControllerTests extends BaseIT{
     @Test
     public void testHomePageMVCHttpBasicAuth_success() throws Exception {
 
+
+
         mockMvc.perform(get("/").with(httpBasic("user", "pa55w0rd")))
                 .andExpect(status().isOk());
     }
@@ -55,12 +88,16 @@ public class HomeControllerTests extends BaseIT{
     @Test
     public void testHomePageMVCAllowAnonHomepage_success() throws Exception {
 
+
+
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void testHomePageMVCAllowAnonImageView_success() throws Exception {
+
+
 
         mockMvc.perform(get("/img/gym.jpg"))
                 .andExpect(status().isOk());
@@ -100,9 +137,6 @@ public class HomeControllerTests extends BaseIT{
     @Test
     public void testHomePageHasGymAttribute_success() throws Exception {
 
-        GymCommand gymCommand = GymCommand.builder().name("Fat Al's").build();
-
-        when(gymService.getGym()).thenReturn(gymCommand);
 
         mockMvc.perform(get("/"))
                 .andExpect(model().attributeExists("gym"))
