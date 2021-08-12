@@ -75,25 +75,19 @@ public class HomeControllerTests extends BaseIT{
     @Test
     public void testHomePageMVCHttpBasicAuth_fail() throws Exception {
 
-
-
         mockMvc.perform(get("/").with(httpBasic("foo", "bar")))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void testHomePageMVCHttpBasicAuth_success() throws Exception {
+    public void testHomePageMVCHttpBasicAuthFromInMem_success() throws Exception {
 
-
-
-        mockMvc.perform(get("/").with(httpBasic("user", "pa55w0rd")))
+        mockMvc.perform(get("/").with(httpBasic("userMember", "pa55w0rd")))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void testHomePageMVCAllowAnonHomepage_success() throws Exception {
-
-
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk());
@@ -101,8 +95,6 @@ public class HomeControllerTests extends BaseIT{
 
     @Test
     public void testHomePageMVCAllowAnonImageView_success() throws Exception {
-
-
 
         mockMvc.perform(get("/img/gym.jpg"))
                 .andExpect(status().isOk());
