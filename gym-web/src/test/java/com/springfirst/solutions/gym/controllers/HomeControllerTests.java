@@ -51,6 +51,13 @@ public class HomeControllerTests extends BaseIT{
     }
 
     @Test
+    public void testHomePageMVCAllowAnonImageView_success() throws Exception {
+
+        mockMvc.perform(get("/img/gym.jpg"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void testHomePage() {
 
         homeController = new HomeController();
