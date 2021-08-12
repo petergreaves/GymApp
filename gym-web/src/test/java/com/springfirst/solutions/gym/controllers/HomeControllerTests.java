@@ -1,6 +1,7 @@
 package com.springfirst.solutions.gym.controllers;
 
 
+import com.springfirst.solutions.gym.commands.AddressCommand;
 import com.springfirst.solutions.gym.commands.GymCommand;
 import com.springfirst.solutions.gym.domain.Address;
 import org.junit.jupiter.api.Assertions;
@@ -25,14 +26,14 @@ public class HomeControllerTests extends BaseIT{
     Model model;
 
 
-    private Address address;
+    private AddressCommand addressCommand;
     private GymCommand gymCommand;
 
     @BeforeEach
     public void setup(){
 
         super.setup();
-         address= Address.builder()
+         addressCommand= AddressCommand.builder()
                 .buildingIdentifier("44")
                 .street("Beesley Street")
                 .county("Rutland")
@@ -41,7 +42,7 @@ public class HomeControllerTests extends BaseIT{
          gymCommand = GymCommand.builder()
                 .name("Fat Al's")
                 .gymInfo("some info")
-                .address(address)
+                .address(addressCommand)
                 .build();
 
         when(gymService.getGym()).thenReturn(gymCommand);

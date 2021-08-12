@@ -3,6 +3,7 @@ package com.springfirst.solutions.gym.controllers;
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.domain.Trainer;
+import com.springfirst.solutions.gym.mappers.AddressMapper;
 import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.mappers.TrainerSpecialityMapper;
@@ -52,6 +53,9 @@ public class TrainerIT {
     @Autowired
     private GymMapper gymMapper;
 
+    @Autowired
+    private AddressMapper addressMapper;
+
     private TrainerService trainerService;
     private TrainerSpecialityService trainerSpecialityService;
     private GymService gymService ;
@@ -64,7 +68,7 @@ public class TrainerIT {
         trainerService = new TrainerServiceImpl(trainerRepository, gymService, trainerMapper,trainerSpecialityRepository);
         trainerSpecialityService = new TrainerSpecialityServiceImpl(trainerSpecialityRepository,trainerSpecialityMapper );
         trainerController = new TrainerController(trainerService, trainerSpecialityService);
-        gymService = new GymServiceImpl(gymMapper, trainerMapper, gymRepository);
+        gymService = new GymServiceImpl(gymMapper, trainerMapper, addressMapper, gymRepository);
 
     }
 

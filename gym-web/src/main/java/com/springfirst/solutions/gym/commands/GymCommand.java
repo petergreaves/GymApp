@@ -11,5 +11,5 @@ public class GymCommand {
 
     private String name;
     private String gymInfo;
-    private Address address;
+    private AddressCommand address;
 }

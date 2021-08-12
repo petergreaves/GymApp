@@ -4,6 +4,7 @@ import com.springfirst.solutions.gym.commands.GymCommand;
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.domain.Gym;
 import com.springfirst.solutions.gym.domain.Trainer;
+import com.springfirst.solutions.gym.mappers.AddressMapper;
 import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.repositories.GymRepository;
@@ -17,11 +18,13 @@ public class GymServiceImpl implements GymService {
 
     private final GymMapper gymMapper;
     private final TrainerMapper trainerMapper;
+    private final AddressMapper addressMapper ;
     private final GymRepository gymRepository;
 
-    public GymServiceImpl(GymMapper gymMapper, TrainerMapper trainerMapper, GymRepository gymRepository) {
+    public GymServiceImpl(GymMapper gymMapper, TrainerMapper trainerMapper, AddressMapper addressMapper, GymRepository gymRepository) {
         this.gymMapper = gymMapper;
         this.trainerMapper = trainerMapper;
+        this.addressMapper = addressMapper;
         this.gymRepository = gymRepository;
     }
 

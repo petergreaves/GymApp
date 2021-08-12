@@ -1,6 +1,7 @@
 package com.springfirst.solutions.gym.domain;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @Table(name = "address")
 @AllArgsConstructor
 @NoArgsConstructor
