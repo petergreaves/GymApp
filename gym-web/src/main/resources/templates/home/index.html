@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="gym" type="com.springfirst.solutions.gym.commands.GymCommand"*/-->
 <head>
     <meta charset="UTF-8">
     <title>Gym app home page</title>
 
-    <h1> Welcome to the gym app!</h1>
+    <h1 th:text="'Welcome to ' + ${gym.name} +'!'"> Welcome to the gym!</h1>
 
     <table>
+        <tr>
+            <td>
+                <p th:text="${gym.gymInfo}">About the gym</p>
+                <p th:text="'Join us at '+${gym.address.buildingIdentifier}+' '+${gym.address.street}+', '+ ${gym.address.county}">Address</p>
+            </td>
+        </tr>
         <tr>
             <td>
               <img th:src="@{/img/gym.jpg}" height="200px"/>

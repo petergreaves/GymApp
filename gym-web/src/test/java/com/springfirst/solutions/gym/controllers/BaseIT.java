@@ -1,5 +1,6 @@
 package com.springfirst.solutions.gym.controllers;
 
+import com.springfirst.solutions.gym.services.GymService;
 import com.springfirst.solutions.gym.services.ImageService;
 import com.springfirst.solutions.gym.services.TrainerService;
 import com.springfirst.solutions.gym.services.TrainerSpecialityService;
@@ -20,6 +21,9 @@ public class BaseIT {
 
     @MockBean
     protected ImageService imageService;
+
+    @MockBean
+    protected GymService gymService;
 
     @MockBean
     protected TrainerService trainerService;
