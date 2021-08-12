@@ -1,7 +1,5 @@
 package com.springfirst.solutions.gym.controllers;
 
-
-import com.jayway.jsonpath.internal.path.PathToken;
 import com.springfirst.solutions.gym.commands.AddressCommand;
 import com.springfirst.solutions.gym.commands.GymCommand;
 
@@ -24,10 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 public class HomeControllerTests extends BaseIT{
 
-
     @Mock
     Model model;
-
 
     private AddressCommand addressCommand;
     private GymCommand gymCommand;
@@ -50,7 +46,6 @@ public class HomeControllerTests extends BaseIT{
                 .build();
 
         when(gymService.getGym()).thenReturn(gymCommand);
-
 
     }
 
@@ -80,9 +75,21 @@ public class HomeControllerTests extends BaseIT{
     }
 
     @Test
+    public void testHomePageMVCHttpBasicAuthFromInMemAdmin_success() throws Exception {
+
+        mockMvc.perform(get("/").with(httpBasic("admin", "admin")))
+                .andExpect(status().isOk());
+    }
+    @Test
+    public void testHomePageMVCHttpBasicAuthFromInMemUserMember_success() throws Exception {
+
+        mockMvc.perform(get("/").with(httpBasic("userMember", "userMember")))
+                .andExpect(status().isOk());
+    }
+    @Test
     public void testHomePageMVCHttpBasicAuthFromInMem_success() throws Exception {
 
-        mockMvc.perform(get("/").with(httpBasic("userMember", "pa55w0rd")))
+        mockMvc.perform(get("/").with(httpBasic("userTrainer", "pa55w0rd")))
                 .andExpect(status().isOk());
     }
 
@@ -134,7 +141,6 @@ public class HomeControllerTests extends BaseIT{
     @Test
     public void testHomePageHasGymAttribute_success() throws Exception {
 
-
         mockMvc.perform(get("/"))
                 .andExpect(model().attributeExists("gym"))
                 .andExpect(status().isOk());
@@ -148,6 +154,5 @@ public class HomeControllerTests extends BaseIT{
                                 hasProperty("city", equalTo("Newtown")))))
                 .andExpect(status().isOk());
     }
-
 
 }

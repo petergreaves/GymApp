@@ -1,18 +1,13 @@
 package com.springfirst.solutions.gym.config.security;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
 
 @Configuration
 @EnableWebSecurity
@@ -38,29 +33,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    @Bean
-    protected UserDetailsService userDetailsService() {
-
-        UserDetails userAdmin = User
-                .withDefaultPasswordEncoder()
-                .username("admin")
-                .password("pa55w0rd")
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("admin")
+                .password("{bcrypt}$2a$10$e.THGU/v3BUS3lWDI65mjutNx995VzRuJB804QF.1eEQSh8m3iQpG") //admin
                 .roles("ADMIN")
-                .build();
-
-        UserDetails userMember = User
-                .withDefaultPasswordEncoder()
-                .username("userMember")
-                .password("pa55w0rd")
+                .and()
+                .withUser("userMember")
+                .password("{bcrypt}$2a$10$WZWeOwLPFMI04JF.OuyCkeFfgwrIb35KHYeX3sBZTusDx5Q8tF5HS") //userMember
                 .roles("MEMBER")
-                .build();
-        UserDetails userTrainer = User
-                .withDefaultPasswordEncoder()
-                .username("userTrainer")
-                .password("pa55w0rd")
-                .roles("TRAINER")
-                .build();
-
-        return new InMemoryUserDetailsManager(userMember,userAdmin,userTrainer);
+                .and()
+                .withUser("userTrainer")
+                .password("{bcrypt}$2a$10$bqEaZLu5TXGCcK/X4R8H1./o9DsnjVdpivjXhFnoEmEujNplB12qK") //pa55w0rd
+                .roles("userTrainer");
     }
+
 }
