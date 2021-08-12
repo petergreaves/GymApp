@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <!--/*@thymesVar id="gym" type="com.springfirst.solutions.gym.commands.GymCommand"*/-->
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,12 @@
 
     <h1 th:text="'Welcome to ' + ${gym.name} +'!'"> Welcome to the gym!</h1>
 
+    <div sec:authorize="isAuthenticated()">
+        Welcome, <span sec:authentication="name">Authenticated user name</span> <a th:href="@{/logout}">Logout</a>
+    </div>
+    <div sec:authorize="isAnonymous()">
+        <a th:href="@{/login}">Login</a>
+    </div>
     <table>
         <tr>
             <td>
