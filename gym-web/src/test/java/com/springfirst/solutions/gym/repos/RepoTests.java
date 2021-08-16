@@ -6,6 +6,8 @@ import com.springfirst.solutions.gym.domain.Gym;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
 import com.springfirst.solutions.gym.repositories.*;
+import com.springfirst.solutions.gym.repositories.security.AuthorityRepository;
+import com.springfirst.solutions.gym.repositories.security.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,10 +43,26 @@ public class RepoTests {
     @Autowired
     VisitRepository visitRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    AuthorityRepository authorityRepository;
+
+
     @BeforeEach
     public void setup() throws Exception {
-        Dataloader dataloader = new Dataloader(trainerSpecialityRepository, trainerRepository,
-                membershipRepository, membershipTypeRepository, gymRepository, addressRepository, memberRepository, visitRepository);
+        Dataloader dataloader = new Dataloader(
+                trainerSpecialityRepository,
+                trainerRepository,
+                membershipRepository,
+                membershipTypeRepository,
+                gymRepository,
+                addressRepository,
+                memberRepository,
+                visitRepository,
+                userRepository,
+                authorityRepository);
 
         dataloader.run("Running...");
     }

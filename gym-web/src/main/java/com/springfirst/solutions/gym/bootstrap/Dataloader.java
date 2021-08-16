@@ -1,7 +1,11 @@
 package com.springfirst.solutions.gym.bootstrap;
 
 import com.springfirst.solutions.gym.domain.*;
+import com.springfirst.solutions.gym.domain.security.Authority;
+import com.springfirst.solutions.gym.domain.security.User;
 import com.springfirst.solutions.gym.repositories.*;
+import com.springfirst.solutions.gym.repositories.security.AuthorityRepository;
+import com.springfirst.solutions.gym.repositories.security.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -23,7 +27,19 @@ public class Dataloader implements CommandLineRunner {
     private final MemberRepository memberRepository;
     private final VisitRepository visitRepository;
 
-    public Dataloader(TrainerSpecialityRepository trainerSpecialityRepository, TrainerRepository trainerRepository, MembershipRepository membershipRepository, MembershipTypeRepository membershipTypeRepository, GymRepository gymRepository, AddressRepository addressRepository, MemberRepository memberRepository, VisitRepository visitRepository) {
+    private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
+
+    public Dataloader(TrainerSpecialityRepository trainerSpecialityRepository,
+                      TrainerRepository trainerRepository,
+                      MembershipRepository membershipRepository,
+                      MembershipTypeRepository membershipTypeRepository,
+                      GymRepository gymRepository,
+                      AddressRepository addressRepository,
+                      MemberRepository memberRepository,
+                      VisitRepository visitRepository,
+                      UserRepository userRepository,
+                      AuthorityRepository authorityRepository) {
         this.trainerSpecialityRepository = trainerSpecialityRepository;
         this.trainerRepository = trainerRepository;
         this.membershipRepository = membershipRepository;
@@ -32,15 +48,16 @@ public class Dataloader implements CommandLineRunner {
         this.addressRepository = addressRepository;
         this.memberRepository = memberRepository;
         this.visitRepository = visitRepository;
+        this.userRepository = userRepository;
+        this.authorityRepository = authorityRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
 
-        if (gymRepository.count() > 0){
+        if (gymRepository.count() > 0) {
             log.info("Data already loaded...");
-        }
-        else {
+        } else {
 
             log.info("Starting data load...");
 
@@ -66,9 +83,24 @@ public class Dataloader implements CommandLineRunner {
 
             // members
 
-            Map<String, Member> members = loadMembers(savedMembershipTypes);
+            Map<String, Member> savedMembers = loadMembers(savedMembershipTypes);
             count = memberRepository.count();
             log.info("Loaded {} members..", count);
+
+            Map<String, Authority> auths = loadAuthorities();
+
+            count = authorityRepository.count();
+            log.info("Loaded {} authorities..", count);
+
+            //create a list of collections of the users
+            List<Map<String, ? extends AbstractPerson>> allUsers = new ArrayList<>();
+            allUsers.add(savedMembers);
+            allUsers.add(savedTrainers);
+
+            loadUsers(allUsers, auths);
+
+            count = userRepository.count();
+            log.info("Loaded {} users..", count);
 
             count = visitRepository.count();
             log.info("Loaded {} visits..", count);
@@ -81,9 +113,55 @@ public class Dataloader implements CommandLineRunner {
 
     }
 
-    private Gym loadGym(Map<String, Trainer> savedTrainers){
+    private Map<String, Authority> loadAuthorities() {
 
-        Address savedGymAddress =addressRepository.save(Address.builder()
+        Map<String, Authority> auths = new HashMap<>();
+
+        Authority admin = Authority.builder()
+                .authority("ADMIN")
+                .build();
+        auths.put(admin.getAuthority(), authorityRepository.save(admin));
+
+        Authority member = Authority.builder()
+                .authority("MEMBER")
+                .build();
+        auths.put(member.getAuthority(), authorityRepository.save(member));
+
+        Authority trainer = Authority.builder()
+                .authority("TRAINER")
+                .build();
+        auths.put(trainer.getAuthority(), authorityRepository.save(trainer));
+
+        return auths;
+
+
+    }
+
+    private void loadUsers(List<Map<String, ? extends AbstractPerson>> users, Map<String, Authority> authorities) {
+
+        users.stream().forEach(userMap -> {
+
+            for (AbstractPerson user : userMap.values()) {
+                userRepository.save(User.builder()
+                        .username(user.getEmail())
+                        .password("{bcrypt}$2a$10$WZWeOwLPFMI04JF.OuyCkeFfgwrIb35KHYeX3sBZTusDx5Q8tF5HS")
+                        .authority(user instanceof Member?authorities.get("MEMBER"):authorities.get("TRAINER"))
+                        .build());
+            }
+        });
+
+        // load an admin account
+        userRepository.save(User.builder()
+                .username("admin")
+                .password("{bcrypt}$2a$10$e.THGU/v3BUS3lWDI65mjutNx995VzRuJB804QF.1eEQSh8m3iQpG")
+                .authority(authorities.get("ADMIN"))
+                .build());
+
+    }
+
+    private Gym loadGym(Map<String, Trainer> savedTrainers) {
+
+        Address savedGymAddress = addressRepository.save(Address.builder()
                 .buildingIdentifier("11a")
                 .street("Swan St")
                 .postcode("RR1 9DD")
@@ -91,7 +169,7 @@ public class Dataloader implements CommandLineRunner {
                 .county("Rutland")
                 .build());
 
-       return gymRepository.save(Gym.builder()
+        return gymRepository.save(Gym.builder()
                 .name("Muscles Unlimited")
                 .gymInfo("The place to get buff!")
                 .address(savedGymAddress)
@@ -108,17 +186,19 @@ public class Dataloader implements CommandLineRunner {
         Trainer savedJoe = trainerRepository.save(Trainer.builder()
                 .name("Joe Smith")
                 .telNo("049129993")
+                .email("smith@bar.com")
                 .employeeID("AB002")
                 .biography("Joe has been a trainer for 10 years, he knows his stuff.")
-    //            .image(new Byte['3'])
+                //            .image(new Byte['3'])
                 .trainerSpeciality(savedSpecialities.get("Classes"))
                 .build());
 
         Trainer savedKelly = trainerRepository.save(Trainer.builder()
                 .name("Kelly Strong")
                 .telNo("04328129993")
+                .email("kelly@strong.com")
                 .employeeID("BC889")
-   //             .image(new Byte['3'])
+                //             .image(new Byte['3'])
                 .biography("Kelly can help you with your goals, whatever they are, she has lots of experience.")
                 .trainerSpeciality(savedSpecialities.get("Yoga"))
                 .trainerSpeciality(savedSpecialities.get("Classes"))
@@ -234,31 +314,33 @@ public class Dataloader implements CommandLineRunner {
                 .name("Arnie Liftalot")
                 .memberID("M001")
                 .telNo("039940-2832388")
+                .email("ironman@foo.com")
                 .trainingGoals("get fitter")
                 .visit(savedVisit)
                 .dateOfBirth(LocalDate.of(1963, 3, 22))
                 .membership(savedM1Membership).build();
 
-        Member m2= Member.builder()
+        Member m2 = Member.builder()
                 .name("Karen Kettlebells")
                 .memberID("M002")
+                .email("kk@buns.com")
                 .telNo("0190940-2832388")
                 .trainingGoals("strength")
                 .dateOfBirth(LocalDate.of(1993, 7, 12))
                 .membership(savedM2Membership).build();
 
-        Member m3= Member.builder()
+        Member m3 = Member.builder()
                 .name("Billy Biceps")
                 .memberID("M003")
+                .email("billy@bt.net")
                 .telNo("0378-832388")
                 .dateOfBirth(LocalDate.of(1977, 11, 19))
                 .trainingGoals("flexibility")
                 .membership(savedM3Membership).build();
 
-
         saved.put(m1.getMemberID(), memberRepository.save(m1));
         saved.put(m2.getMemberID(), memberRepository.save(m2));
-        saved.put(m2.getMemberID(), memberRepository.save(m3));
+        saved.put(m3.getMemberID(), memberRepository.save(m3));
         return saved;
     }
 
