@@ -24,7 +24,7 @@ jobs:
           command: mvn test
       - run:
           name: Coverage report
-          command: mvn jacoco:report
+          command: mvn org.jacoco:jacoco-maven-plugin:report
 
 workflows:
   # Below is the definition of your workflow.
