@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface TrainerSpecialityRepository extends JpaRepository<TrainerSpeciality, Long> {
 
-    List<TrainerSpeciality> findAllByDescriptionIgnoringCase(String desc);
+    List<TrainerSpeciality> findAllByNameIgnoringCase(String name);
 }

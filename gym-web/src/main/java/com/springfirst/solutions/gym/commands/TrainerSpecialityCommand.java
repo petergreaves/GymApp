@@ -9,6 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class TrainerSpecialityCommand {
 
+    private String name;
     private String description;
     private Long id;
 }

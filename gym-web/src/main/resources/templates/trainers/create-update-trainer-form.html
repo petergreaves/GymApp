@@ -56,7 +56,7 @@
     <p><label for="specialities">Specialities:</label></p>
     <p><select th:name="specialities" id="specialities"
                th:field="*{trainerSpecialityCommandIDs}" multiple="multiple" th:size="${specialities.size()}">
-        <option th:each="spec : ${specialities}" th:value="${spec.id}" th:text="${spec.description}"
+        <option th:each="spec : ${specialities}" th:value="${spec.id}" th:text="${spec.name}"
                 th:selected="${#lists.contains(trainer.trainerSpecialityCommandIDs, spec.id)}">
         </option>
     </select></p>

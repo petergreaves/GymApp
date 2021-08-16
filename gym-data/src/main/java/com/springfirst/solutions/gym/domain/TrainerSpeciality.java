@@ -18,4 +18,7 @@ public class TrainerSpeciality extends AbstractEntity{
 
     @Column(name ="description")
     private String description;
+
+    @Column(name ="name")
+    private String name;
 }

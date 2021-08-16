@@ -18,7 +18,7 @@
 
     <p th:if="${trainer.trainerSpecialityCommandIDs}" th:text="'Specialities: '"></p>
     <div th:each="s : ${specialities}">
-        <p th:if="${trainer.trainerSpecialityCommandIDs.contains(s.id)}" th:text="${s.description}">spec</p>
+        <p th:if="${trainer.trainerSpecialityCommandIDs.contains(s.id)}" th:text="${s.name}">spec</p>
     </div>
 
 <form id="deleteForm"

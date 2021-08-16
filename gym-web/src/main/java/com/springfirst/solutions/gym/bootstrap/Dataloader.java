@@ -138,32 +138,32 @@ public class Dataloader implements CommandLineRunner {
         saved.put("Pilates", trainerSpecialityRepository.save(TrainerSpeciality
                 .builder()
                 .id(1L)
-                .description("Pilates")
+                .name("Pilates")
+                .description("Pilates is the class for you if you want to get schwifty.")
                 .build()));
         saved.put("Yoga", trainerSpecialityRepository.save(TrainerSpeciality
                 .builder()
                 .id(2L)
-                .description("Yoga")
+                .name("Yoga")
+                .description("All the bendy magic of the east!")
                 .build()));
         saved.put("Strength", trainerSpecialityRepository.save(TrainerSpeciality
                 .builder()
                 .id(3L)
-                .description("Strength")
+                .name("Strength")
+                .description("Bring your own telephone directories, and destroy them.")
                 .build()));
         saved.put("Core", trainerSpecialityRepository.save(TrainerSpeciality
                 .builder()
                 .id(4L)
-                .description("Core")
+                .name("Core")
+                .description("Take the core class to get ripped!")
                 .build()));
         saved.put("Classes", trainerSpecialityRepository.save(TrainerSpeciality
                 .builder()
                 .id(5L)
-                .description("Classes")
-                .build()));
-        saved.put("Strength", trainerSpecialityRepository.save(TrainerSpeciality
-                .builder()
-                .id(6L)
-                .description("Strength")
+                .name("Spinning")
+                .description("In the cycle studio...get ready to hit the heights!!")
                 .build()));
 
         return saved;

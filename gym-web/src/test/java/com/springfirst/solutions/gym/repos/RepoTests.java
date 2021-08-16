@@ -60,7 +60,7 @@ public class RepoTests {
     public void testTrainerSearchBySpec_success(){
         // add a trainer
 
-        List<TrainerSpeciality> classes = trainerSpecialityRepository.findAllByDescriptionIgnoringCase("classes");
+        List<TrainerSpeciality> classes = trainerSpecialityRepository.findAllByNameIgnoringCase("yoga");
         List<Trainer> found = trainerRepository.findAllByTrainerSpecialities(classes.get(0));
 
         Assertions.assertTrue(found.size() > 0);
