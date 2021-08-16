@@ -63,8 +63,8 @@ public class TrainerRestControllersTest extends BaseIT{
 
         when(trainerService.getAllTrainers()).thenReturn(ret);
 
-        mockMvc.perform(get("/api/v1/trainers")
-                .with(httpBasic("userMember", "userMember")))
+        mockMvc.perform(get("/api/v1/trainers"))
+           //     .with(httpBasic("userMember", "userMember")))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(status().isOk());
 
@@ -73,8 +73,8 @@ public class TrainerRestControllersTest extends BaseIT{
     public void getTrainerByID() throws Exception{
 
         when(trainerService.getTrainerByEmployeeID(anyString())).thenReturn(ret.get(0));
-        mockMvc.perform(get("/api/v1/trainers/{id}","A8238")
-                .with(httpBasic("userTrainer", "pa55w0rd")))
+        mockMvc.perform(get("/api/v1/trainers/{id}","A8238"))
+       //         .with(httpBasic("userTrainer", "pa55w0rd")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Bill Bicep")));
 

@@ -22,8 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests(authorize -> {
                     authorize
                             .antMatchers("/h2-console/**", "/", "/img/**", "/login").permitAll()
-                            .antMatchers("/trainers/list").permitAll()
-                            .antMatchers("/trainers/*/show").permitAll()
+                            .antMatchers(HttpMethod.GET, "/trainers/list").permitAll()
+                            .antMatchers(HttpMethod.GET, "/trainers/*/show").permitAll()
+                            .antMatchers(HttpMethod.GET, "/api/v1/trainers/**").permitAll()
                             .antMatchers(HttpMethod.GET, "/api/v1/trainer-specialities/**").permitAll();
                 } )
                 .authorizeRequests()
