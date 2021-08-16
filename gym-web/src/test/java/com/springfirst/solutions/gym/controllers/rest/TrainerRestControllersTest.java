@@ -63,7 +63,8 @@ public class TrainerRestControllersTest extends BaseIT{
 
         when(trainerService.getAllTrainers()).thenReturn(ret);
 
-        mockMvc.perform(get("/api/v1/trainers").with(httpBasic("userMember", "userMember")))
+        mockMvc.perform(get("/api/v1/trainers")
+                .with(httpBasic("userMember", "userMember")))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(status().isOk());
 

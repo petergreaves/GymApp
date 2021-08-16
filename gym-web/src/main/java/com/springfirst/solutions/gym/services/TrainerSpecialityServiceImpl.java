@@ -31,4 +31,9 @@ public class TrainerSpecialityServiceImpl implements TrainerSpecialityService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public TrainerSpecialityCommand getTrainerSpecialityByID(Long id) {
+        return trainerSpecialityMapper.trainerSpecialityToTrainerSpecialityCommand(trainerSpecialityRepository.getById(id));
+    }
 }

@@ -3,6 +3,7 @@ package com.springfirst.solutions.gym.config.security;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,7 +23,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     authorize
                             .antMatchers("/h2-console/**", "/", "/img/**", "/login").permitAll()
                             .antMatchers("/trainers/list").permitAll()
-                            .antMatchers("/trainers/*/show").permitAll();
+                            .antMatchers("/trainers/*/show").permitAll()
+                            .antMatchers(HttpMethod.GET, "/api/v1/trainer-specialities/**").permitAll();
                 } )
                 .authorizeRequests()
                 .anyRequest().authenticated()

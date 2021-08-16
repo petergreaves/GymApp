@@ -37,6 +37,9 @@ public class BaseIT {
     protected ImageController imageController;
     protected TrainerRestController trainerRestController;
 
+    @InjectMocks
+    protected TrainerRestController trainerSpecialitiesRestController;
+
     protected MockMvc mockMvc ;
 
     protected HomeController homeController;
