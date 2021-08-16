@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Test
           command: mvn test
-       - run:
+      - run:
           name: Coverage report
           command: mvn jacoco:report
 
