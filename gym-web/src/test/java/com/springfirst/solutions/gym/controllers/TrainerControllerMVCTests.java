@@ -37,7 +37,7 @@ public class TrainerControllerMVCTests extends BaseIT{
     @Test
     public void trainersPostNewNotAvailableUnauthenticated_success() throws Exception{
         mockMvc.perform(post("/trainers/new"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
     }
 
@@ -70,7 +70,7 @@ public class TrainerControllerMVCTests extends BaseIT{
     @Test
     public void trainerDeleteNotAvailableUnauthenticated_success() throws Exception{
         mockMvc.perform(post("/trainers/{id}/delete", "A0099"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
     }
 }

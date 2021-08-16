@@ -28,7 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().and()
-                .httpBasic();
+                .httpBasic()
+                .and()
+                .csrf().disable();
     }
 
 
@@ -45,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .withUser("userTrainer")
                 .password("{bcrypt}$2a$10$bqEaZLu5TXGCcK/X4R8H1./o9DsnjVdpivjXhFnoEmEujNplB12qK") //pa55w0rd
-                .roles("userTrainer");
+                .roles("TRAINER");
     }
 
 }

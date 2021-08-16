@@ -1,5 +1,6 @@
 package com.springfirst.solutions.gym.controllers;
 
+import com.springfirst.solutions.gym.controllers.rest.TrainerRestController;
 import com.springfirst.solutions.gym.services.GymService;
 import com.springfirst.solutions.gym.services.ImageService;
 import com.springfirst.solutions.gym.services.TrainerService;
@@ -34,6 +35,7 @@ public class BaseIT {
     @InjectMocks
     protected TrainerController trainerController ;
     protected ImageController imageController;
+    protected TrainerRestController trainerRestController;
 
     protected MockMvc mockMvc ;
 
