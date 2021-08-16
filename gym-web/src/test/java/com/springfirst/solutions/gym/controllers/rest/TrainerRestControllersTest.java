@@ -2,27 +2,17 @@ package com.springfirst.solutions.gym.controllers.rest;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.controllers.BaseIT;
-import com.springfirst.solutions.gym.services.TrainerService;
-import lombok.With;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -93,7 +83,7 @@ public class TrainerRestControllersTest extends BaseIT{
     @Test
     public void deleteTrainerByID() throws Exception{
 
-        mockMvc.perform(delete("/api/v1/trainers/{id}","A8238")
+        mockMvc.perform(delete("/api/v1/trainers/{id}/delete","A8238")
                 .with(httpBasic("admin", "admin")))
                 .andExpect(status().isOk());
 
@@ -135,37 +125,42 @@ public class TrainerRestControllersTest extends BaseIT{
 
     }
 
-    @Test //TODO
-    public void updateTrainer() throws Exception{
-        TrainerCommand created = TrainerCommand.builder()
+    @Test
+    public void updateTrainer_success() throws Exception{
+        TrainerCommand updated = TrainerCommand.builder()
                 .employeeID("A8888")
                 .name("Anew Trainer")
                 .telNo("039903899")
+                .id(99L)
                 .biography("now is time for all good men to come to the aid of the party")
                 .build();
 
-        when(trainerService.createOrUpdateTrainer(any())).thenReturn(created);
+        when(trainerService.createOrUpdateTrainer(any())).thenReturn(updated);
 
         StringBuffer content = new StringBuffer();
-        content.append("{ \"name\": \"Anew Trainer\", \"employeeID\": \"A8888\",\"telNo\": \"039903899\",");
+        content.append("{ \"name\": \"Anew Trainer\", \"employeeID\": \"A8864\",\"telNo\": \"039903899\",");
         content.append("\"biography\" :\"now is time for all good men to come to the aid of the party\",");
         content.append("\"imagePresent\" : false,");
         content.append("\"trainerSpecialityCommandIDs\": [2,5,6]");
         content.append("}");
 
-        mockMvc.perform(post("/api/v1/trainers/new")
+        mockMvc.perform(put("/api/v1/trainers/{id}/update", "A8864")
                 .content(content.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("admin", "admin"))
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(header().string("Location", "/api/v1/trainers/A8888"))
-                .andExpect(jsonPath("$.name").value("Anew Trainer"))
-                .andExpect(jsonPath("$.telNo").value("039903899"));
+                .andExpect(status().isNoContent())
+                .andExpect(header().string("Location", "/api/v1/trainers/A8864"))
+                .andExpect(jsonPath("$").doesNotExist());
 
         verify(trainerService, times(1))
                 .createOrUpdateTrainer(ArgumentMatchers.any(TrainerCommand.class));
+
+    }
+
+    @Test // TODO
+    public void updateTrainerNoTrainerWithID_failure(){
+
 
     }
 }

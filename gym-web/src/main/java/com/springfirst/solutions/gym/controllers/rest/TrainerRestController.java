@@ -1,12 +1,9 @@
 package com.springfirst.solutions.gym.controllers.rest;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
-import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.services.TrainerService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
@@ -46,7 +43,7 @@ public class TrainerRestController {
 
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void deleteTrainerByID(@PathVariable("id") String empID){
 
@@ -66,6 +63,19 @@ public class TrainerRestController {
                 request.getContextPath(), created.getEmployeeID()));
 
         return created;
+
+    }
+
+    @PutMapping("/{id}/update")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateTrainerByID(@PathVariable("id") String empID, @RequestBody TrainerCommand updatedTrainerCommand, HttpServletResponse httpResponse,
+            WebRequest request){
+
+        trainerService.createOrUpdateTrainer(updatedTrainerCommand);
+
+        httpResponse.setStatus(HttpStatus.NO_CONTENT.value());
+        httpResponse.setHeader("Location", String.format("%s/api/v1/trainers/%s",
+                request.getContextPath(), updatedTrainerCommand.getEmployeeID()));
 
     }
 }
