@@ -4,6 +4,7 @@ import com.springfirst.solutions.gym.commands.TrainerCommand;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,7 +37,8 @@ public class TrainerControllerMVCTests extends BaseIT{
 
     @Test
     public void trainersPostNewNotAvailableUnauthenticated_success() throws Exception{
-        mockMvc.perform(post("/trainers/new"))
+        mockMvc.perform(post("/trainers/new")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(status().isUnauthorized());
 
     }
@@ -69,7 +71,8 @@ public class TrainerControllerMVCTests extends BaseIT{
 
     @Test
     public void trainerDeleteNotAvailableUnauthenticated_success() throws Exception{
-        mockMvc.perform(post("/trainers/{id}/delete", "A0099"))
+        mockMvc.perform(post("/trainers/{id}/delete", "A0099")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(status().isUnauthorized());
 
     }

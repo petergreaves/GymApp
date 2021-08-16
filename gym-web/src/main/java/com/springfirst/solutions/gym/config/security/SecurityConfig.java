@@ -20,7 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests(authorize -> {
                     authorize
-                            .antMatchers("/", "/img/**", "/login").permitAll()
+                            .antMatchers("/h2-console/**", "/", "/img/**", "/login").permitAll()
                             .antMatchers("/trainers/list").permitAll()
                             .antMatchers("/trainers/*/show").permitAll();
                 } )
@@ -30,7 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().and()
                 .httpBasic()
                 .and()
-                .csrf().disable();
+                .csrf().ignoringAntMatchers("/h2-console/**", "/api/v1/**");
+
+                // h2 console
+                http.headers().frameOptions().sameOrigin();
     }
 
 
