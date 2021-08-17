@@ -7,7 +7,8 @@
 
     <h1 th:text="'Welcome to ' + ${gym.name} +'!'"> Welcome to the gym!</h1>
 
-    <p th:if="${loginError}">Wrong username or password</p>
+    <div th:if="${param.error}">Wrong username or password!</div>
+    <div th:if="${param.logout}">You have signed out.</div>
     <div sec:authorize="isAnonymous()">
         <form th:action="@{/login}" method="post">
             <label for="username">Username:</label>
