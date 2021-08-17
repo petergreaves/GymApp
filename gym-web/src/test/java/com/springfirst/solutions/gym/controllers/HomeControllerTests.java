@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.ui.Model;
 
@@ -19,7 +19,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+
+@SpringBootTest
 public class HomeControllerTests extends BaseIT{
 
     @Mock
@@ -83,13 +84,13 @@ public class HomeControllerTests extends BaseIT{
     @Test
     public void testHomePageMVCHttpBasicAuthFromInMemUserMember_success() throws Exception {
 
-        mockMvc.perform(get("/").with(httpBasic("userMember", "userMember")))
+        mockMvc.perform(get("/").with(httpBasic("ironman@foo.com", "userMember")))
                 .andExpect(status().isOk());
     }
     @Test
     public void testHomePageMVCHttpBasicAuthFromInMem_success() throws Exception {
 
-        mockMvc.perform(get("/").with(httpBasic("userTrainer", "pa55w0rd")))
+        mockMvc.perform(get("/").with(httpBasic("kelly@strong.com", "userTrainer")))
                 .andExpect(status().isOk());
     }
 

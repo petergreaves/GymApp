@@ -41,8 +41,9 @@ public class PasswordEncoderTests {
         // default strength = 10
        // System.out.println(bcrypt.encode(PASSWORD));
         System.out.println(bcrypt.encode("admin"));
-        System.out.println(bcrypt.encode("pa55w0rd"));
-        System.out.println(bcrypt.encode("userMember"));
+//        System.out.println(bcrypt.encode("pa55w0rd"));
+//        System.out.println(bcrypt.encode("userMember"));
+        System.out.println(bcrypt.encode("userTrainer"));
         //System.out.println(bcrypt.encode(PASSWORD));
     }
     @Test

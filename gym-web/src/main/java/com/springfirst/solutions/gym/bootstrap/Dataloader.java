@@ -7,7 +7,10 @@ import com.springfirst.solutions.gym.repositories.*;
 import com.springfirst.solutions.gym.repositories.security.AuthorityRepository;
 import com.springfirst.solutions.gym.repositories.security.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -29,6 +32,9 @@ public class Dataloader implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public Dataloader(TrainerSpecialityRepository trainerSpecialityRepository,
                       TrainerRepository trainerRepository,
@@ -144,7 +150,9 @@ public class Dataloader implements CommandLineRunner {
             for (AbstractPerson user : userMap.values()) {
                 userRepository.save(User.builder()
                         .username(user.getEmail())
-                        .password("{bcrypt}$2a$10$WZWeOwLPFMI04JF.OuyCkeFfgwrIb35KHYeX3sBZTusDx5Q8tF5HS")
+                        .password(user instanceof Member
+                                ?"{bcrypt}$2a$10$WZWeOwLPFMI04JF.OuyCkeFfgwrIb35KHYeX3sBZTusDx5Q8tF5HS" //userMember
+                                :"{bcrypt}$2a$10$3Oj0vJzDtHUs2DaJp9W4Oe.y/VAHhv9H/731H1DF5E911X.8TaaLS") //userTrainer
                         .authority(user instanceof Member?authorities.get("MEMBER"):authorities.get("TRAINER"))
                         .build());
             }
@@ -153,7 +161,7 @@ public class Dataloader implements CommandLineRunner {
         // load an admin account
         userRepository.save(User.builder()
                 .username("admin")
-                .password("{bcrypt}$2a$10$e.THGU/v3BUS3lWDI65mjutNx995VzRuJB804QF.1eEQSh8m3iQpG")
+                .password("{bcrypt}$2a$10$ggssAWNb6c/1utOpI/pf1.YRPjsTpxDgARlrbkJMaNdf7yoRF1OPq")
                 .authority(authorities.get("ADMIN"))
                 .build());
 
@@ -207,6 +215,7 @@ public class Dataloader implements CommandLineRunner {
 
         saved.put(savedJoe.getEmployeeID(), savedJoe);
         saved.put(savedKelly.getEmployeeID(), savedKelly);
+        log.info("Loaded trainers : " + savedJoe.getEmail() + "," + savedKelly.getEmail());
         return saved;
 
     }
@@ -341,6 +350,7 @@ public class Dataloader implements CommandLineRunner {
         saved.put(m1.getMemberID(), memberRepository.save(m1));
         saved.put(m2.getMemberID(), memberRepository.save(m2));
         saved.put(m3.getMemberID(), memberRepository.save(m3));
+        log.info("Loaded members : " + m1.getEmail() + "," + m2.getEmail() + "," + m3.getEmail());
         return saved;
     }
 
