@@ -19,6 +19,5 @@ public class Authority {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-
-    private String authority;
+    private String role;
 }

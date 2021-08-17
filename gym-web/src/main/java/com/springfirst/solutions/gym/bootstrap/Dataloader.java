@@ -118,19 +118,19 @@ public class Dataloader implements CommandLineRunner {
         Map<String, Authority> auths = new HashMap<>();
 
         Authority admin = Authority.builder()
-                .authority("ADMIN")
+                .role("ADMIN")
                 .build();
-        auths.put(admin.getAuthority(), authorityRepository.save(admin));
+        auths.put(admin.getRole(), authorityRepository.save(admin));
 
         Authority member = Authority.builder()
-                .authority("MEMBER")
+                .role("MEMBER")
                 .build();
-        auths.put(member.getAuthority(), authorityRepository.save(member));
+        auths.put(member.getRole(), authorityRepository.save(member));
 
         Authority trainer = Authority.builder()
-                .authority("TRAINER")
+                .role("TRAINER")
                 .build();
-        auths.put(trainer.getAuthority(), authorityRepository.save(trainer));
+        auths.put(trainer.getRole(), authorityRepository.save(trainer));
 
         return auths;
 
