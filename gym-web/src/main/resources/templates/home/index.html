@@ -7,12 +7,21 @@
 
     <h1 th:text="'Welcome to ' + ${gym.name} +'!'"> Welcome to the gym!</h1>
 
-    <div sec:authorize="isAuthenticated()">
-        You are signed in as <span sec:authentication="name">Authenticated user name</span> <a th:href="@{/logout}"> (Logout) </a>
-    </div>
+    <p th:if="${loginError}">Wrong username or password</p>
     <div sec:authorize="isAnonymous()">
-        <a th:href="@{/login}">Sign in</a>
+        <form th:action="@{/login}" method="post">
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" autocomplete="off" autofocus="true" />
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" autocomplete="off" autofocus="true" />
+            <input type="submit" value="Sign in" />
+        </form>
     </div>
+
+    <div sec:authorize="isAuthenticated()">
+        You are signed in as <span sec:authentication="name">Authenticated user name</span> <a th:href="@{/logout}"> (Sign out) </a>
+    </div>
+
     <table>
         <tr>
             <td>
