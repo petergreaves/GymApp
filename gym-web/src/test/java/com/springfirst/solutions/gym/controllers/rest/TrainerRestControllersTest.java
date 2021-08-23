@@ -2,12 +2,14 @@ package com.springfirst.solutions.gym.controllers.rest;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.controllers.BaseIT;
+import com.springfirst.solutions.gym.controllers.advice.TrainerRestControllerExceptionHandler;
+import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -161,9 +164,23 @@ public class TrainerRestControllersTest extends BaseIT{
 
     }
 
-    @Test // TODO
-    public void updateTrainerNoTrainerWithID_failure(){
+    @Test
+    public void getTrainerWithInvalidID() throws Exception{
 
+        TrainerRestController trainerController = new TrainerRestController(trainerService);
+
+        mockMvc= MockMvcBuilders
+                .standaloneSetup(trainerController)
+                .setControllerAdvice(new TrainerRestControllerExceptionHandler())
+                .build();
+
+        when(trainerService.getTrainerByEmployeeID(anyString())).thenThrow(new TrainerNotFoundException("no trainer found wth ID ABC"));
+
+        mockMvc.perform(get("/api/v1/trainers/{id}","ABC"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.errorCode").value("EGA-001"));
+
+        verify(trainerService, times(1)).getTrainerByEmployeeID(anyString());
 
     }
 }

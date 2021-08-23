@@ -1,11 +1,14 @@
 package com.springfirst.solutions.gym.controllers.rest;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
+import com.springfirst.solutions.gym.error.Error;
+import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.services.TrainerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -39,7 +42,14 @@ public class TrainerRestController {
     @ResponseStatus(HttpStatus.OK)
     public TrainerCommand getTrainerByID(@PathVariable("id") String empID){
 
-       return trainerService.getTrainerByEmployeeID(empID);
+        try {
+            return trainerService.getTrainerByEmployeeID(empID);
+
+        }catch(TrainerNotFoundException tnfe){
+
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Trainer Not Found with ID "+empID, tnfe);
+        }
 
     }
 
