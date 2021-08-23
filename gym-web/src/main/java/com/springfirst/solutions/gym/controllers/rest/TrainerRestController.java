@@ -2,15 +2,19 @@ package com.springfirst.solutions.gym.controllers.rest;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.error.Error;
+import com.springfirst.solutions.gym.exceptions.TrainerInvalidContentException;
 import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.services.TrainerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -63,8 +67,15 @@ public class TrainerRestController {
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public TrainerCommand createTrainer(@RequestBody TrainerCommand newTrainerCommand, HttpServletResponse httpResponse,
-                              WebRequest request){
+    public TrainerCommand createTrainer(@Valid @RequestBody TrainerCommand newTrainerCommand, BindingResult bindingResult, HttpServletResponse httpResponse,
+                                        WebRequest request){
+
+        if (bindingResult.hasErrors()) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Invalid request to create trainer",
+                    new TrainerInvalidContentException("bad request", bindingResult.getAllErrors()));
+        }
 
         TrainerCommand created = trainerService.createOrUpdateTrainer(newTrainerCommand);
 
@@ -76,10 +87,21 @@ public class TrainerRestController {
 
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateTrainerByID(@PathVariable("id") String empID, @RequestBody TrainerCommand updatedTrainerCommand, HttpServletResponse httpResponse,
+    public void updateTrainerByID(@PathVariable("id") String empID,
+                                  @Valid @RequestBody TrainerCommand updatedTrainerCommand,
+                                  BindingResult bindingResult, HttpServletResponse httpResponse,
             WebRequest request){
+
+        if (bindingResult.hasErrors()) {
+
+            log.error("Errors in update request body.");
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Invalid request to update trainer",
+                    new TrainerInvalidContentException("bad request", bindingResult.getAllErrors()));
+        }
 
         trainerService.createOrUpdateTrainer(updatedTrainerCommand);
 

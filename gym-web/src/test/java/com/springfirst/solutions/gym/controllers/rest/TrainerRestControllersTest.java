@@ -7,8 +7,11 @@ import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import org.springframework.boot.ResourceBanner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
@@ -150,7 +153,7 @@ public class TrainerRestControllersTest extends BaseIT{
         content.append("\"trainerSpecialityCommandIDs\": [2,5,6]");
         content.append("}");
 
-        mockMvc.perform(put("/api/v1/trainers/{id}/update", "A8864")
+        mockMvc.perform(put("/api/v1/trainers/{id}", "A8864")
                 .content(content.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("admin", "admin"))
@@ -181,6 +184,42 @@ public class TrainerRestControllersTest extends BaseIT{
                 .andExpect(jsonPath("$.errorCode").value("EGA-001"));
 
         verify(trainerService, times(1)).getTrainerByEmployeeID(anyString());
+
+    }
+
+    @Test
+    public void updateTrainerWithInvalidIDInBody() throws Exception{
+
+        StringBuffer contentWithBadID = new StringBuffer();
+        contentWithBadID.append("{ \"name\": \"Anew Trainer\", \"employeeID\": \"A88993\",\"telNo\": \"039903899993939\",");
+        contentWithBadID.append("\"biography\" :\"now is time for all good men to come to the aid of the party\",");
+        contentWithBadID.append("\"imagePresent\" : false,");
+        contentWithBadID.append("\"trainerSpecialityCommandIDs\": [2,5,6]");
+        contentWithBadID.append("}");
+
+        TrainerRestController trainerController = new TrainerRestController(trainerService);
+
+        mockMvc= MockMvcBuilders
+                .standaloneSetup(trainerController)
+                .setControllerAdvice(new TrainerRestControllerExceptionHandler())
+                .build();
+
+        MvcResult result= mockMvc.perform(put("/api/v1/trainers/{id}","A88888")
+                .content(contentWithBadID.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+               .andExpect(jsonPath("$[1].errorCode").value("EGA-002"))
+          //      .andExpect(jsonPath("$.[?(@.message =~ /employeeID.*?/i)')].detail").value("size must be between 5 and 5"))
+//                .andExpect(jsonPath("$[1].message").value("employeeID failed validation."))
+               .andExpect(jsonPath("$[0].errorCode").value("EGA-002"))
+//                .andExpect(jsonPath("$[0].detail").value("size must be between 7 and 12"))
+//                .andExpect(jsonPath("$[0].message").value("telNo failed validation."))
+               .andReturn();
+
+
+        System.out.println(result.getResponse().getContentAsString());
+        verifyNoInteractions(trainerService);
 
     }
 }
