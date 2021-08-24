@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 //@WebMvcTest()
 @SpringBootTest
-public class TrainerRestControllersTest extends BaseIT{
+public class TrainerRestControllersTest extends BaseIT {
 
     TrainerCommand trainerCommand1;
     TrainerCommand trainerCommand2;
@@ -67,22 +67,23 @@ public class TrainerRestControllersTest extends BaseIT{
     }
 
     @Test
-    public void getAllTrainers() throws Exception{
+    public void getAllTrainers() throws Exception {
 
         when(trainerService.getAllTrainers()).thenReturn(ret);
 
         mockMvc.perform(get("/api/v1/trainers"))
-           //     .with(httpBasic("userMember", "userMember")))
+                //     .with(httpBasic("userMember", "userMember")))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(status().isOk());
 
     }
+
     @Test
-    public void getTrainerByID() throws Exception{
+    public void getTrainerByID() throws Exception {
 
         when(trainerService.getTrainerByEmployeeID(anyString())).thenReturn(ret.get(0));
-        mockMvc.perform(get("/api/v1/trainers/{id}","A8238"))
-       //         .with(httpBasic("userTrainer", "pa55w0rd")))
+        mockMvc.perform(get("/api/v1/trainers/{id}", "A8238"))
+                //         .with(httpBasic("userTrainer", "pa55w0rd")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Bill Bicep")));
 
@@ -90,9 +91,9 @@ public class TrainerRestControllersTest extends BaseIT{
     }
 
     @Test
-    public void deleteTrainerByID() throws Exception{
+    public void deleteTrainerByID() throws Exception {
 
-        mockMvc.perform(delete("/api/v1/trainers/{id}/delete","A8238")
+        mockMvc.perform(delete("/api/v1/trainers/{id}/delete", "A8238")
                 .with(httpBasic("admin", "admin")))
                 .andExpect(status().isOk());
 
@@ -101,7 +102,7 @@ public class TrainerRestControllersTest extends BaseIT{
     }
 
     @Test
-    public void createTrainer() throws Exception{
+    public void createTrainer() throws Exception {
         TrainerCommand created = TrainerCommand.builder()
                 .employeeID("A8888")
                 .name("Anew Trainer")
@@ -135,7 +136,7 @@ public class TrainerRestControllersTest extends BaseIT{
     }
 
     @Test
-    public void updateTrainer_success() throws Exception{
+    public void updateTrainer_success() throws Exception {
         TrainerCommand updated = TrainerCommand.builder()
                 .employeeID("A8888")
                 .name("Anew Trainer")
@@ -168,18 +169,18 @@ public class TrainerRestControllersTest extends BaseIT{
     }
 
     @Test
-    public void getTrainerWithInvalidID() throws Exception{
+    public void getTrainerWithInvalidID() throws Exception {
 
         TrainerRestController trainerController = new TrainerRestController(trainerService);
 
-        mockMvc= MockMvcBuilders
+        mockMvc = MockMvcBuilders
                 .standaloneSetup(trainerController)
                 .setControllerAdvice(new TrainerRestControllerExceptionHandler())
                 .build();
 
         when(trainerService.getTrainerByEmployeeID(anyString())).thenThrow(new TrainerNotFoundException("no trainer found wth ID ABC"));
 
-        mockMvc.perform(get("/api/v1/trainers/{id}","ABC"))
+        mockMvc.perform(get("/api/v1/trainers/{id}", "ABC"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorCode").value("EGA-001"));
 
@@ -188,7 +189,7 @@ public class TrainerRestControllersTest extends BaseIT{
     }
 
     @Test
-    public void updateTrainerWithInvalidIDInBody() throws Exception{
+    public void updateTrainerWithInvalidIDInBody() throws Exception {
 
         StringBuffer contentWithBadID = new StringBuffer();
         contentWithBadID.append("{ \"name\": \"Anew Trainer\", \"employeeID\": \"A88993\",\"telNo\": \"039903899993939\",");
@@ -199,26 +200,22 @@ public class TrainerRestControllersTest extends BaseIT{
 
         TrainerRestController trainerController = new TrainerRestController(trainerService);
 
-        mockMvc= MockMvcBuilders
+        mockMvc = MockMvcBuilders
                 .standaloneSetup(trainerController)
                 .setControllerAdvice(new TrainerRestControllerExceptionHandler())
                 .build();
 
-        MvcResult result= mockMvc.perform(put("/api/v1/trainers/{id}","A88888")
+    mockMvc.perform(put("/api/v1/trainers/{id}", "A88888")
                 .content(contentWithBadID.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-               .andExpect(jsonPath("$[1].errorCode").value("EGA-002"))
-          //      .andExpect(jsonPath("$.[?(@.message =~ /employeeID.*?/i)')].detail").value("size must be between 5 and 5"))
-//                .andExpect(jsonPath("$[1].message").value("employeeID failed validation."))
-               .andExpect(jsonPath("$[0].errorCode").value("EGA-002"))
-//                .andExpect(jsonPath("$[0].detail").value("size must be between 7 and 12"))
-//                .andExpect(jsonPath("$[0].message").value("telNo failed validation."))
-               .andReturn();
+                .andExpect(jsonPath("$[1].errorCode").value("EGA-002"))
+                .andExpect(jsonPath("$.[?(@.message =~ /employeeID.*?/i)].detail").value("size must be between 5 and 5"))
+                .andExpect(jsonPath("$[0].errorCode").value("EGA-002"))
+                .andExpect(jsonPath("$.[?(@.message =~ /telNo.*?/i)].detail").value("size must be between 7 and 12"))
+                .andReturn();
 
-
-        System.out.println(result.getResponse().getContentAsString());
         verifyNoInteractions(trainerService);
 
     }
