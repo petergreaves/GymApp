@@ -5,6 +5,8 @@ import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.configs.MapperConfigs;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.exceptions.TrainerDuplicateEmployeeIDException;
+import com.springfirst.solutions.gym.exceptions.TrainerInvalidContentException;
 import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
@@ -127,6 +129,7 @@ public class TrainerServiceTests {
         TrainerCommand newTrainerCommand = TrainerCommand.builder()
                 .employeeID(t1EmpID)
                 .name(t1Name)
+                .isNew(true)
                 .telNo(t1TelNo)
                 .trainerSpecialityCommandID(55L)
                 .build();
@@ -178,6 +181,23 @@ public class TrainerServiceTests {
             trainerService.deleteTrainer("XXXX");
         });
         verify(trainerRepository, times(0)).delete(any(Trainer.class));
+        verify(trainerRepository, times(1)).findByEmployeeID(anyString());
+
+    }
+
+    @Test
+    void testCreateTrainerWithDuplicateEmpId_fail() {
+
+        Trainer t1 = Trainer.builder().employeeID("ABC01").build();
+        TrainerCommand t2 = TrainerCommand.builder().employeeID("ABC01").isNew(true).build();
+
+        when(trainerRepository.findByEmployeeID(anyString())).thenReturn(Optional.of(t1));
+
+        Assertions.assertThrows(TrainerDuplicateEmployeeIDException.class, () -> {
+            trainerService.createOrUpdateTrainer(t2);
+        });
+
+     //   verify(trainerRepository, times(0)).save(Trainer.class);
         verify(trainerRepository, times(1)).findByEmployeeID(anyString());
 
     }

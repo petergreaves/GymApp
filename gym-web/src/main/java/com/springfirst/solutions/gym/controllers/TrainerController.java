@@ -2,6 +2,7 @@ package com.springfirst.solutions.gym.controllers;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
+import com.springfirst.solutions.gym.exceptions.TrainerDuplicateEmployeeIDException;
 import com.springfirst.solutions.gym.services.TrainerService;
 import com.springfirst.solutions.gym.services.TrainerSpecialityService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,10 +75,11 @@ public class TrainerController {
     // handle the post of a new trainer
     @PostMapping(value = "/new")
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
-    public String createTrainer(@Valid @ModelAttribute("trainer") TrainerCommand trainerCommand, BindingResult bindingResult){
+    public String createTrainer(@Valid @ModelAttribute("trainer") TrainerCommand trainerCommand,
+                                BindingResult bindingResult,
+                                Model model){
 
         if (bindingResult.hasErrors()) {
-
             for (ObjectError allError : bindingResult.getAllErrors()) {
                 log.error("Trainer create/update error validating : " + allError.getDefaultMessage());
             }
@@ -84,7 +87,16 @@ public class TrainerController {
             return TRAINER_CREATE_UPDATE_FORM;
         }
 
-        TrainerCommand savedTrainer=trainerService.createOrUpdateTrainer(trainerCommand);
+        TrainerCommand savedTrainer;
+        try {
+             savedTrainer = trainerService.createOrUpdateTrainer(trainerCommand);
+        }
+        catch(TrainerDuplicateEmployeeIDException tex){
+       bindingResult.addError(new FieldError("trainer","employeeID", tex.getMessage()));
+            trainerCommand.setIsNew(true); // never been saved
+            return TRAINER_CREATE_UPDATE_FORM;
+
+        }
         return "redirect:/trainers/" + savedTrainer.getEmployeeID() + "/show";
     }
 

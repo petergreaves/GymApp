@@ -11,5 +11,9 @@ public class TrainerInvalidContentException extends RuntimeException{
                 super(message);
                 this.errorList = errorList;
     }
+
+    public TrainerInvalidContentException(String message) {
+        super(message);
+    }
     public List<ObjectError> getErrorList(){ return  errorList;}
 }

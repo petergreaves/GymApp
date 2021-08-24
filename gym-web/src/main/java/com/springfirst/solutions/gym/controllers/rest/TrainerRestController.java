@@ -2,12 +2,14 @@ package com.springfirst.solutions.gym.controllers.rest;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.error.Error;
+import com.springfirst.solutions.gym.exceptions.TrainerDuplicateEmployeeIDException;
 import com.springfirst.solutions.gym.exceptions.TrainerInvalidContentException;
 import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.services.TrainerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -71,19 +73,28 @@ public class TrainerRestController {
                                         WebRequest request){
 
         if (bindingResult.hasErrors()) {
-
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Invalid request to create trainer",
                     new TrainerInvalidContentException("bad request", bindingResult.getAllErrors()));
         }
 
-        TrainerCommand created = trainerService.createOrUpdateTrainer(newTrainerCommand);
+        TrainerCommand savedTrainer = null;
+        try {
+            newTrainerCommand.setIsNew(true);
+            savedTrainer = trainerService.createOrUpdateTrainer(newTrainerCommand);
+        }
+        catch(TrainerDuplicateEmployeeIDException tex){
+         //   bindingResult.addError(new FieldError("trainer","employeeID", tex.getMessage()));
+            tex.setErrorList(List.of(new FieldError("trainer","employeeID", tex.getMessage())));
+            throw tex;
+        }
+
 
         httpResponse.setStatus(HttpStatus.CREATED.value());
         httpResponse.setHeader("Location", String.format("%s/api/v1/trainers/%s",
-                request.getContextPath(), created.getEmployeeID()));
+                request.getContextPath(), savedTrainer.getEmployeeID()));
 
-        return created;
+        return savedTrainer;
 
     }
 

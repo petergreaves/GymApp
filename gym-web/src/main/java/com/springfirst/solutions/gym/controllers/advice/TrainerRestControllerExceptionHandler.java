@@ -1,6 +1,7 @@
 package com.springfirst.solutions.gym.controllers.advice;
 
 import com.springfirst.solutions.gym.error.Error;
+import com.springfirst.solutions.gym.exceptions.TrainerDuplicateEmployeeIDException;
 import com.springfirst.solutions.gym.exceptions.TrainerInvalidContentException;
 import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,24 @@ import java.util.List;
 @Slf4j
 @ControllerAdvice(annotations = RestController.class)
 public class TrainerRestControllerExceptionHandler {
+
+
+    @ExceptionHandler(TrainerDuplicateEmployeeIDException.class)
+    @ResponseBody
+    protected ResponseEntity<Error> handleDuplicateID(Exception ex) {
+
+        log.error("Handling Duplicate Trainer ID exception");
+        log.error(ex.getMessage());
+
+        Error error = Error.builder()
+                .errorCode("EGA-003")
+                .message("A trainer with this employee ID already exists for this trainer.")
+                .detail(
+                        ex.getMessage())
+                .build();
+
+        return new ResponseEntity(error, HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(TrainerInvalidContentException.class)
     @ResponseBody

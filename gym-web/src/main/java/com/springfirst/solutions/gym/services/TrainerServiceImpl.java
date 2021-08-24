@@ -3,6 +3,8 @@ package com.springfirst.solutions.gym.services;
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.exceptions.TrainerDuplicateEmployeeIDException;
+import com.springfirst.solutions.gym.exceptions.TrainerInvalidContentException;
 import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;
@@ -64,6 +66,15 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public TrainerCommand createOrUpdateTrainer(TrainerCommand trainerCommand) {
+
+        String empID = trainerCommand.getEmployeeID();
+
+        if (trainerCommand.getIsNew()){
+
+            if (trainerRepository.findByEmployeeID(trainerCommand.getEmployeeID()).isPresent()){
+                throw new TrainerDuplicateEmployeeIDException("Trainer already exists with employee ID : "+empID);
+            }
+        }
         Trainer toBeSaved = trainerMapper.trainerCommandToTrainer(trainerCommand);
 
         // now add the trainerSpecialities from the command as the Mapper doesnt do that

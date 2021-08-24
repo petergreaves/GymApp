@@ -136,6 +136,7 @@ public class TrainerControllerTests {
         verify(trainerService, times(1)).createOrUpdateTrainer(any());
     }
 
+
     @Test
     public void createTrainer_failsValidation() throws Exception {
         TrainerCommand newTrainerCommand = TrainerCommand.builder()
@@ -146,7 +147,7 @@ public class TrainerControllerTests {
                 .trainerSpecialityCommandID(11L)
                 .build();
 
-      //  when(trainerService.createTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(newTrainerCommand);
+        //  when(trainerService.createTrainer(ArgumentMatchers.any(TrainerCommand.class))).thenReturn(newTrainerCommand);
 
         mockMvc.perform(post("/trainers/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -167,7 +168,6 @@ public class TrainerControllerTests {
     @Test
     public void deleteTrainer_success() throws Exception {
 
-        //   when(trainerService.deleteTrainer(anyString())).;
 
         mockMvc.perform(post("/trainers/{id}/delete", "A001")
                 .param("id", "A001"))

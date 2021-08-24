@@ -81,6 +81,7 @@ public class TrainerIT {
         TrainerCommand originalTrainerCommand = TrainerCommand.builder()
                 .employeeID(empID)
                 .name("Big Jim Beefcake")
+                .isNew(false)
                 .telNo("83843874774")
                 .biography("now is the time for all good men to come to the aid of the party")
                 .trainerSpecialityCommandID(33L)
@@ -93,6 +94,7 @@ public class TrainerIT {
         TrainerCommand updatedTrainerCommand = TrainerCommand.builder()
                 .employeeID(empID)
                 .name("Big Jim Beefcake UPDATED")
+                .isNew(false)
                 .telNo("83843874774 UPDATED")
                 .biography("now is the time for all good men to come to the aid of the party UPDATED")
                 .id(created.getId())
@@ -114,13 +116,14 @@ public class TrainerIT {
         TrainerCommand newTrainerCommand = TrainerCommand.builder()
                 .employeeID("A0201")
                 .name("Big Jim Beefcake")
+                .isNew(true)
                 .telNo("83843874774")
                 .biography("now is the time for all good men to come to the aid of the party")
                 .trainerSpecialityCommandID(33L)
                 .trainerSpecialityCommandID(11L)
                 .build();
 
-        trainerController.createTrainer(newTrainerCommand, bindingResult);
+        trainerController.createTrainer(newTrainerCommand, bindingResult, model);
 
         Optional<Trainer> newOne = trainerRepository.findByEmployeeID("A0201");
         Assertions.assertTrue(newOne.isPresent());
