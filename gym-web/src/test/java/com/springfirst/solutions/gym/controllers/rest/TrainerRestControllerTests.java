@@ -119,7 +119,7 @@ public class TrainerRestControllerTests extends BaseIT {
         content.append("\"trainerSpecialityCommandIDs\": [2,5,6]");
         content.append("}");
 
-        mockMvc.perform(post("/api/v1/trainers/new")
+        mockMvc.perform(post("/api/v1/trainers")
                 .content(content.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(httpBasic("admin", "admin"))

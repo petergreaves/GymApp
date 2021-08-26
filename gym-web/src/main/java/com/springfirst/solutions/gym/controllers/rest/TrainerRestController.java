@@ -67,7 +67,7 @@ public class TrainerRestController {
 
     }
 
-    @PostMapping("/new")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TrainerCommand createTrainer(@Valid @RequestBody TrainerCommand newTrainerCommand, BindingResult bindingResult, HttpServletResponse httpResponse,
                                         WebRequest request){
