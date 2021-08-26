@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 //@WebMvcTest()
 @SpringBootTest
-public class TrainerRestControllersTest extends BaseIT {
+public class TrainerRestControllerTests extends BaseIT {
 
     TrainerCommand trainerCommand1;
     TrainerCommand trainerCommand2;
@@ -93,7 +93,7 @@ public class TrainerRestControllersTest extends BaseIT {
     @Test
     public void deleteTrainerByID() throws Exception {
 
-        mockMvc.perform(delete("/api/v1/trainers/{id}/delete", "A8238")
+        mockMvc.perform(delete("/api/v1/trainers/{id}", "A8238")
                 .with(httpBasic("admin", "admin")))
                 .andExpect(status().isOk());
 

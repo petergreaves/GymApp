@@ -59,7 +59,7 @@ public class TrainerRestController {
 
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteTrainerByID(@PathVariable("id") String empID){
 
