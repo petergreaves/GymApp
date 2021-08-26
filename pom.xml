@@ -14,7 +14,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.springfirst.solutions.gym</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>gym-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Gym</name>
     <description>Gym application</description>
