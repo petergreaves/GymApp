@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest()
-public class TrainerSpecialitiesRestControllersTest extends BaseIT{
+public class TrainerSpecialitiesRestControllerTests extends BaseIT{
 
     TrainerSpecialityCommand trainerSpecialityCommand1;
     TrainerSpecialityCommand trainerSpecialityCommand2;
