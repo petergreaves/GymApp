@@ -7,6 +7,7 @@ import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
 import com.springfirst.solutions.gym.repositories.*;
 import com.springfirst.solutions.gym.repositories.security.AuthorityRepository;
+import com.springfirst.solutions.gym.repositories.security.RoleRepository;
 import com.springfirst.solutions.gym.repositories.security.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +50,9 @@ public class RepoTests {
     @Autowired
     AuthorityRepository authorityRepository;
 
+    @Autowired
+    RoleRepository roleRepository;
+
 
     @BeforeEach
     public void setup() throws Exception {
@@ -62,7 +66,8 @@ public class RepoTests {
                 memberRepository,
                 visitRepository,
                 userRepository,
-                authorityRepository);
+                authorityRepository,
+                roleRepository);
 
         dataloader.run("Running...");
     }

@@ -2,9 +2,11 @@ package com.springfirst.solutions.gym.bootstrap;
 
 import com.springfirst.solutions.gym.domain.*;
 import com.springfirst.solutions.gym.domain.security.Authority;
+import com.springfirst.solutions.gym.domain.security.Role;
 import com.springfirst.solutions.gym.domain.security.User;
 import com.springfirst.solutions.gym.repositories.*;
 import com.springfirst.solutions.gym.repositories.security.AuthorityRepository;
+import com.springfirst.solutions.gym.repositories.security.RoleRepository;
 import com.springfirst.solutions.gym.repositories.security.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,7 @@ public class Dataloader implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -45,7 +48,8 @@ public class Dataloader implements CommandLineRunner {
                       MemberRepository memberRepository,
                       VisitRepository visitRepository,
                       UserRepository userRepository,
-                      AuthorityRepository authorityRepository) {
+                      AuthorityRepository authorityRepository,
+                      RoleRepository roleRepository) {
         this.trainerSpecialityRepository = trainerSpecialityRepository;
         this.trainerRepository = trainerRepository;
         this.membershipRepository = membershipRepository;
@@ -56,6 +60,7 @@ public class Dataloader implements CommandLineRunner {
         this.visitRepository = visitRepository;
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -93,17 +98,15 @@ public class Dataloader implements CommandLineRunner {
             count = memberRepository.count();
             log.info("Loaded {} members..", count);
 
-            Map<String, Authority> auths = loadAuthorities();
-
-            count = authorityRepository.count();
-            log.info("Loaded {} authorities..", count);
-
             //create a list of collections of the users
             List<Map<String, ? extends AbstractPerson>> allUsers = new ArrayList<>();
             allUsers.add(savedMembers);
             allUsers.add(savedTrainers);
 
-            loadUsers(allUsers, auths);
+            loadUsersAndSecurityData(allUsers);
+
+            count = authorityRepository.count();
+            log.info("Loaded {} authorities..", count);
 
             count = userRepository.count();
             log.info("Loaded {} users..", count);
@@ -119,31 +122,35 @@ public class Dataloader implements CommandLineRunner {
 
     }
 
-    private Map<String, Authority> loadAuthorities() {
+    private void loadUsersAndSecurityData(List<Map<String, ? extends AbstractPerson>> users) {
 
-        Map<String, Authority> auths = new HashMap<>();
+        // create all the authorities
+        Authority createTrainer = authorityRepository.save(Authority.builder().permission("trainer.create").build());
+        Authority updateTrainer = authorityRepository.save(Authority.builder().permission("trainer.update").build());
+        Authority readTrainer = authorityRepository.save(Authority.builder().permission("trainer.read").build());
+        Authority deleteTrainer = authorityRepository.save(Authority.builder().permission("trainer.delete").build());
+        Authority createMember = authorityRepository.save(Authority.builder().permission("member.create").build());
+        Authority updateMember = authorityRepository.save(Authority.builder().permission("member.update").build());
+        Authority readMember = authorityRepository.save(Authority.builder().permission("member.read").build());
+        Authority deleteMember = authorityRepository.save(Authority.builder().permission("member.delete").build());
 
-        Authority admin = Authority.builder()
-                .role("ADMIN")
+        //create the roles
+        Role adminRole = Role.builder()
+                .roleName("ADMIN")
+                .authorities(Set.of(readTrainer,updateTrainer,deleteTrainer,createTrainer,readMember,createMember,updateMember,deleteMember))
                 .build();
-        auths.put(admin.getRole(), authorityRepository.save(admin));
-
-        Authority member = Authority.builder()
-                .role("MEMBER")
+        Role memberRole = Role.builder()
+                .roleName("MEMBER")
+                .authorities(Set.of(readTrainer,readMember, updateMember,createMember))
                 .build();
-        auths.put(member.getRole(), authorityRepository.save(member));
 
-        Authority trainer = Authority.builder()
-                .role("TRAINER")
+        Role trainerRole = Role.builder()
+                .roleName("TRAINER")
+                .authorities(Set.of(readTrainer,updateTrainer,deleteTrainer,readMember))
                 .build();
-        auths.put(trainer.getRole(), authorityRepository.save(trainer));
 
-        return auths;
+        roleRepository.saveAll(Arrays.asList(memberRole, adminRole, trainerRole));
 
-
-    }
-
-    private void loadUsers(List<Map<String, ? extends AbstractPerson>> users, Map<String, Authority> authorities) {
 
         users.stream().forEach(userMap -> {
 
@@ -153,7 +160,7 @@ public class Dataloader implements CommandLineRunner {
                         .password(user instanceof Member
                                 ?"{bcrypt}$2a$10$WZWeOwLPFMI04JF.OuyCkeFfgwrIb35KHYeX3sBZTusDx5Q8tF5HS" //userMember
                                 :"{bcrypt}$2a$10$3Oj0vJzDtHUs2DaJp9W4Oe.y/VAHhv9H/731H1DF5E911X.8TaaLS") //userTrainer
-                        .authority(user instanceof Member?authorities.get("MEMBER"):authorities.get("TRAINER"))
+                        .role(user instanceof Member?memberRole:trainerRole)
                         .build());
             }
         });
@@ -162,8 +169,10 @@ public class Dataloader implements CommandLineRunner {
         userRepository.save(User.builder()
                 .username("admin")
                 .password("{bcrypt}$2a$10$ggssAWNb6c/1utOpI/pf1.YRPjsTpxDgARlrbkJMaNdf7yoRF1OPq")
-                .authority(authorities.get("ADMIN"))
+                .role(adminRole)
                 .build());
+
+
 
     }
 
