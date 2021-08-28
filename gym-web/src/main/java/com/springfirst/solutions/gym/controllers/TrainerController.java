@@ -8,6 +8,7 @@ import com.springfirst.solutions.gym.services.TrainerSpecialityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -53,6 +54,7 @@ public class TrainerController {
 
 
     // get the form for create a new trainer
+    @PreAuthorize("hasAuthority('trainer.create')")
     @GetMapping("/new")
     @ResponseStatus(HttpStatus.OK)
     public String getCreateTrainerForm(Model model){
@@ -62,6 +64,7 @@ public class TrainerController {
     }
 
     // get the form for updating an existing trainer
+    @PreAuthorize("hasAuthority('trainer.update')")
     @GetMapping("/{id}/update")
     @ResponseStatus(HttpStatus.OK)
     public String getUpdateTrainerForm(Model model, @PathVariable("id") String employeeID){
@@ -119,9 +122,10 @@ public class TrainerController {
     }
 
     // handle delete trainer
+    @PreAuthorize("hasAuthority('trainer.delete')")
     @RequestMapping (value = "/{id}/delete", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
-    public String doTrainerDelete(Model model, @RequestParam("id") String employeeID){
+    public String doTrainerDelete(@PathVariable("id") String employeeID){
 
         log.debug("Got a request to delete trainer with empID {}", employeeID);
         trainerService.deleteTrainer(employeeID);

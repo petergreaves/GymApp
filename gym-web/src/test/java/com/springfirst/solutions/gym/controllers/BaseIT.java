@@ -1,5 +1,6 @@
 package com.springfirst.solutions.gym.controllers;
 
+import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.controllers.rest.TrainerRestController;
 import com.springfirst.solutions.gym.services.GymService;
 import com.springfirst.solutions.gym.services.ImageService;
@@ -13,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 public class BaseIT {
@@ -44,12 +46,28 @@ public class BaseIT {
 
     protected HomeController homeController;
 
+    protected TrainerCommand newInstance;
+    protected TrainerCommand trainerCommand;
+
     @BeforeEach
     public void setup(){
 
         mockMvc= MockMvcBuilders.
                 webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
+                .build();
+
+
+        newInstance = TrainerCommand.builder().isNew(true).build();
+
+        trainerCommand = TrainerCommand.builder()
+                .employeeID("A9971")
+                .name("Bill Bicep")
+                .telNo("0129348 03993")
+                .trainerSpecialityCommandID(1L)
+                .trainerSpecialityCommandID(2L)
+                .biography("Been a personal trainer for 10 years")
+                .image(new Byte['3'])
                 .build();
 
 
