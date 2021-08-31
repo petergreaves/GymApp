@@ -1,24 +1,24 @@
 package com.springfirst.solutions.gym.services;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
-import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.configs.MapperConfigs;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
 import com.springfirst.solutions.gym.exceptions.TrainerDuplicateEmployeeIDException;
-import com.springfirst.solutions.gym.exceptions.TrainerInvalidContentException;
 import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.repositories.GymRepository;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;
 import com.springfirst.solutions.gym.repositories.TrainerSpecialityRepository;
+import com.springfirst.solutions.gym.repositories.security.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
@@ -35,6 +35,9 @@ public class TrainerServiceTests {
 
     @Mock
     private TrainerRepository trainerRepository;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @Mock
     private TrainerSpecialityRepository trainerSpecialityRepository;
@@ -60,6 +63,7 @@ public class TrainerServiceTests {
 
     @Autowired
     private GymMapper gymMapper;
+
 
     @BeforeEach
     public void setup() {
@@ -87,7 +91,7 @@ public class TrainerServiceTests {
                        .build())
                 .build();
 
-        trainerService = new TrainerServiceImpl(trainerRepository, gymService, trainerMapper,trainerSpecialityRepository);
+        trainerService = new TrainerServiceImpl(trainerRepository, gymService, trainerMapper,trainerSpecialityRepository, userRepository);
        // gymService = new GymServiceImpl(gymMapper,trainerMapper,gymRepository);
     }
 
@@ -174,7 +178,7 @@ public class TrainerServiceTests {
     }
 
     @Test
-    void testDeleteTrainer_fail() {
+    void testDeleteTrainerNoSuchTrainer_fail() {
 
         when(trainerRepository.findByEmployeeID(anyString())).thenReturn(Optional.empty());
         Assertions.assertThrows(TrainerNotFoundException.class, () -> {
@@ -184,6 +188,7 @@ public class TrainerServiceTests {
         verify(trainerRepository, times(1)).findByEmployeeID(anyString());
 
     }
+
 
     @Test
     void testCreateTrainerWithDuplicateEmpId_fail() {

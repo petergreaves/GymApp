@@ -1,5 +1,6 @@
 package com.springfirst.solutions.gym.domain;
 
+import com.springfirst.solutions.gym.domain.security.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -26,4 +27,7 @@ public class Trainer extends AbstractPerson{
             inverseJoinColumns = @JoinColumn(name="speciality_id"))
     @Singular
     private Set<TrainerSpeciality> trainerSpecialities;
+
+   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+   private User user;
 }

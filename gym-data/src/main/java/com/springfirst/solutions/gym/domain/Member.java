@@ -1,5 +1,6 @@
 package com.springfirst.solutions.gym.domain;
 
+import com.springfirst.solutions.gym.domain.security.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -32,4 +33,7 @@ public class Member extends AbstractPerson{
             inverseJoinColumns = @JoinColumn(name="visit_id"))
     @Singular
     private Set<Visit> visits;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private User user;
 }

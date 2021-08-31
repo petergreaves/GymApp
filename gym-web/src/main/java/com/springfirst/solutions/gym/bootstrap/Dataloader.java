@@ -163,6 +163,8 @@ public class Dataloader implements CommandLineRunner {
             for (AbstractPerson user : userMap.values()) {
                 userRepository.save(User.builder()
                         .username(user.getEmail())
+                        .trainer(user instanceof Trainer?trainerRepository.findByEmployeeID(((Trainer) user).getEmployeeID()).orElseThrow():null)
+                        .member(user instanceof Member?memberRepository.findByMemberID((((Member) user).getMemberID())).orElseThrow():null)
                         .password(user instanceof Member
                                 ?"{bcrypt}$2a$10$WZWeOwLPFMI04JF.OuyCkeFfgwrIb35KHYeX3sBZTusDx5Q8tF5HS" //userMember
                                 :"{bcrypt}$2a$10$3Oj0vJzDtHUs2DaJp9W4Oe.y/VAHhv9H/731H1DF5E911X.8TaaLS") //userTrainer

@@ -3,6 +3,7 @@ package com.springfirst.solutions.gym.controllers;
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.domain.Trainer;
+import com.springfirst.solutions.gym.domain.security.User;
 import com.springfirst.solutions.gym.mappers.AddressMapper;
 import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
@@ -10,6 +11,7 @@ import com.springfirst.solutions.gym.mappers.TrainerSpecialityMapper;
 import com.springfirst.solutions.gym.repositories.GymRepository;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;
 import com.springfirst.solutions.gym.repositories.TrainerSpecialityRepository;
+import com.springfirst.solutions.gym.repositories.security.UserRepository;
 import com.springfirst.solutions.gym.services.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +40,9 @@ public class TrainerIT {
     @Autowired
     private TrainerSpecialityRepository trainerSpecialityRepository ;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @MockBean
     Model model;
 
@@ -62,10 +67,12 @@ public class TrainerIT {
     private TrainerController trainerController;
 
 
+
+
     @BeforeEach
     public void setup(){
 
-        trainerService = new TrainerServiceImpl(trainerRepository, gymService, trainerMapper,trainerSpecialityRepository);
+        trainerService = new TrainerServiceImpl(trainerRepository, gymService, trainerMapper,trainerSpecialityRepository, userRepository);
         trainerSpecialityService = new TrainerSpecialityServiceImpl(trainerSpecialityRepository,trainerSpecialityMapper );
         trainerController = new TrainerController(trainerService, trainerSpecialityService);
         gymService = new GymServiceImpl(gymMapper, trainerMapper, addressMapper, gymRepository);
@@ -150,6 +157,15 @@ public class TrainerIT {
         Trainer getOne = trainerRepository.findAll().get(0);
         TrainerCommand toRemove = TrainerCommand.builder().employeeID(getOne.getEmployeeID()).build();
         gymService.removeTrainer(toRemove);
+        Optional<User> userToRemove = userRepository.findByUsername(getOne.getEmail());
+
+        if (userToRemove.isPresent()){
+
+            User user = userToRemove.get();
+            user.setTrainer(null);
+            userRepository.saveAndFlush(user);
+         //   getOne.setUser(null);
+        }
         trainerRepository.delete(getOne);
 
         List<TrainerCommand> trainers = trainerService.getAllTrainers();

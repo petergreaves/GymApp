@@ -3,12 +3,15 @@ package com.springfirst.solutions.gym.services;
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.domain.security.User;
 import com.springfirst.solutions.gym.exceptions.TrainerDuplicateEmployeeIDException;
 import com.springfirst.solutions.gym.exceptions.TrainerInvalidContentException;
 import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;
 import com.springfirst.solutions.gym.repositories.TrainerSpecialityRepository;
+import com.springfirst.solutions.gym.repositories.security.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -18,19 +21,21 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class TrainerServiceImpl implements TrainerService {
 
     private final TrainerRepository trainerRepository;
     private final GymService gymService;
     private final TrainerMapper trainerMapper;
     private final TrainerSpecialityRepository trainerSpecialityRepository;
+    private final UserRepository userRepository;
 
-    public TrainerServiceImpl(TrainerRepository trainerRepository, GymService gymService,
-                              TrainerMapper trainerMapper, TrainerSpecialityRepository trainerSpecialityRepository) {
+    public TrainerServiceImpl(TrainerRepository trainerRepository, GymService gymService, TrainerMapper trainerMapper, TrainerSpecialityRepository trainerSpecialityRepository, UserRepository userRepository) {
         this.trainerRepository = trainerRepository;
         this.gymService = gymService;
         this.trainerMapper = trainerMapper;
         this.trainerSpecialityRepository = trainerSpecialityRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -60,7 +65,9 @@ public class TrainerServiceImpl implements TrainerService {
             return trainerMapper.trainerToTrainerCommand(t.get());
         }
         else {
-            throw new TrainerNotFoundException("Trainer not found with employee ID : "+ empID);
+            final String message = "Trainer not found with employee ID : "+ empID;
+            log.error(message);
+            throw new TrainerNotFoundException(message);
         }
     }
 
@@ -72,7 +79,9 @@ public class TrainerServiceImpl implements TrainerService {
         if (trainerCommand.getIsNew()){
 
             if (trainerRepository.findByEmployeeID(trainerCommand.getEmployeeID()).isPresent()){
-                throw new TrainerDuplicateEmployeeIDException("Trainer already exists with employee ID : "+empID);
+                final String message = "Trainer already existswith employee ID : "+ empID;
+                log.error(message);
+                throw new TrainerDuplicateEmployeeIDException(message);
             }
         }
         Trainer toBeSaved = trainerMapper.trainerCommandToTrainer(trainerCommand);
@@ -100,24 +109,34 @@ public class TrainerServiceImpl implements TrainerService {
         return TrainerCommand.builder().isNew(true).build();
     }
 
-    //@Override
-//    public TrainerCommand updateTrainer(TrainerCommand trainerCommand) {
-//
-//        Trainer savedTrainer = trainerRepository.save(trainerMapper.trainerCommandToTrainer(trainerCommand));
-//        return trainerMapper.trainerToTrainerCommand(savedTrainer);
-//    }
 
     @Override
     public void deleteTrainer(String employeeID) throws TrainerNotFoundException{
-        Optional<Trainer> t = trainerRepository.findByEmployeeID(employeeID);
+        log.info("Request to delete trainer with emp ID : " +employeeID);
+        Optional<Trainer> trainerOptional = trainerRepository.findByEmployeeID(employeeID);
 
-        if (t.isPresent()){
-            Trainer trainer = t.get();
+        if (trainerOptional.isPresent()){
+            Trainer trainer = trainerOptional.get();
+
+            Optional<User> userToRemove = userRepository.findByUsername(trainer.getEmail());
+
+            if (userToRemove.isPresent()){
+                User user = userToRemove.get();
+                log.info("Found user with username : " +user.getUsername());
+
+                user.setTrainer(null);
+                log.info("Removed trainer id from user : " +user.getUsername());
+                userRepository.saveAndFlush(user);
+
+                //   getOne.setUser(null);
+            }
             gymService.removeTrainer(trainerMapper.trainerToTrainerCommand(trainer));
             trainerRepository.delete(trainer);
         }
         else {
-            throw new TrainerNotFoundException("Trainer not found with employee ID : "+ employeeID);
+            final String message = "Trainer not found with employee ID : "+ employeeID;
+            log.error(message);
+            throw new TrainerNotFoundException(message);
         }
 
     }

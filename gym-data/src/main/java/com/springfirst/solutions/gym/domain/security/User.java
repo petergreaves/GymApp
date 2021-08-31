@@ -1,6 +1,12 @@
 package com.springfirst.solutions.gym.domain.security;
 
+import com.springfirst.solutions.gym.domain.Member;
+import com.springfirst.solutions.gym.domain.Trainer;
 import lombok.*;
+import org.springframework.security.core.CredentialsContainer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -12,7 +18,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Builder
 @Entity
-public class User {
+public class User implements UserDetails, CredentialsContainer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,12 +34,42 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
     private Set<Role> roles;
 
+
     @Transient
-    private Set<Authority> authorities;
+    public Set<GrantedAuthority> getAuthorities(){
 
-    public Set<Authority> getAuthorities(){
+        return this.roles.stream()
+                .map(Role::getAuthorities)
+                .flatMap(Set::stream)
+                .map(authority -> {return new SimpleGrantedAuthority(authority.getPermission());})
+                .collect(Collectors.toSet());
 
-        return this.roles.stream().map(Role::getAuthorities).flatMap(Set::stream).collect(Collectors.toSet());
+    }
+
+
+    @Override
+    public void eraseCredentials() {
+        this.password = null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
     @Builder.Default
@@ -44,4 +80,12 @@ public class User {
     private Boolean credentialsNonExpired = true;
     @Builder.Default
     private Boolean enabled = true;
+
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private Trainer trainer;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private Member member;
+
 }
