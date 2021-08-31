@@ -11,7 +11,7 @@
     <div th:if="${param.logout}">You have signed out.</div>
     <div sec:authorize="isAnonymous()">
         <form th:action="@{/login}" method="post">
-            <label for="username">Username:</label>
+            <label for="username">Email:</label>
             <input type="text" name="username" id="username" autocomplete="off" autofocus="true" />
             <label for="password">Password:</label>
             <input type="password" name="password" id="password" autocomplete="off" autofocus="true" />
@@ -36,9 +36,9 @@
             </td>
             <td>
                 <p><a href="/trainers/list">See our trainers</a></p>
-                <p><a href="/register">Register</a></p>
+                <div sec:authorize="isAnonymous()"><p><a href="/register">Register</a></p></div>
                 <p><a href="/classes">See the classes we have on offer</a></p>
-                <p><a href="/members">Members</a></p>
+                <p sec:authorize="isAuthenticated()"><a href="/members">Members</a></p>
             </td>
         </tr>
     </table>

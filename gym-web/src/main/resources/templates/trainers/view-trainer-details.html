@@ -1,4 +1,4 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <body>
 
@@ -21,16 +21,21 @@
         <p th:if="${trainer.trainerSpecialityCommandIDs.contains(s.id)}" th:text="${s.name}">spec</p>
     </div>
 
+<div sec:authorize="hasAuthority('trainer.delete')">
 <form id="deleteForm"
       method="POST"
       th:action="@{'/trainers/' + ${trainer.employeeID} +'/delete'}">
     <input type="hidden" name="id" th:value="${trainer.employeeID}"/>
     <a href="javascript:void()" onclick="document.getElementById('deleteForm').submit();">Delete</a>
 </form>
+</div>
 
-    <p><a th:href="@{'/trainers/' + ${trainer.employeeID}+ '/update'}">Edit</a> |
+<a sec:authorize="hasAuthority('trainer.update')" th:href="@{'/trainers/' + ${trainer.employeeID}+ '/update'}">Edit</a>
 
-    <a th:href="@{'/images/trainers/' + ${trainer.employeeID}+ '/upload'}">Image upload</a> | <a th:href="@{'/trainers/list'}">List</a>
+<p sec:authorize="hasAuthority('trainer.update')"><a th:href="@{'/images/trainers/' + ${trainer.employeeID}+ '/upload'}">Image upload</a></p>
+
+<p><a th:href="@{'/trainers/list'}">Trainers</a></p>
+<p><a th:href="@{'/'}">Home</a></p>
 
 
 
