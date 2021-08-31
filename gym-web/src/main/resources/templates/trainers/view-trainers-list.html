@@ -27,12 +27,12 @@
         <td th:each="s : ${specialities}">
                 <p th:if="${trainer.trainerSpecialityCommandIDs.contains(s.id)}" th:text="${s.name}">spec</p>
         </td>
-        <td><div sec:authorize="hasAuthority('trainer.update')"><a th:href="@{'/trainers/' + ${trainer.getEmployeeID()}+ '/update'}">Edit</a></div>
+        <td><div sec:authorize="hasAnyAuthority('admin.trainer.update', 'trainer.trainer.update')"><a th:href="@{'/trainers/' + ${trainer.getEmployeeID()}+ '/update'}">Edit</a></div>
         </td>
     </tr>
     </tbody>
 </table>
 
-<p><a th:href="@{'/'}">Home</a></p> <p sec:authorize="hasAuthority('trainer.create')"> | <a href="/trainers/new">Create new trainer</a></p>
+<p><a th:href="@{'/'}">Home</a></p> <p sec:authorize="hasAuthority('admin.trainer.create')"> | <a href="/trainers/new">Create new trainer</a></p>
 </body>
 </html>

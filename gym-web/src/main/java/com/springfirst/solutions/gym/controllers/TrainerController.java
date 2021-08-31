@@ -54,7 +54,7 @@ public class TrainerController {
 
 
     // get the form for create a new trainer
-    @PreAuthorize("hasAuthority('trainer.create')")
+    @PreAuthorize("hasAuthority('admin.trainer.create')")
     @GetMapping("/new")
     @ResponseStatus(HttpStatus.OK)
     public String getCreateTrainerForm(Model model){
@@ -64,7 +64,7 @@ public class TrainerController {
     }
 
     // get the form for updating an existing trainer
-    @PreAuthorize("hasAuthority('trainer.update')")
+    @PreAuthorize("hasAnyAuthority('trainer.trainer.update', 'admin.trainer.update')")
     @GetMapping("/{id}/update")
     @ResponseStatus(HttpStatus.OK)
     public String getUpdateTrainerForm(Model model, @PathVariable("id") String employeeID){
@@ -76,6 +76,7 @@ public class TrainerController {
 
 
     // handle the post of a new trainer
+    @PreAuthorize("hasAuthority('admin.trainer.create')")
     @PostMapping(value = "/new")
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
     public String createTrainer(@Valid @ModelAttribute("trainer") TrainerCommand trainerCommand,
@@ -122,7 +123,7 @@ public class TrainerController {
     }
 
     // handle delete trainer
-    @PreAuthorize("hasAuthority('trainer.delete')")
+    @PreAuthorize("hasAuthority('admin.trainer.delete')")
     @RequestMapping (value = "/{id}/delete", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
     public String doTrainerDelete(@PathVariable("id") String employeeID){

@@ -38,7 +38,7 @@ public class TrainerControllerMVCTests extends BaseIT{
     }
 
     @Test
-    @WithMockUser(username = "foo", password = "bar", authorities = {"trainer.create"})
+    @WithMockUser(username = "foo", password = "bar", authorities = {"admin.trainer.create"})
     public void trainersNewAvailableToUserInRole_success() throws Exception{
 
         when(trainerService.getNewTrainerInstance()).thenReturn(newInstance);
@@ -48,10 +48,20 @@ public class TrainerControllerMVCTests extends BaseIT{
     }
 
     @Test
-    public void trainersPostNewNotAvailableUnauthenticated_success() throws Exception{
+    @WithMockUser(authorities = {"not.valid"})
+    public void trainersPostNewNotAvailable_success() throws Exception{
         mockMvc.perform(post("/trainers/new")
                 .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
+
+    }
+
+    @Test
+    @WithMockUser(authorities = {"admin.trainer.create"})
+    public void trainersPostNewIsAvailableToRole_success() throws Exception{
+        mockMvc.perform(post("/trainers/new")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(status().is3xxRedirection());
 
     }
 
@@ -73,7 +83,7 @@ public class TrainerControllerMVCTests extends BaseIT{
     }
 
     @Test
-    @WithMockUser(username = "foo", password = "bar", authorities = {"trainer.update"})
+    @WithMockUser(authorities = {"admin.trainer.update", "trainer.trainer.update"})
     public void trainerEditIsAuthorityProtected_success() throws Exception{
 
         newInstance.setIsNew(false);
@@ -84,7 +94,7 @@ public class TrainerControllerMVCTests extends BaseIT{
 
     }
     @Test
-    @WithMockUser(username = "foo", password = "bar", authorities = {"not.valid"})
+    @WithMockUser(authorities = {"not.valid"})
     public void trainerEditIsAuthorityProtected_fail() throws Exception{
 
         newInstance.setIsNew(false);
@@ -96,7 +106,7 @@ public class TrainerControllerMVCTests extends BaseIT{
     }
 
     @Test
-    @WithMockUser(username = "foo", password = "bar", authorities = {"trainer.delete"})
+    @WithMockUser(authorities = {"admin.trainer.delete"})
     public void trainerDeleteIsAuthorityProtected_success() throws Exception{
         mockMvc.perform(post("/trainers/{id}/delete", "A0001")
                 .with(SecurityMockMvcRequestPostProcessors.csrf()))
@@ -104,7 +114,7 @@ public class TrainerControllerMVCTests extends BaseIT{
 
     }
     @Test
-    @WithMockUser(username = "foo", password = "bar", authorities = {"not.valid"})
+    @WithMockUser(authorities = {"not.valid"})
     public void trainerDeleteIsAuthorityProtected_fail() throws Exception{
         mockMvc.perform(post("/trainers/{id}/delete", "A0001")
                 .with(SecurityMockMvcRequestPostProcessors.csrf()))

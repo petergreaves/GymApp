@@ -125,28 +125,34 @@ public class Dataloader implements CommandLineRunner {
     private void loadUsersAndSecurityData(List<Map<String, ? extends AbstractPerson>> users) {
 
         // create all the authorities
-        Authority createTrainer = authorityRepository.save(Authority.builder().permission("trainer.create").build());
-        Authority updateTrainer = authorityRepository.save(Authority.builder().permission("trainer.update").build());
-        Authority readTrainer = authorityRepository.save(Authority.builder().permission("trainer.read").build());
-        Authority deleteTrainer = authorityRepository.save(Authority.builder().permission("trainer.delete").build());
+        Authority createTrainerAdmin = authorityRepository.save(Authority.builder().permission("admin.trainer.create").build());
+        Authority updateTrainerAdmin = authorityRepository.save(Authority.builder().permission("admin.trainer.update").build());
+        Authority readTrainerAdmin = authorityRepository.save(Authority.builder().permission("admin.trainer.read").build());
+        Authority deleteTrainerAdmin = authorityRepository.save(Authority.builder().permission("admin.trainer.delete").build());
+
+        Authority updateTrainerTrainer = authorityRepository.save(Authority.builder().permission("trainer.trainer.update").build());
+        Authority readTrainerTrainer = authorityRepository.save(Authority.builder().permission("trainer.trainer.read").build());
+
+        Authority readTrainerMember = authorityRepository.save(Authority.builder().permission("member.trainer.read").build());
         Authority createMember = authorityRepository.save(Authority.builder().permission("member.create").build());
         Authority updateMember = authorityRepository.save(Authority.builder().permission("member.update").build());
         Authority readMember = authorityRepository.save(Authority.builder().permission("member.read").build());
+        Authority readMemberTrainer = authorityRepository.save(Authority.builder().permission("trainer.member.read").build());
         Authority deleteMember = authorityRepository.save(Authority.builder().permission("member.delete").build());
 
         //create the roles
         Role adminRole = Role.builder()
                 .roleName("ADMIN")
-                .authorities(Set.of(readTrainer,updateTrainer,deleteTrainer,createTrainer,readMember,createMember,updateMember,deleteMember))
+                .authorities(Set.of(readTrainerAdmin,updateTrainerAdmin,deleteTrainerAdmin,createTrainerAdmin,readMember,createMember,updateMember,deleteMember))
                 .build();
         Role memberRole = Role.builder()
                 .roleName("MEMBER")
-                .authorities(Set.of(readTrainer,readMember, updateMember,createMember))
+                .authorities(Set.of(readTrainerMember,readMember, updateMember,createMember))
                 .build();
 
         Role trainerRole = Role.builder()
                 .roleName("TRAINER")
-                .authorities(Set.of(readTrainer,updateTrainer,deleteTrainer,readMember))
+                .authorities(Set.of(readTrainerTrainer,updateTrainerTrainer,readMemberTrainer))
                 .build();
 
         roleRepository.saveAll(Arrays.asList(memberRole, adminRole, trainerRole));

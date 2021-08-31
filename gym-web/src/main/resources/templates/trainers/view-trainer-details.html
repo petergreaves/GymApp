@@ -21,7 +21,7 @@
         <p th:if="${trainer.trainerSpecialityCommandIDs.contains(s.id)}" th:text="${s.name}">spec</p>
     </div>
 
-<div sec:authorize="hasAuthority('trainer.delete')">
+<div sec:authorize="hasAuthority('admin.trainer.delete')">
 <form id="deleteForm"
       method="POST"
       th:action="@{'/trainers/' + ${trainer.employeeID} +'/delete'}">
@@ -30,9 +30,9 @@
 </form>
 </div>
 
-<a sec:authorize="hasAuthority('trainer.update')" th:href="@{'/trainers/' + ${trainer.employeeID}+ '/update'}">Edit</a>
+<a sec:authorize="hasAnyAuthority('admin.trainer.update','trainer.trainer.update')" th:href="@{'/trainers/' + ${trainer.employeeID}+ '/update'}">Edit</a>
 
-<p sec:authorize="hasAuthority('trainer.update')"><a th:href="@{'/images/trainers/' + ${trainer.employeeID}+ '/upload'}">Image upload</a></p>
+<p sec:authorize="hasAnyAuthority('admin.trainer.update','trainer.trainer.update')"><a th:href="@{'/images/trainers/' + ${trainer.employeeID}+ '/upload'}">Image upload</a></p>
 
 <p><a th:href="@{'/trainers/list'}">Trainers</a></p>
 <p><a th:href="@{'/'}">Home</a></p>
