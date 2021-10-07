@@ -19,7 +19,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="trainer : ${trainers}">
+    <tr th:each="trainer, k : ${trainers}">
         <td><a th:href="@{'/trainers/' + ${trainer.employeeID} +'/show'}"><p th:text="${trainer.name}">Name</p></a>
         </td>
         <td th:text="${trainer.telNo}">Contact</td>
@@ -27,7 +27,8 @@
         <td th:each="s : ${specialities}">
                 <p th:if="${trainer.trainerSpecialityCommandIDs.contains(s.id)}" th:text="${s.name}">spec</p>
         </td>
-        <td><div sec:authorize="hasAnyAuthority('admin.trainer.update', 'trainer.trainer.update')"><a th:href="@{'/trainers/' + ${trainer.getEmployeeID()}+ '/update'}">Edit</a></div>
+       <td><div sec:authorize="hasAnyAuthority('admin.trainer.update', 'trainer.trainer.update')">
+                    <a th:href="@{'/trainers/' + ${trainer.getEmployeeID()}+ '/update'}">Edit</a></div>
         </td>
     </tr>
     </tbody>
