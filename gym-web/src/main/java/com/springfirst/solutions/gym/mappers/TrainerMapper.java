@@ -1,11 +1,10 @@
 package com.springfirst.solutions.gym.mappers;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
-import com.springfirst.solutions.gym.domain.Trainer;
-import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.domain.trainer.Trainer;
+import com.springfirst.solutions.gym.domain.trainer.TrainerSpeciality;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Set;

@@ -2,7 +2,7 @@ package com.springfirst.solutions.gym.services;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 
-import com.springfirst.solutions.gym.domain.Trainer;
+import com.springfirst.solutions.gym.domain.trainer.Trainer;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;
 
 import lombok.extern.slf4j.Slf4j;

@@ -1,8 +1,7 @@
 package com.springfirst.solutions.gym.controllers;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
-import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
-import com.springfirst.solutions.gym.domain.Trainer;
+import com.springfirst.solutions.gym.domain.trainer.Trainer;
 import com.springfirst.solutions.gym.domain.security.User;
 import com.springfirst.solutions.gym.mappers.AddressMapper;
 import com.springfirst.solutions.gym.mappers.GymMapper;

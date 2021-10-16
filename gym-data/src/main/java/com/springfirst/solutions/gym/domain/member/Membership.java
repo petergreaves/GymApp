@@ -1,5 +1,6 @@
-package com.springfirst.solutions.gym.domain;
+package com.springfirst.solutions.gym.domain.member;
 
+import com.springfirst.solutions.gym.domain.AbstractEntity;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "membership")
-public class Membership extends AbstractEntity{
+public class Membership extends AbstractEntity {
 
     private LocalDate start;
     private LocalDate end;

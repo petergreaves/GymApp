@@ -1,5 +1,6 @@
-package com.springfirst.solutions.gym.domain;
+package com.springfirst.solutions.gym.domain.trainer;
 
+import com.springfirst.solutions.gym.domain.AbstractPerson;
 import com.springfirst.solutions.gym.domain.security.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -14,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "trainer")
-public class Trainer extends AbstractPerson{
+public class Trainer extends AbstractPerson {
 
     @Column(name = "employee_number", unique=true)
     private String employeeID;

@@ -1,7 +1,7 @@
 package com.springfirst.solutions.gym.domain.security;
 
-import com.springfirst.solutions.gym.domain.Member;
-import com.springfirst.solutions.gym.domain.Trainer;
+import com.springfirst.solutions.gym.domain.member.Member;
+import com.springfirst.solutions.gym.domain.trainer.Trainer;
 import lombok.*;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;

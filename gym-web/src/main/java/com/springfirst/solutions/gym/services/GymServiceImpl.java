@@ -3,7 +3,7 @@ package com.springfirst.solutions.gym.services;
 import com.springfirst.solutions.gym.commands.GymCommand;
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.domain.Gym;
-import com.springfirst.solutions.gym.domain.Trainer;
+import com.springfirst.solutions.gym.domain.trainer.Trainer;
 import com.springfirst.solutions.gym.mappers.AddressMapper;
 import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;

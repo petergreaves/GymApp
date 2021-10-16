@@ -2,8 +2,8 @@ package com.springfirst.solutions.gym.mappers;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.configs.MapperConfigs;
-import com.springfirst.solutions.gym.domain.Trainer;
-import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.domain.trainer.Trainer;
+import com.springfirst.solutions.gym.domain.trainer.TrainerSpeciality;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

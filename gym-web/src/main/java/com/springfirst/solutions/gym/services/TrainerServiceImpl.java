@@ -1,11 +1,10 @@
 package com.springfirst.solutions.gym.services;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
-import com.springfirst.solutions.gym.domain.Trainer;
-import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.domain.trainer.Trainer;
+import com.springfirst.solutions.gym.domain.trainer.TrainerSpeciality;
 import com.springfirst.solutions.gym.domain.security.User;
 import com.springfirst.solutions.gym.exceptions.TrainerDuplicateEmployeeIDException;
-import com.springfirst.solutions.gym.exceptions.TrainerInvalidContentException;
 import com.springfirst.solutions.gym.exceptions.TrainerNotFoundException;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.repositories.TrainerRepository;

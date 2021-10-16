@@ -1,5 +1,6 @@
 package com.springfirst.solutions.gym.domain;
 
+import com.springfirst.solutions.gym.domain.trainer.Trainer;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

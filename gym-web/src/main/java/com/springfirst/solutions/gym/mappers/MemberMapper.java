@@ -1,7 +1,7 @@
 package com.springfirst.solutions.gym.mappers;
 
 import com.springfirst.solutions.gym.commands.MemberCommand;
-import com.springfirst.solutions.gym.domain.Member;
+import com.springfirst.solutions.gym.domain.member.Member;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

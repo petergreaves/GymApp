@@ -2,8 +2,8 @@ package com.springfirst.solutions.gym.mappers;
 
 import com.springfirst.solutions.gym.commands.MembershipCommand;
 import com.springfirst.solutions.gym.configs.MapperConfigs;
-import com.springfirst.solutions.gym.domain.Membership;
-import com.springfirst.solutions.gym.domain.MembershipType;
+import com.springfirst.solutions.gym.domain.member.Membership;
+import com.springfirst.solutions.gym.domain.member.MembershipType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

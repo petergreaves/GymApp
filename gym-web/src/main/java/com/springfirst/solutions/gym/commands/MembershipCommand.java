@@ -1,6 +1,5 @@
 package com.springfirst.solutions.gym.commands;
 
-import com.springfirst.solutions.gym.domain.MembershipType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

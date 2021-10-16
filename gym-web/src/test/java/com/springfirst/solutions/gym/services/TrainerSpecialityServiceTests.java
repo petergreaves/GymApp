@@ -2,14 +2,13 @@ package com.springfirst.solutions.gym.services;
 
 import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.configs.MapperConfigs;
-import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.domain.trainer.TrainerSpeciality;
 import com.springfirst.solutions.gym.mappers.TrainerSpecialityMapper;
 import com.springfirst.solutions.gym.repositories.TrainerSpecialityRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 

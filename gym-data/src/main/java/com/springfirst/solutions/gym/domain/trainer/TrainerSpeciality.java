@@ -1,5 +1,6 @@
-package com.springfirst.solutions.gym.domain;
+package com.springfirst.solutions.gym.domain.trainer;
 
+import com.springfirst.solutions.gym.domain.AbstractEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -14,7 +15,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "trainer_speciality")
-public class TrainerSpeciality extends AbstractEntity{
+public class TrainerSpeciality extends AbstractEntity {
 
     @Column(name ="description")
     private String description;

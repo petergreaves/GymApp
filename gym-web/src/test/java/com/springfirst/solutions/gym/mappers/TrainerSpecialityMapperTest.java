@@ -2,7 +2,7 @@ package com.springfirst.solutions.gym.mappers;
 
 import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.configs.MapperConfigs;
-import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.domain.trainer.TrainerSpeciality;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

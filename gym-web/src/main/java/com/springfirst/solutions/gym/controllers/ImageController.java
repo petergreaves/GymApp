@@ -1,7 +1,6 @@
 package com.springfirst.solutions.gym.controllers;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
-import com.springfirst.solutions.gym.domain.Trainer;
 import com.springfirst.solutions.gym.services.ImageService;
 import com.springfirst.solutions.gym.services.TrainerService;
 import lombok.extern.slf4j.Slf4j;

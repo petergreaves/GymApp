@@ -2,10 +2,8 @@ package com.springfirst.solutions.gym.controllers;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
-import com.springfirst.solutions.gym.domain.Trainer;
-import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.domain.trainer.Trainer;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
-import com.springfirst.solutions.gym.mappers.TrainerSpecialityMapper;
 import com.springfirst.solutions.gym.services.TrainerService;
 import com.springfirst.solutions.gym.services.TrainerSpecialityService;
 import org.junit.jupiter.api.BeforeEach;

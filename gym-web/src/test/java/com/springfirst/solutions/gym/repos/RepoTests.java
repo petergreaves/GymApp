@@ -1,10 +1,9 @@
 package com.springfirst.solutions.gym.repos;
 
 import com.springfirst.solutions.gym.bootstrap.Dataloader;
-import com.springfirst.solutions.gym.domain.Address;
 import com.springfirst.solutions.gym.domain.Gym;
-import com.springfirst.solutions.gym.domain.Trainer;
-import com.springfirst.solutions.gym.domain.TrainerSpeciality;
+import com.springfirst.solutions.gym.domain.trainer.Trainer;
+import com.springfirst.solutions.gym.domain.trainer.TrainerSpeciality;
 import com.springfirst.solutions.gym.repositories.*;
 import com.springfirst.solutions.gym.repositories.security.AuthorityRepository;
 import com.springfirst.solutions.gym.repositories.security.RoleRepository;

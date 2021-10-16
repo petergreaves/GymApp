@@ -5,7 +5,7 @@ import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.configs.MapperConfigs;
 import com.springfirst.solutions.gym.domain.Address;
 import com.springfirst.solutions.gym.domain.Gym;
-import com.springfirst.solutions.gym.domain.Trainer;
+import com.springfirst.solutions.gym.domain.trainer.Trainer;
 import com.springfirst.solutions.gym.mappers.AddressMapper;
 import com.springfirst.solutions.gym.mappers.GymMapper;
 import com.springfirst.solutions.gym.mappers.TrainerMapper;
@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 

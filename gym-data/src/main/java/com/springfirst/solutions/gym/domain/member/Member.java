@@ -1,5 +1,7 @@
-package com.springfirst.solutions.gym.domain;
+package com.springfirst.solutions.gym.domain.member;
 
+import com.springfirst.solutions.gym.domain.AbstractPerson;
+import com.springfirst.solutions.gym.domain.Visit;
 import com.springfirst.solutions.gym.domain.security.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -15,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "member")
-public class Member extends AbstractPerson{
+public class Member extends AbstractPerson {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "member_membership", joinColumns = @JoinColumn(name = "member_id"),
