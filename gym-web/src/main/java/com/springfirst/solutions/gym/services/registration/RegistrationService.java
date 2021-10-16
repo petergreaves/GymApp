@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface RegistrationService {
 
     Optional<RegistrationState> findRegistrationByEmail(String email);
-    void setRegistrationState(RegistrationStateCommand stateCommand, Stage stage);
+    RegistrationStateCommand setRegistrationState(RegistrationStateCommand stateCommand, Stage stage);
     void deleteRegistration(RegistrationStateCommand stateCommand);
 }

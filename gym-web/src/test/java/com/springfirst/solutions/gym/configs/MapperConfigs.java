@@ -1,9 +1,12 @@
 package com.springfirst.solutions.gym.configs;
 
 import com.springfirst.solutions.gym.mappers.*;
+import com.springfirst.solutions.gym.mappers.registration.RegistrationMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.servlet.Registration;
 
 @Configuration
 public class MapperConfigs {
@@ -11,6 +14,11 @@ public class MapperConfigs {
     @Bean
     public TrainerSpecialityMapper trainerSpecialityMapper() {
         return Mappers.getMapper(TrainerSpecialityMapper.class);
+    }
+
+    @Bean
+    public RegistrationMapper registrationMapper() {
+        return Mappers.getMapper(RegistrationMapper.class);
     }
 
     @Bean
