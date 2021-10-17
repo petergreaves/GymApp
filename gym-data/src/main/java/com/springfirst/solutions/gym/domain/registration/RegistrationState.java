@@ -20,8 +20,14 @@ public class RegistrationState {
     private Long id;
 
    private Stage stage;
+   private String name;
+   private String password;
    private LocalDate created;
    private LocalDate updated;
    private String email;
+
+   @Transient
+   @Builder.Default
+   private Boolean isNew=false;
 
 }

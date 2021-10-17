@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests(authorize -> {
                     authorize
-                            .antMatchers("/h2-console/**", "/", "/img/**", "/login").permitAll()
+                            .antMatchers("/h2-console/**", "/", "/img/**", "/login", "/register/new").permitAll()
                             .antMatchers(HttpMethod.GET, "/trainers/list").permitAll()
                             .antMatchers(HttpMethod.GET, "/trainers/*/show").permitAll()
                             .antMatchers(HttpMethod.GET, "/api/v1/trainers/**").permitAll()

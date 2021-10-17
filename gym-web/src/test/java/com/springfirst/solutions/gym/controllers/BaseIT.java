@@ -6,6 +6,7 @@ import com.springfirst.solutions.gym.services.GymService;
 import com.springfirst.solutions.gym.services.ImageService;
 import com.springfirst.solutions.gym.services.TrainerService;
 import com.springfirst.solutions.gym.services.TrainerSpecialityService;
+import com.springfirst.solutions.gym.services.registration.RegistrationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class BaseIT {
     protected GymService gymService;
 
     @MockBean
+    protected RegistrationService registrationService;
+
+    @MockBean
     protected TrainerService trainerService;
 
     @MockBean
@@ -38,6 +42,7 @@ public class BaseIT {
     protected TrainerController trainerController ;
     protected ImageController imageController;
     protected TrainerRestController trainerRestController;
+    protected RegistrationController registrationController;
 
     @InjectMocks
     protected TrainerRestController trainerSpecialitiesRestController;

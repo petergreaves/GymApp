@@ -19,4 +19,6 @@ public class RegistrationStateCommand {
     private LocalDate updated;
     private String email;
     private Long id;
+    private String name;
+    private String password;
 }

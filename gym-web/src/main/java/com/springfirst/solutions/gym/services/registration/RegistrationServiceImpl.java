@@ -6,10 +6,14 @@ import com.springfirst.solutions.gym.domain.registration.Stage;
 import com.springfirst.solutions.gym.exceptions.NoSuchRegistrationException;
 import com.springfirst.solutions.gym.mappers.registration.RegistrationMapper;
 import com.springfirst.solutions.gym.repositories.registration.RegistrationRepository;
+import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+@Service
 public class RegistrationServiceImpl implements RegistrationService {
 
     private final RegistrationRepository registrationRepository;
@@ -20,10 +24,30 @@ public class RegistrationServiceImpl implements RegistrationService {
         this.registrationMapper = registrationMapper;
     }
 
-    @Override
-    public Optional<RegistrationState> findRegistrationByEmail(String email) {
 
-        return findRegState(email);
+    @Override
+    public RegistrationStateCommand saveOrUpdateRegistration(RegistrationStateCommand stateCommand) {
+
+        RegistrationState saved = registrationRepository
+                .save(registrationMapper
+                        .registrationStateCommandToRegistrationState(stateCommand));
+
+        return registrationMapper.registrationStateToRegistrationStateCommand(saved);
+    }
+
+    @Override
+    public RegistrationStateCommand findRegistrationByEmail(String email) {
+
+        Optional<RegistrationState> state = findRegState(email);
+
+        if (state.isPresent()){
+            return registrationMapper.registrationStateToRegistrationStateCommand(state.get());
+        }
+        else{
+            throw new
+                    NoSuchRegistrationException("No such registration with email : " +email);
+        }
+
     }
 
     @Override
@@ -59,6 +83,16 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
 
+    }
+
+    @Override
+    public List<RegistrationStateCommand> getAllRegistrations() {
+
+        return registrationRepository
+                .findAll()
+                .stream()
+                .map( reg ->  registrationMapper.registrationStateToRegistrationStateCommand(reg))
+                .collect(Collectors.toList());
     }
 
 

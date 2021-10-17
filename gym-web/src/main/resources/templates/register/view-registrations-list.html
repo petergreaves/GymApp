@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of Registrations</title>
+</head>
+<body>
+<!--/*@thymesVar id="trainer" type="com.springfirst.solutions.gym.commands.registration.RegistrationStateCommand"*/-->
+<h2>Registrations</h2>
+
+<table id="registrations" class="table table-striped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Stage</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="reg, k : ${registrations}">
+        <td><a th:href="@{'/register/' + ${reg.email} +'/show'}"><p th:text="${reg.name}">Name</p></a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<p><a th:href="@{'/'}">Home</a></p> <p sec:authorize="hasAuthority('admin.registration.approve')"> Approve or reject</a></p>
+</body>
+</html>

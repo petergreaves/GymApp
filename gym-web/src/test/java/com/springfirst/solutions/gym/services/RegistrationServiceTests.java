@@ -5,7 +5,6 @@ import com.springfirst.solutions.gym.configs.MapperConfigs;
 import com.springfirst.solutions.gym.domain.registration.RegistrationState;
 import com.springfirst.solutions.gym.domain.registration.Stage;
 import com.springfirst.solutions.gym.exceptions.NoSuchRegistrationException;
-import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.mappers.registration.RegistrationMapper;
 import com.springfirst.solutions.gym.repositories.registration.RegistrationRepository;
 import com.springfirst.solutions.gym.services.registration.RegistrationService;
@@ -20,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -52,7 +52,7 @@ public class RegistrationServiceTests {
         RegistrationState state = RegistrationState.builder().id(1L).email("a@foo.com").stage(Stage.PENDING).created(LocalDate.now()).build();
         when(registrationRepository.findRegistrationStateByEmail(any())).thenReturn(Optional.of(state));
 
-        RegistrationState stateFromService = registrationService.findRegistrationByEmail("boo@bar.com").orElseThrow();
+        RegistrationStateCommand stateFromService = registrationService.findRegistrationByEmail("boo@bar.com");
         Assertions.assertAll(
 
                 () -> {
@@ -63,12 +63,43 @@ public class RegistrationServiceTests {
     }
 
     @Test
+    public void saveOrUpdateReg(){
+
+        RegistrationState newReg =  RegistrationState
+                .builder()
+                .email("foo@bar.com")
+                .id(122L)
+                .stage(Stage.PENDING)
+                .created(LocalDate.now())
+                .updated(LocalDate.now())
+                .build();
+
+        RegistrationStateCommand postedReg =  RegistrationStateCommand
+                .builder()
+                .email("foo@bar.com")
+                .stage(Stage.PENDING)
+                .created(LocalDate.now())
+                .updated(LocalDate.now())
+                .build();
+
+        when(registrationRepository.save(any())).thenReturn(newReg);
+
+        RegistrationStateCommand stateFromService = registrationService.saveOrUpdateRegistration(postedReg);
+
+        Assertions.assertEquals(stateFromService.getEmail(), postedReg.getEmail());
+
+    }
+
+
+
+
+    @Test
     public void getARegistrationStateForNoMatchThrowsNoSuchRegEx_success() {
 
         when(registrationRepository.findRegistrationStateByEmail(any())).thenReturn(Optional.empty());
 
         Assertions.assertThrows(NoSuchRegistrationException.class, () -> {
-            RegistrationState stateFromService = registrationService.findRegistrationByEmail("boo@bar.com").orElseThrow();
+            RegistrationStateCommand stateFromService = registrationService.findRegistrationByEmail("boo@bar.com");
             registrationService.findRegistrationByEmail("XXXX");
         });
 
@@ -127,4 +158,21 @@ public class RegistrationServiceTests {
         verify(registrationRepository, times(1)).findRegistrationStateByEmail(any(String.class));
 
     }
-}
+
+    @Test
+    public void getRegistrationsList_success() {
+
+        RegistrationState reg1 = RegistrationState.builder().id(1L).email("a@foo.com").stage(Stage.PENDING).created(LocalDate.now()).build();
+        RegistrationState reg2 = RegistrationState.builder().id(2L).email("b@foo.com").stage(Stage.APPROVED).created(LocalDate.now()).build();
+
+        when(registrationRepository.findAll()).thenReturn(List.of(reg1, reg2));
+
+        List<RegistrationStateCommand> registrations = registrationService.getAllRegistrations();
+        Assertions.assertEquals(registrations.size(), 2);
+
+        verify(registrationRepository, times(1)).findAll();
+
+
+    }
+
+    }
