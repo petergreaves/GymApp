@@ -2,9 +2,11 @@ package com.springfirst.solutions.gym.repos;
 
 import com.springfirst.solutions.gym.bootstrap.Dataloader;
 import com.springfirst.solutions.gym.domain.Gym;
+import com.springfirst.solutions.gym.domain.registration.RegistrationState;
 import com.springfirst.solutions.gym.domain.trainer.Trainer;
 import com.springfirst.solutions.gym.domain.trainer.TrainerSpeciality;
 import com.springfirst.solutions.gym.repositories.*;
+import com.springfirst.solutions.gym.repositories.registration.RegistrationRepository;
 import com.springfirst.solutions.gym.repositories.security.AuthorityRepository;
 import com.springfirst.solutions.gym.repositories.security.RoleRepository;
 import com.springfirst.solutions.gym.repositories.security.UserRepository;
@@ -52,6 +54,9 @@ public class RepoTests {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    RegistrationRepository registrationRepository;
+
 
     @BeforeEach
     public void setup() throws Exception {
@@ -64,6 +69,7 @@ public class RepoTests {
                 addressRepository,
                 memberRepository,
                 visitRepository,
+                registrationRepository,
                 userRepository,
                 authorityRepository,
                 roleRepository);

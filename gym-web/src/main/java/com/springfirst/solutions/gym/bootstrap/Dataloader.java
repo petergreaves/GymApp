@@ -4,12 +4,15 @@ import com.springfirst.solutions.gym.domain.*;
 import com.springfirst.solutions.gym.domain.member.Member;
 import com.springfirst.solutions.gym.domain.member.Membership;
 import com.springfirst.solutions.gym.domain.member.MembershipType;
+import com.springfirst.solutions.gym.domain.registration.RegistrationState;
+import com.springfirst.solutions.gym.domain.registration.Stage;
 import com.springfirst.solutions.gym.domain.security.Authority;
 import com.springfirst.solutions.gym.domain.security.Role;
 import com.springfirst.solutions.gym.domain.security.User;
 import com.springfirst.solutions.gym.domain.trainer.Trainer;
 import com.springfirst.solutions.gym.domain.trainer.TrainerSpeciality;
 import com.springfirst.solutions.gym.repositories.*;
+import com.springfirst.solutions.gym.repositories.registration.RegistrationRepository;
 import com.springfirst.solutions.gym.repositories.security.AuthorityRepository;
 import com.springfirst.solutions.gym.repositories.security.RoleRepository;
 import com.springfirst.solutions.gym.repositories.security.UserRepository;
@@ -35,6 +38,7 @@ public class Dataloader implements CommandLineRunner {
     private final AddressRepository addressRepository;
     private final MemberRepository memberRepository;
     private final VisitRepository visitRepository;
+    private final RegistrationRepository registrationRepository;
 
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
@@ -44,16 +48,11 @@ public class Dataloader implements CommandLineRunner {
     PasswordEncoder passwordEncoder;
 
     public Dataloader(TrainerSpecialityRepository trainerSpecialityRepository,
-                      TrainerRepository trainerRepository,
-                      MembershipRepository membershipRepository,
-                      MembershipTypeRepository membershipTypeRepository,
-                      GymRepository gymRepository,
-                      AddressRepository addressRepository,
-                      MemberRepository memberRepository,
-                      VisitRepository visitRepository,
-                      UserRepository userRepository,
-                      AuthorityRepository authorityRepository,
-                      RoleRepository roleRepository) {
+                      TrainerRepository trainerRepository, MembershipRepository membershipRepository,
+                      MembershipTypeRepository membershipTypeRepository, GymRepository gymRepository,
+                      AddressRepository addressRepository, MemberRepository memberRepository,
+                      VisitRepository visitRepository, RegistrationRepository registrationRepository, UserRepository userRepository,
+                      AuthorityRepository authorityRepository, RoleRepository roleRepository) {
         this.trainerSpecialityRepository = trainerSpecialityRepository;
         this.trainerRepository = trainerRepository;
         this.membershipRepository = membershipRepository;
@@ -62,6 +61,7 @@ public class Dataloader implements CommandLineRunner {
         this.addressRepository = addressRepository;
         this.memberRepository = memberRepository;
         this.visitRepository = visitRepository;
+        this.registrationRepository = registrationRepository;
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.roleRepository = roleRepository;
@@ -79,6 +79,12 @@ public class Dataloader implements CommandLineRunner {
             Map<String, TrainerSpeciality> savedSpecialities = loadSpecialities();
             long count = trainerSpecialityRepository.count();
             log.info("Loaded {} trainer specialities...", count);
+
+
+            // registrations
+            loadRegistrations();
+            count = registrationRepository.count();
+            log.info("Loaded {} registrations...", count);
 
             // trainers
             Map<String, Trainer> savedTrainers = loadTrainers(savedSpecialities);
@@ -277,6 +283,60 @@ public class Dataloader implements CommandLineRunner {
                 .build()));
 
         return saved;
+
+
+    }
+
+
+    private void loadRegistrations(){
+
+        RegistrationState r1 = RegistrationState
+                .builder()
+                .id(1L)
+                .stage(Stage.PENDING)
+                .email("a@b.com")
+                .created(LocalDate.now())
+                .updated(LocalDate.now())
+                .name("Nancy New")
+                .password("password")
+                .build();
+        RegistrationState r2 = RegistrationState
+                .builder()
+                .id(2L)
+                .stage(Stage.APPROVED)
+                .email("b@b.com")
+                .created(LocalDate.now())
+                .updated(LocalDate.now())
+                .name("Alan Alda")
+                .password("password")
+                .build();
+
+        RegistrationState r3= RegistrationState
+                .builder()
+                .id(3L)
+                .stage(Stage.PENDING)
+                .email("c@b.com")
+                .created(LocalDate.now())
+                .updated(LocalDate.now())
+                .name("Billy Budd")
+                .password("password")
+                .build();
+        RegistrationState r4= RegistrationState
+                .builder()
+                .id(4L)
+                .stage(Stage.PENDING)
+                .email("d@b.com")
+                .created(LocalDate.now())
+                .updated(LocalDate.now())
+                .name("Dolly Mixture")
+                .password("password")
+                .build();
+
+        registrationRepository.save(r1);
+        registrationRepository.save(r2);
+        registrationRepository.save(r3);
+        registrationRepository.save(r4);
+
 
 
     }
