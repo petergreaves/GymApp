@@ -297,7 +297,6 @@ public class Dataloader implements CommandLineRunner {
                 .email("a@b.com")
                 .created(LocalDate.now())
                 .updated(LocalDate.now())
-                .name("Nancy New")
                 .password("password")
                 .build();
         RegistrationState r2 = RegistrationState
@@ -307,7 +306,6 @@ public class Dataloader implements CommandLineRunner {
                 .email("b@b.com")
                 .created(LocalDate.now())
                 .updated(LocalDate.now())
-                .name("Alan Alda")
                 .password("password")
                 .build();
 
@@ -318,7 +316,6 @@ public class Dataloader implements CommandLineRunner {
                 .email("c@b.com")
                 .created(LocalDate.now())
                 .updated(LocalDate.now())
-                .name("Billy Budd")
                 .password("password")
                 .build();
         RegistrationState r4= RegistrationState
@@ -328,7 +325,6 @@ public class Dataloader implements CommandLineRunner {
                 .email("d@b.com")
                 .created(LocalDate.now())
                 .updated(LocalDate.now())
-                .name("Dolly Mixture")
                 .password("password")
                 .build();
 

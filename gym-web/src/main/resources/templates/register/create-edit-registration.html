@@ -19,13 +19,6 @@
 
     <input type="hidden" name="id" th:value="*{id}"/>
     <input type="hidden" name="isNew" th:value="${registration['isNew']} ?: 'false'" />
-    <p><label for="name">Name:</label></p>
-    <p><input type="text" id="name" th:field="*{name}" th:value="${registration.name}" /></p>
-    <span class="help-block" th:if="${#fields.hasErrors('name')}">
-        <ul>
-            <li th:each="err : ${#fields.errors('name')}" th:text="${err}"/>
-        </ul>
-    </span>
 
     <p><label for="email">Email:</label></p>
     <p><input type="text" id="email" th:field="*{email}" th:value="${registration.email}"/></p>

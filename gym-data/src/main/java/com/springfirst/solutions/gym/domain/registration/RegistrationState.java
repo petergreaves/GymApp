@@ -1,7 +1,6 @@
 package com.springfirst.solutions.gym.domain.registration;
 
 
-import com.springfirst.solutions.gym.domain.member.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,7 +19,6 @@ public class RegistrationState {
     private Long id;
 
    private Stage stage;
-   private String name;
    private String password;
    private LocalDate created;
    private LocalDate updated;

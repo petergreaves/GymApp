@@ -1,17 +1,11 @@
 package com.springfirst.solutions.gym.controllers.registration;
 
 import com.springfirst.solutions.gym.commands.TrainerCommand;
-import com.springfirst.solutions.gym.commands.TrainerSpecialityCommand;
 import com.springfirst.solutions.gym.commands.registration.RegistrationStateCommand;
 import com.springfirst.solutions.gym.controllers.RegistrationController;
-import com.springfirst.solutions.gym.controllers.TrainerController;
 import com.springfirst.solutions.gym.domain.registration.RegistrationState;
 import com.springfirst.solutions.gym.domain.registration.Stage;
-import com.springfirst.solutions.gym.domain.trainer.Trainer;
-import com.springfirst.solutions.gym.mappers.TrainerMapper;
 import com.springfirst.solutions.gym.mappers.registration.RegistrationMapper;
-import com.springfirst.solutions.gym.services.TrainerService;
-import com.springfirst.solutions.gym.services.TrainerSpecialityService;
 import com.springfirst.solutions.gym.services.registration.RegistrationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -120,7 +113,31 @@ public class RegistrationControllerTests {
                 .andExpect(status().isOk());
 
     }
+
+
+    @Test
+    public void createRegistration_success() throws Exception {
+        RegistrationStateCommand newRegCommand = RegistrationStateCommand.builder()
+                .email("A001@foo.com")
+                .password("changeMe")
+                .stage(Stage.PENDING)
+                .build();
+
+        when(registrationService.saveOrUpdateRegistration(ArgumentMatchers.any(RegistrationStateCommand.class))).
+                thenReturn(newRegCommand);
+
+        mockMvc.perform(post("/register/new")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .param("email", "A001@foo.com")
+                .param("password", "changeMe"))
+                .andExpect(model().hasNoErrors())
+                .andExpect(status().is3xxRedirection());
+
+        verify(registrationService, times(1)).saveOrUpdateRegistration(any());
+
+    }
 }
+
 
 //    @Test
 //    public void saveNewRegForm() throws Exception {
@@ -149,7 +166,6 @@ public class RegistrationControllerTests {
 //                .andExpect(status().is3xxRedirection());
 //
 //        verify(trainerService, times(1)).createOrUpdateTrainer(any());
-
 
 
 //    @Test
