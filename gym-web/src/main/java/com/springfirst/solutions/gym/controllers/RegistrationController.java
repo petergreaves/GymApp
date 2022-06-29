@@ -1,19 +1,15 @@
 package com.springfirst.solutions.gym.controllers;
 
-import com.springfirst.solutions.gym.commands.TrainerCommand;
 import com.springfirst.solutions.gym.commands.registration.RegistrationStateCommand;
 import com.springfirst.solutions.gym.domain.registration.RegistrationState;
 import com.springfirst.solutions.gym.domain.registration.Stage;
-import com.springfirst.solutions.gym.exceptions.TrainerDuplicateEmployeeIDException;
 import com.springfirst.solutions.gym.services.registration.RegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,7 +26,7 @@ public class RegistrationController {
     }
 
 
-    //get a list of all trainers
+    //get a list of all registrations
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public String getAllRegistrations(Model model){
@@ -39,6 +35,7 @@ public class RegistrationController {
         return "register/view-registrations-list";
     }
 
+    // view a single req
     @GetMapping("/{email}/view")
     @ResponseStatus(HttpStatus.OK)
     public String getSingleRegistration(Model model, @PathVariable("email") String email){
@@ -64,6 +61,8 @@ public class RegistrationController {
     public String handleNewRegForm(@Valid @ModelAttribute("registration") RegistrationStateCommand command,
                                    BindingResult bindingResult,
                                    Model model){
+
+
         if (bindingResult.hasErrors()) {
             for (ObjectError allError : bindingResult.getAllErrors()) {
                 log.error("Registration create/update error validating : " + allError.getDefaultMessage());
@@ -73,13 +72,15 @@ public class RegistrationController {
         }
 
         // its ok
+        log.info("Valid reg request for email : " + command.getEmail());
 
         command.setStage(Stage.PENDING);
 
         RegistrationStateCommand
             savedReg = registrationService.saveOrUpdateRegistration(command);
 
-        return "/&regSuccessful";
+        log.info("Saved reg request with id: " + command.getId());
+        return "home/index";
     }
 
 
